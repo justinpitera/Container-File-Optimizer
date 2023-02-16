@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Container File Optimizer", "Container File Optimizer\Container File Optimizer.csproj", "{BE88A902-B009-4379-9892-BA2BB3E0355A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE88A902-B009-4379-9892-BA2BB3E0355A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE88A902-B009-4379-9892-BA2BB3E0355A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE88A902-B009-4379-9892-BA2BB3E0355A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE88A902-B009-4379-9892-BA2BB3E0355A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D2071C65-5C18-4556-AD24-9472AA4D6DD8}
+	EndGlobalSection
+EndGlobal
