@@ -36,9 +36,42 @@ namespace Container_File_Optimizer
 
         private void ShowToolTip(object sender, EventArgs e)
         {
-                String message = "Initiialize System with above applications, and continue to the System Builder interface";
-                toolTipInfo.SetToolTip(buttonCreateSystem, message);
+            String message = "Initialize System with above applications, and continue to the System Builder interface.";
+            toolTipInfo.SetToolTip(buttonCreateSystem, message);
         }
+
+        private void textBoxSystemName_MouseHover(object sender, EventArgs e)
+        {
+            String message = "Enter the name of the system to be created.";
+            toolTipInfo.SetToolTip(textBoxSystemName, message);
+        }
+
+        private void textBoxCreator_MouseHover(object sender, EventArgs e)
+        {
+            String message = "Enter the name of the person responsible for the system.";
+            toolTipInfo.SetToolTip(textBoxCreator, message);
+        }
+
+        private void listViewContainers_MouseHover(object sender, EventArgs e)
+        {
+            String message = "The list of containers to initialize the system with. \n To add more containers, click the 'Add Container' button below. \n To remove the selected container, click the 'Remove Container' button below.";
+            toolTipInfo.SetToolTip(listViewContainers, message);
+        }
+
+        private void buttonAddContainer_MouseHover(object sender, EventArgs e)
+        {
+            String message = "Add a new container to the list of containers to initialize the new system with.";
+            toolTipInfo.Show(message, buttonAddContainer);
+        }
+        private void buttonRemoveContainer_MouseHover(object sender, EventArgs e)
+        {
+            String message = "Remove selected container from the list of containers to initialize the new system with.";
+            toolTipInfo.Show(message, buttonRemoveContainer);
+        }
+
+
+
+
 
         // Failsafe if user accidently closes window to prevent data loss
         private void NewSystem_FormClosing(object sender, FormClosingEventArgs e)
@@ -53,7 +86,7 @@ namespace Container_File_Optimizer
         {
             int current = textBoxSystemName.Text.Length;
             int max = textBoxSystemName.MaxLength;
-            labelSystemNameCount.Text = current.ToString() + " /32";
+            labelSystemNameCount.Text = current.ToString() + " / 32";
             this.Text = "Create System - " + textBoxSystemName.Text;
 
             if (current == max)
@@ -73,7 +106,7 @@ namespace Container_File_Optimizer
         {
             int current = textBoxCreator.Text.Length;
             int max = textBoxCreator.MaxLength;
-            labelCreatorCount.Text = current.ToString() + " /32";
+            labelCreatorCount.Text = current.ToString() + " / 32";
 
             if (current == max)
             {
@@ -82,6 +115,18 @@ namespace Container_File_Optimizer
             else
             {
                 labelCreatorCount.ForeColor = Form.DefaultForeColor;
+            }
+        }
+
+        private void buttonRemoveContainer_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you would like to remove: " + listViewContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                MessageBox.Show("Removed");
+            } else
+            {
+                // Do nothing
+                MessageBox.Show("No changes made");
             }
         }
     }

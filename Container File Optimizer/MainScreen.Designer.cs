@@ -36,6 +36,7 @@
             // 
             // buttonCreateNewSystem
             // 
+            this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateNewSystem.Location = new System.Drawing.Point(13, 13);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(340, 99);
@@ -46,6 +47,7 @@
             // 
             // buttonCreateContainer
             // 
+            this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateContainer.Location = new System.Drawing.Point(13, 118);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(340, 99);
@@ -55,6 +57,7 @@
             // 
             // buttonEditSystem
             // 
+            this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEditSystem.Location = new System.Drawing.Point(358, 13);
             this.buttonEditSystem.Name = "buttonEditSystem";
             this.buttonEditSystem.Size = new System.Drawing.Size(340, 99);
@@ -65,6 +68,7 @@
             // 
             // buttonExit
             // 
+            this.buttonExit.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonExit.Location = new System.Drawing.Point(358, 118);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(340, 99);
@@ -76,7 +80,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(720, 228);
+            this.ClientSize = new System.Drawing.Size(711, 228);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonEditSystem);
             this.Controls.Add(this.buttonCreateContainer);
