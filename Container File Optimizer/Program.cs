@@ -16,7 +16,7 @@ namespace Container_File_Optimizer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new formMainScreen());
+            Application.Run(new MainScreen());
         }
     }
 }

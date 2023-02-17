@@ -4,15 +4,17 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Management.Instrumentation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Container_File_Optimizer
 {
-    public partial class formMainScreen : Form
+    public partial class MainScreen : Form
     {
-        public formMainScreen()
+        public MainScreen()
         {
             InitializeComponent();
         }
@@ -24,14 +26,13 @@ namespace Container_File_Optimizer
 
         private void buttonCreateNewSystem_Click(object sender, EventArgs e)
         {
-            Form newSystemFormInstnce = new formNewSystem();
-            newSystemFormInstnce.Show();
+            NewSystem newSystem = new NewSystem();
+            newSystem.ShowDialog();
         }
 
-        private void buttonExit_Click(object sender, EventArgs e)
+        private void buttonEditSystem_Click(object sender, EventArgs e)
         {
 
-            Application.Exit();
         }
     }
 }

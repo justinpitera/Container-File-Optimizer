@@ -1,6 +1,6 @@
 ﻿namespace Container_File_Optimizer
 {
-    partial class formMainScreen
+    partial class MainScreen
     {
         /// <summary>
         /// Required designer variable.
@@ -29,67 +29,63 @@
         private void InitializeComponent()
         {
             this.buttonCreateNewSystem = new System.Windows.Forms.Button();
-            this.buttonCreateApplication = new System.Windows.Forms.Button();
+            this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonCreateNewSystem
             // 
-            this.buttonCreateNewSystem.Location = new System.Drawing.Point(15, 16);
-            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonCreateNewSystem.Location = new System.Drawing.Point(13, 13);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
-            this.buttonCreateNewSystem.Size = new System.Drawing.Size(382, 124);
+            this.buttonCreateNewSystem.Size = new System.Drawing.Size(340, 99);
             this.buttonCreateNewSystem.TabIndex = 0;
             this.buttonCreateNewSystem.Text = "Create New System";
             this.buttonCreateNewSystem.UseVisualStyleBackColor = true;
             this.buttonCreateNewSystem.Click += new System.EventHandler(this.buttonCreateNewSystem_Click);
             // 
-            // buttonCreateApplication
+            // buttonCreateContainer
             // 
-            this.buttonCreateApplication.Location = new System.Drawing.Point(15, 148);
-            this.buttonCreateApplication.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.buttonCreateApplication.Name = "buttonCreateApplication";
-            this.buttonCreateApplication.Size = new System.Drawing.Size(382, 124);
-            this.buttonCreateApplication.TabIndex = 1;
-            this.buttonCreateApplication.Text = "Create Application";
-            this.buttonCreateApplication.UseVisualStyleBackColor = true;
+            this.buttonCreateContainer.Location = new System.Drawing.Point(13, 118);
+            this.buttonCreateContainer.Name = "buttonCreateContainer";
+            this.buttonCreateContainer.Size = new System.Drawing.Size(340, 99);
+            this.buttonCreateContainer.TabIndex = 1;
+            this.buttonCreateContainer.Text = "Create Container";
+            this.buttonCreateContainer.UseVisualStyleBackColor = true;
             // 
             // buttonEditSystem
             // 
-            this.buttonEditSystem.Location = new System.Drawing.Point(404, 15);
-            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonEditSystem.Location = new System.Drawing.Point(358, 13);
             this.buttonEditSystem.Name = "buttonEditSystem";
-            this.buttonEditSystem.Size = new System.Drawing.Size(382, 124);
+            this.buttonEditSystem.Size = new System.Drawing.Size(340, 99);
             this.buttonEditSystem.TabIndex = 2;
-            this.buttonEditSystem.Text = "Edit Existing System";
+            this.buttonEditSystem.Text = "Edit System";
             this.buttonEditSystem.UseVisualStyleBackColor = true;
+            this.buttonEditSystem.Click += new System.EventHandler(this.buttonEditSystem_Click);
             // 
             // buttonExit
             // 
-            this.buttonExit.Location = new System.Drawing.Point(404, 146);
-            this.buttonExit.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.buttonExit.Location = new System.Drawing.Point(358, 118);
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(382, 124);
+            this.buttonExit.Size = new System.Drawing.Size(340, 99);
             this.buttonExit.TabIndex = 3;
-            this.buttonExit.Text = "Edit Application";
+            this.buttonExit.Text = "Edit Container";
             this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // MainScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(810, 288);
+            this.ClientSize = new System.Drawing.Size(720, 228);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonEditSystem);
-            this.Controls.Add(this.buttonCreateApplication);
+            this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.MaximizeBox = false;
             this.Name = "MainScreen";
-            this.Text = "Container File Optimizer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Container File Optimizer - PRESENTATION BUILD";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
 
@@ -98,7 +94,7 @@
         #endregion
 
         private System.Windows.Forms.Button buttonCreateNewSystem;
-        private System.Windows.Forms.Button buttonCreateApplication;
+        private System.Windows.Forms.Button buttonCreateContainer;
         private System.Windows.Forms.Button buttonEditSystem;
         private System.Windows.Forms.Button buttonExit;
     }

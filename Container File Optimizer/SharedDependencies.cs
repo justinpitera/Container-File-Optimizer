@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace Container_File_Optimizer
 {
-    public partial class formNewSystem : Form
+    public partial class SharedDependencies : Form
     {
-        public formNewSystem()
+        public SharedDependencies()
         {
             InitializeComponent();
         }
