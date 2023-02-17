@@ -20,7 +20,8 @@ namespace Container_File_Optimizer
 
         private void NewSystem_Load(object sender, EventArgs e)
         {
-
+            // To Do : 
+            // Make it so the NewSystem form shows up and this form hides, then when newsystem closes this form reappears
         }
         private void NewSystem_Load(object sender, FormClosedEventArgs e)
         {
