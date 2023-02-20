@@ -16,5 +16,10 @@ namespace Container_File_Optimizer
         {
             InitializeComponent();
         }
+
+        private void EditSystem_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

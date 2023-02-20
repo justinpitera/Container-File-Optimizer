@@ -203,7 +203,6 @@
             this.Name = "NewSystem";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Create System - New System";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.NewSystem_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NewSystem_Load);
             this.Load += new System.EventHandler(this.NewSystem_Load);
             this.panel2.ResumeLayout(false);

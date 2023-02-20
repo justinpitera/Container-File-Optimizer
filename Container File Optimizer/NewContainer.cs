@@ -10,11 +10,16 @@ using System.Windows.Forms;
 
 namespace Container_File_Optimizer
 {
-    public partial class SystemBuilder : Form
+    public partial class NewContainer : Form
     {
-        public SystemBuilder()
+        public NewContainer()
         {
             InitializeComponent();
+        }
+
+        private void NewContainer_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

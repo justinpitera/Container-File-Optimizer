@@ -34,6 +34,21 @@ namespace Container_File_Optimizer
 
         private void buttonEditSystem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog openSystemFile = new OpenFileDialog();
+            openSystemFile.Filter = "Container File Optimizer files (*.cfo)|*.cfo";
+            openSystemFile.InitialDirectory = Application.StartupPath;
+            openSystemFile.ShowDialog();
+            MessageBox.Show("Opening: " + openSystemFile.FileName);
+        }
+
+        private void buttonCreateContainer_Click(object sender, EventArgs e)
+        {
+            NewContainer newContainer = new NewContainer();
+            newContainer.ShowDialog();
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
 
         }
     }

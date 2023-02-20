@@ -32,6 +32,7 @@
             this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // buttonCreateNewSystem
@@ -54,6 +55,7 @@
             this.buttonCreateContainer.TabIndex = 1;
             this.buttonCreateContainer.Text = "Create Container";
             this.buttonCreateContainer.UseVisualStyleBackColor = true;
+            this.buttonCreateContainer.Click += new System.EventHandler(this.buttonCreateContainer_Click);
             // 
             // buttonEditSystem
             // 
@@ -75,6 +77,11 @@
             this.buttonExit.TabIndex = 3;
             this.buttonExit.Text = "Edit Container";
             this.buttonExit.UseVisualStyleBackColor = true;
+            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // MainScreen
             // 
@@ -101,6 +108,7 @@
         private System.Windows.Forms.Button buttonCreateContainer;
         private System.Windows.Forms.Button buttonEditSystem;
         private System.Windows.Forms.Button buttonExit;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 

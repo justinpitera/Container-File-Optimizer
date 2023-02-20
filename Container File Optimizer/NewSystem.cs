@@ -13,6 +13,7 @@ namespace Container_File_Optimizer
 {
     public partial class NewSystem : Form
     {
+
         public NewSystem()
         {
             InitializeComponent();
@@ -32,7 +33,10 @@ namespace Container_File_Optimizer
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-           
+            EditSystem systemBuilderForm = new EditSystem();
+            systemBuilderForm.Show();
+            this.Close();
+            
         }
 
         private void ShowToolTip(object sender, EventArgs e)
@@ -71,25 +75,29 @@ namespace Container_File_Optimizer
         }
 
 
-
-
-
         // Failsafe if user accidently closes window to prevent data loss
+        // I'm commenting this out because of issues but ill re implement this if i cant fix it.
+        // NOTE: IF RE IMPLEMENTING< GO INTO THE FORM DESINGER ANd GO TO EVENTS AND RESET THIS AS THE FORM CLOSING EVENT!!!!!!
+        /*
         private void NewSystem_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit", MessageBoxButtons.YesNo) == DialogResult.No)
+            if(changesMade)
             {
-                e.Cancel = true;
+                if (MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
             }
-
         }
+        */
+
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
             int current = textBoxSystemName.Text.Length;
             int max = textBoxSystemName.MaxLength;
             labelSystemNameCount.Text = current.ToString() + " / 32";
             this.Text = "Create System - " + textBoxSystemName.Text;
-
+            
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
@@ -109,6 +117,10 @@ namespace Container_File_Optimizer
             int max = textBoxCreator.MaxLength;
             labelCreatorCount.Text = current.ToString() + " / 32";
 
+                
+
+
+
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
@@ -117,13 +129,14 @@ namespace Container_File_Optimizer
             {
                 labelCreatorCount.ForeColor = Form.DefaultForeColor;
             }
+
         }
 
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you would like to remove: " + listViewContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MessageBox.Show("Removed");
+                MessageBox.Show("Removed: " + listViewContainers.SelectedItems.ToString());
             } else
             {
                 // Do nothing
