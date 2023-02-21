@@ -16,5 +16,10 @@ namespace Container_File_Optimizer
         {
             InitializeComponent();
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
