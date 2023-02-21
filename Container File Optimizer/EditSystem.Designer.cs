@@ -60,7 +60,7 @@
             listViewItem2,
             listViewItem3});
             this.listView1.Location = new System.Drawing.Point(11, 309);
-            this.listView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.Name = "listView1";
             this.listView1.Size = new System.Drawing.Size(97, 94);
             this.listView1.TabIndex = 0;
@@ -78,7 +78,7 @@
             listViewItem4,
             listViewItem5,
             listViewItem6});
-            this.listView2.Location = new System.Drawing.Point(12, 25);
+            this.listView2.Location = new System.Drawing.Point(11, 25);
             this.listView2.Name = "listView2";
             this.listView2.Size = new System.Drawing.Size(385, 266);
             this.listView2.TabIndex = 1;
@@ -123,7 +123,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.listView2);
             this.Controls.Add(this.listView1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "EditSystem";
             this.Text = "System Builder";
             this.Load += new System.EventHandler(this.EditSystem_Load);
