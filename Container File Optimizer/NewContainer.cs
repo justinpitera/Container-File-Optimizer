@@ -21,5 +21,10 @@ namespace Container_File_Optimizer
         {
 
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
