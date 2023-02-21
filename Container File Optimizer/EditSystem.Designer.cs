@@ -49,6 +49,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ExportSystemFile = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.ModifyFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listView1
@@ -62,7 +63,7 @@
             this.listView1.Location = new System.Drawing.Point(11, 309);
             this.listView1.Margin = new System.Windows.Forms.Padding(2);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(97, 94);
+            this.listView1.Size = new System.Drawing.Size(140, 94);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.List;
@@ -97,7 +98,7 @@
             // 
             // ExportSystemFile
             // 
-            this.ExportSystemFile.Location = new System.Drawing.Point(113, 380);
+            this.ExportSystemFile.Location = new System.Drawing.Point(156, 380);
             this.ExportSystemFile.Name = "ExportSystemFile";
             this.ExportSystemFile.Size = new System.Drawing.Size(117, 23);
             this.ExportSystemFile.TabIndex = 3;
@@ -113,11 +114,21 @@
             this.label3.TabIndex = 5;
             this.label3.Text = "Dependancy Tree:";
             // 
+            // ModifyFile
+            // 
+            this.ModifyFile.Location = new System.Drawing.Point(279, 380);
+            this.ModifyFile.Name = "ModifyFile";
+            this.ModifyFile.Size = new System.Drawing.Size(117, 23);
+            this.ModifyFile.TabIndex = 6;
+            this.ModifyFile.Text = "Modify File";
+            this.ModifyFile.UseVisualStyleBackColor = true;
+            // 
             // EditSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(410, 417);
+            this.Controls.Add(this.ModifyFile);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.ExportSystemFile);
             this.Controls.Add(this.label1);
@@ -139,5 +150,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ExportSystemFile;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button ModifyFile;
     }
 }
