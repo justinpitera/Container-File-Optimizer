@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Configuration;
 
 namespace Container_File_Optimizer
 {
@@ -189,6 +190,11 @@ namespace Container_File_Optimizer
                 cnn.Close();
 
             }
+        }
+
+        private void labelCreator_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -73,7 +73,7 @@ namespace Container_File_Optimizer
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSystemName.Location = new System.Drawing.Point(8, 22);
-            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxSystemName.MaxLength = 32;
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.Size = new System.Drawing.Size(369, 23);
@@ -85,7 +85,7 @@ namespace Container_File_Optimizer
             this.textBoxCreator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCreator.Location = new System.Drawing.Point(8, 76);
-            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxCreator.MaxLength = 255;
             this.textBoxCreator.Name = "textBoxCreator";
             this.textBoxCreator.Size = new System.Drawing.Size(369, 23);
@@ -97,7 +97,7 @@ namespace Container_File_Optimizer
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 169);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(388, 63);
             this.panel1.TabIndex = 18;
@@ -105,12 +105,13 @@ namespace Container_File_Optimizer
             // buttonCreateSystem
             // 
             this.buttonCreateSystem.Location = new System.Drawing.Point(8, 3);
-            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateSystem.Name = "buttonCreateSystem";
             this.buttonCreateSystem.Size = new System.Drawing.Size(368, 53);
             this.buttonCreateSystem.TabIndex = 3;
             this.buttonCreateSystem.Text = "Add Container";
             this.buttonCreateSystem.UseVisualStyleBackColor = true;
+            this.buttonCreateSystem.Click += new System.EventHandler(this.buttonCreateSystem_Click);
             // 
             // labelSystemNameCount
             // 
@@ -137,7 +138,7 @@ namespace Container_File_Optimizer
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(302, 132);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 24);
             this.button1.TabIndex = 22;
@@ -150,7 +151,7 @@ namespace Container_File_Optimizer
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(8, 132);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.MaxLength = 255;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
@@ -183,7 +184,7 @@ namespace Container_File_Optimizer
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelSystemNameCount);
             this.Controls.Add(this.labelCreatorCount);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "NewContainer";
             this.Text = "Create New Container - {systemName}";
             this.Load += new System.EventHandler(this.NewContainer_Load);

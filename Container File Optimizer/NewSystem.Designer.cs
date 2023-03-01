@@ -51,32 +51,35 @@ namespace Container_File_Optimizer
             // labelCreator
             // 
             this.labelCreator.AutoSize = true;
-            this.labelCreator.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCreator.Location = new System.Drawing.Point(7, 72);
+            this.labelCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCreator.Location = new System.Drawing.Point(5, 58);
+            this.labelCreator.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCreator.Name = "labelCreator";
-            this.labelCreator.Size = new System.Drawing.Size(71, 22);
+            this.labelCreator.Size = new System.Drawing.Size(59, 17);
             this.labelCreator.TabIndex = 8;
             this.labelCreator.Text = "Creator:";
+            this.labelCreator.Click += new System.EventHandler(this.labelCreator_Click);
             // 
             // labelSystemName
             // 
             this.labelSystemName.AutoSize = true;
-            this.labelSystemName.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSystemName.Location = new System.Drawing.Point(7, 6);
+            this.labelSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSystemName.Location = new System.Drawing.Point(5, 5);
+            this.labelSystemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelSystemName.Name = "labelSystemName";
-            this.labelSystemName.Size = new System.Drawing.Size(117, 22);
+            this.labelSystemName.Size = new System.Drawing.Size(99, 17);
             this.labelSystemName.TabIndex = 7;
             this.labelSystemName.Text = "System Name:";
             // 
             // textBoxSystemName
             // 
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSystemName.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSystemName.Location = new System.Drawing.Point(11, 30);
-            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxSystemName.Location = new System.Drawing.Point(8, 24);
+            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxSystemName.MaxLength = 32;
             this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.Size = new System.Drawing.Size(491, 30);
+            this.textBoxSystemName.Size = new System.Drawing.Size(369, 23);
             this.textBoxSystemName.TabIndex = 5;
             this.textBoxSystemName.TextChanged += new System.EventHandler(this.textBoxSystemName_TextChanged);
             this.textBoxSystemName.MouseHover += new System.EventHandler(this.textBoxSystemName_MouseHover);
@@ -85,11 +88,11 @@ namespace Container_File_Optimizer
             // 
             this.panel2.Controls.Add(this.listViewContainers);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel2.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel2.Location = new System.Drawing.Point(0, 165);
-            this.panel2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel2.Location = new System.Drawing.Point(0, 135);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(514, 201);
+            this.panel2.Size = new System.Drawing.Size(386, 163);
             this.panel2.TabIndex = 11;
             // 
             // listViewContainers
@@ -97,9 +100,9 @@ namespace Container_File_Optimizer
             this.listViewContainers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listViewContainers.HideSelection = false;
             this.listViewContainers.Location = new System.Drawing.Point(0, 0);
-            this.listViewContainers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.listViewContainers.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.listViewContainers.Name = "listViewContainers";
-            this.listViewContainers.Size = new System.Drawing.Size(514, 201);
+            this.listViewContainers.Size = new System.Drawing.Size(386, 163);
             this.listViewContainers.TabIndex = 0;
             this.listViewContainers.UseCompatibleStateImageBehavior = false;
             this.listViewContainers.View = System.Windows.Forms.View.List;
@@ -108,12 +111,12 @@ namespace Container_File_Optimizer
             // textBoxCreator
             // 
             this.textBoxCreator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCreator.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCreator.Location = new System.Drawing.Point(11, 96);
-            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxCreator.Location = new System.Drawing.Point(8, 78);
+            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.textBoxCreator.MaxLength = 32;
             this.textBoxCreator.Name = "textBoxCreator";
-            this.textBoxCreator.Size = new System.Drawing.Size(491, 30);
+            this.textBoxCreator.Size = new System.Drawing.Size(369, 23);
             this.textBoxCreator.TabIndex = 10;
             this.textBoxCreator.TextChanged += new System.EventHandler(this.textBoxCreatorName_TextChanged);
             this.textBoxCreator.MouseHover += new System.EventHandler(this.textBoxCreator_MouseHover);
@@ -124,19 +127,19 @@ namespace Container_File_Optimizer
             this.panel1.Controls.Add(this.buttonRemoveContainer);
             this.panel1.Controls.Add(this.buttonAddContainer);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(0, 366);
-            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel1.Location = new System.Drawing.Point(0, 298);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(514, 78);
+            this.panel1.Size = new System.Drawing.Size(386, 63);
             this.panel1.TabIndex = 10;
             // 
             // buttonCreateSystem
             // 
-            this.buttonCreateSystem.Location = new System.Drawing.Point(200, 2);
-            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonCreateSystem.Location = new System.Drawing.Point(150, 2);
+            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonCreateSystem.Name = "buttonCreateSystem";
-            this.buttonCreateSystem.Size = new System.Drawing.Size(302, 70);
+            this.buttonCreateSystem.Size = new System.Drawing.Size(226, 57);
             this.buttonCreateSystem.TabIndex = 3;
             this.buttonCreateSystem.Text = "Initialize System";
             this.buttonCreateSystem.UseVisualStyleBackColor = true;
@@ -145,10 +148,10 @@ namespace Container_File_Optimizer
             // 
             // buttonRemoveContainer
             // 
-            this.buttonRemoveContainer.Location = new System.Drawing.Point(3, 42);
-            this.buttonRemoveContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonRemoveContainer.Location = new System.Drawing.Point(2, 34);
+            this.buttonRemoveContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonRemoveContainer.Name = "buttonRemoveContainer";
-            this.buttonRemoveContainer.Size = new System.Drawing.Size(191, 34);
+            this.buttonRemoveContainer.Size = new System.Drawing.Size(143, 28);
             this.buttonRemoveContainer.TabIndex = 2;
             this.buttonRemoveContainer.Text = "Remove Container";
             this.buttonRemoveContainer.UseVisualStyleBackColor = true;
@@ -157,10 +160,10 @@ namespace Container_File_Optimizer
             // 
             // buttonAddContainer
             // 
-            this.buttonAddContainer.Location = new System.Drawing.Point(3, 5);
-            this.buttonAddContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonAddContainer.Location = new System.Drawing.Point(2, 4);
+            this.buttonAddContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.buttonAddContainer.Name = "buttonAddContainer";
-            this.buttonAddContainer.Size = new System.Drawing.Size(191, 34);
+            this.buttonAddContainer.Size = new System.Drawing.Size(143, 28);
             this.buttonAddContainer.TabIndex = 1;
             this.buttonAddContainer.Text = "Add Container";
             this.buttonAddContainer.UseVisualStyleBackColor = true;
@@ -169,28 +172,30 @@ namespace Container_File_Optimizer
             // labelCreatorCount
             // 
             this.labelCreatorCount.AutoSize = true;
-            this.labelCreatorCount.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCreatorCount.Location = new System.Drawing.Point(413, 128);
+            this.labelCreatorCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelCreatorCount.Location = new System.Drawing.Point(310, 104);
+            this.labelCreatorCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCreatorCount.Name = "labelCreatorCount";
-            this.labelCreatorCount.Size = new System.Drawing.Size(52, 22);
+            this.labelCreatorCount.Size = new System.Drawing.Size(44, 17);
             this.labelCreatorCount.TabIndex = 12;
             this.labelCreatorCount.Text = "0 / 32";
             // 
             // labelSystemNameCount
             // 
             this.labelSystemNameCount.AutoSize = true;
-            this.labelSystemNameCount.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSystemNameCount.Location = new System.Drawing.Point(413, 62);
+            this.labelSystemNameCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSystemNameCount.Location = new System.Drawing.Point(310, 50);
+            this.labelSystemNameCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelSystemNameCount.Name = "labelSystemNameCount";
-            this.labelSystemNameCount.Size = new System.Drawing.Size(52, 22);
+            this.labelSystemNameCount.Size = new System.Drawing.Size(44, 17);
             this.labelSystemNameCount.TabIndex = 13;
             this.labelSystemNameCount.Text = "0 / 32";
             // 
             // NewSystem
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(514, 444);
+            this.ClientSize = new System.Drawing.Size(386, 361);
             this.Controls.Add(this.labelSystemNameCount);
             this.Controls.Add(this.labelCreatorCount);
             this.Controls.Add(this.textBoxCreator);
@@ -200,7 +205,7 @@ namespace Container_File_Optimizer
             this.Controls.Add(this.labelSystemName);
             this.Controls.Add(this.textBoxSystemName);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.MaximizeBox = false;
             this.Name = "NewSystem";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

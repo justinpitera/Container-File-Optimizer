@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Container_File_Optimizer
 {
@@ -95,6 +96,11 @@ namespace Container_File_Optimizer
                 cnn.Close();
 
             }
+        }
+
+        private void buttonCreateSystem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
