@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,10 @@ namespace Container_File_Optimizer
 {
     public partial class NewSystem : Form
     {
+
+        //conection string for SQL
+        string connectionString = "Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString";
+
 
         public NewSystem()
         {
@@ -141,6 +146,48 @@ namespace Container_File_Optimizer
             {
                 // Do nothing
                 MessageBox.Show("No changes made");
+            }
+        }
+
+
+        /*
+         *  This Fundction uses SQL commands to add a system to the database 
+         */
+        private void createSystem()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO System (system_name,version_number, system_creator) VALUES (@a, @b, @c)", cnn))
+            {
+                //Execute SQL INSERT
+                cmd.Parameters.AddWithValue("@a", "value");
+                cmd.Parameters.AddWithValue("@b", "value");
+                cmd.Parameters.AddWithValue("@c", "value");
+
+                cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+
+            }
+        }
+
+        /*
+         *  This Fundction uses SQL commands to add a connection between a system and an application 
+         */
+        private void addSysAppConection()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@a, @b)", cnn))
+            {
+                //Execute SQL INSERT
+                cmd.Parameters.AddWithValue("@a", "value");
+                cmd.Parameters.AddWithValue("@b", "value");
+
+                cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+
             }
         }
     }
