@@ -5,12 +5,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Threading;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Container_File_Optimizer
 {
 
     internal static class Program
-    {
+    { 
         static Mutex mutex = new Mutex(true, "Container-File-Optimizer");
         /// <summary>
         /// The main entry point for the application.

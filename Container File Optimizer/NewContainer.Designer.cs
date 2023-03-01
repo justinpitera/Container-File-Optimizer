@@ -1,7 +1,12 @@
-﻿namespace Container_File_Optimizer
+﻿using System.Data.SqlClient;
+
+namespace Container_File_Optimizer
 {
     partial class NewContainer
     {
+        //conection string for SQL
+        string connectionString = "Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString";
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -19,6 +24,67 @@
             }
             base.Dispose(disposing);
         }
+
+        /*
+        *  This Fundction uses SQL commands to add a application to the database 
+        */
+        private void createApp()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO Application (app_name,app_creator) VALUES (@a, @b)", cnn))
+            {
+                //Execute SQL INSERT
+                cmd.Parameters.AddWithValue("@a", "value");
+                cmd.Parameters.AddWithValue("@b", "value");
+
+                cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+
+            }
+        }
+
+        /*
+       *  This Fundction uses SQL commands to add a File to the database 
+       */
+        private void createFile()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO File (file_name,file_path) VALUES (@a, @b)", cnn))
+            {
+                //Execute SQL INSERT
+                cmd.Parameters.AddWithValue("@a", "value");
+                cmd.Parameters.AddWithValue("@b", "value");
+
+                cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+
+            }
+        }
+
+        /*
+         *  This Fundction uses SQL commands to add a connection between a system and an application 
+         */
+        private void addAppFileConection()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand("INSERT INTO AppFile (app_id,file_id) VALUES (@a, @b)", cnn))
+            {
+                //Execute SQL INSERT
+                cmd.Parameters.AddWithValue("@a", "value");
+                cmd.Parameters.AddWithValue("@b", "value");
+
+                cnn.Open();
+                cmd.ExecuteNonQuery();
+                cnn.Close();
+
+            }
+        }
+
 
         #region Windows Form Designer generated code
 
