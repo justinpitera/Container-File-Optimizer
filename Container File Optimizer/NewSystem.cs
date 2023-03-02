@@ -17,7 +17,7 @@ namespace Container_File_Optimizer
     {
 
         //conection string for SQL
-        string connectionString = "Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString";
+        string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\ContainerfileDatabase.mdf;Integrated Security=True";
 
 
         public NewSystem()
