@@ -165,9 +165,9 @@ namespace Container_File_Optimizer
                 //Execute SQL INSERT
                 cnn.Open();
                 int count = systemCount(cnn);
-                cmd.Parameters.AddWithValue("@a", textBoxSystemName.Text);
+                cmd.Parameters.AddWithValue("@a", textBoxSystemName.Text.ToString());
                 cmd.Parameters.AddWithValue("@b", count + 1);
-                cmd.Parameters.AddWithValue("@c", textBoxCreator.Text);
+                cmd.Parameters.AddWithValue("@c", textBoxCreator.Text.ToString());
 
                 cmd.ExecuteNonQuery();
                 cnn.Close();
