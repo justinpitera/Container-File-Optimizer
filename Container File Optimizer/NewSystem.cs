@@ -163,12 +163,12 @@ namespace Container_File_Optimizer
             using (SqlCommand cmd = new SqlCommand("INSERT INTO System (system_name,version_number, system_creator) VALUES (@a, @b, @c)", cnn))
             {
                 //Execute SQL INSERT
+                cnn.Open();
                 int count = systemCount(cnn);
                 cmd.Parameters.AddWithValue("@a", textBoxSystemName.Text);
                 cmd.Parameters.AddWithValue("@b", count + 1);
                 cmd.Parameters.AddWithValue("@c", textBoxCreator.Text);
 
-                cnn.Open();
                 cmd.ExecuteNonQuery();
                 cnn.Close();
 
