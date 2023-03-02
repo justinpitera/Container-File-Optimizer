@@ -39,6 +39,8 @@ namespace Container_File_Optimizer
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
+
+            createSystem();
             EditSystem systemBuilderForm = new EditSystem();
             systemBuilderForm.Show();
             this.Close();
@@ -156,14 +158,15 @@ namespace Container_File_Optimizer
          */
         private void createSystem()
         {
+            int count = systemCount();
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand("INSERT INTO System (system_name,version_number, system_creator) VALUES (@a, @b, @c)", cnn))
             {
                 //Execute SQL INSERT
-                cmd.Parameters.AddWithValue("@a", "value");
-                cmd.Parameters.AddWithValue("@b", "value");
-                cmd.Parameters.AddWithValue("@c", "value");
+                cmd.Parameters.AddWithValue("@a", textBoxSystemName.Text);
+                cmd.Parameters.AddWithValue("@b", count + 1);
+                cmd.Parameters.AddWithValue("@c", textBoxCreator.Text);
 
                 cnn.Open();
                 cmd.ExecuteNonQuery();
@@ -192,9 +195,36 @@ namespace Container_File_Optimizer
             }
         }
 
+        private int systemCount()
+        {
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
+                                                           "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
+            
+                cmd.Parameters.AddWithValue("@currSystem",textBoxSystemName);
+                cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
+
+                cnn.Open();
+                int count = 0;
+                using (SqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read()) { 
+                        count++;
+                    }
+                }
+
+                cnn.Close();
+
+                return count;
+            }
+        }
         private void labelCreator_Click(object sender, EventArgs e)
         {
+            {
 
+            }
         }
     }
 }
