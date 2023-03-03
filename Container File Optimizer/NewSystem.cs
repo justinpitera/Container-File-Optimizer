@@ -158,21 +158,49 @@ namespace Container_File_Optimizer
          */
         private void createSystem()
         {
-            //get SQL connection and Command
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO System (system_name,version_number, system_creator) VALUES (@a, @b, @c)", cnn))
+
+
+            string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                //Execute SQL INSERT
-                cnn.Open();
-                int count = systemCount(cnn);
-                cmd.Parameters.AddWithValue("@a", textBoxSystemName.Text.ToString());
-                cmd.Parameters.AddWithValue("@b", count + 1);
-                cmd.Parameters.AddWithValue("@c", textBoxCreator.Text.ToString());
+                connection.Open();
 
-                cmd.ExecuteNonQuery();
-                cnn.Close();
+                string system_name = textBoxSystemName.Text;
+                string system_creator = textBoxCreator.Text;
+                int version_number = 1;
 
+                // Check if a system with the same system_name and system_creator already exists
+                string query = "SELECT COUNT(*) FROM System WHERE system_name = @system_name AND system_creator = @system_creator";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@system_name", system_name);
+                command.Parameters.AddWithValue("@system_creator", system_creator);
+
+                int count = (int)command.ExecuteScalar();
+
+                // If a system with the same system_name and system_creator already exists, increment the version_number number
+                if (count > 0)
+                {
+                    query = "SELECT MAX(version_number) FROM System WHERE system_name = @system_name AND system_creator = @system_creator";
+                    command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@system_name", system_name);
+                    command.Parameters.AddWithValue("@system_creator", system_creator);
+                    version_number = count + 1;
+                }
+
+                // Add the new system to the Systems table
+                query = "INSERT INTO System (system_name, system_creator, version_number) VALUES (@system_name, @system_creator, @version_number)";
+                command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@system_name", system_name);
+                command.Parameters.AddWithValue("@system_creator", system_creator);
+                command.Parameters.AddWithValue("@version_number", version_number);
+
+                int rowsAffected = command.ExecuteNonQuery();
+
+                connection.Close();
             }
+
         }
 
         /*
