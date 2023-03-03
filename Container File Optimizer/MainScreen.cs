@@ -43,6 +43,7 @@ namespace Container_File_Optimizer
         /// This Fundction uses SQL commands to view the saved applications
         /// </summary>
         /// 
+
         private void ViewApps()
         {
             //get SQL connection and Command
