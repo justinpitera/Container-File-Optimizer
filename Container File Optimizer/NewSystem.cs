@@ -158,7 +158,7 @@ namespace Container_File_Optimizer
         {
 
 
-            string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
+            string dbPath = "C:\\Users\\ff7fa\\OneDrive\\Desktop\\Containerfile\\Container File Optimizer\\ContainerfileDatabase.mdf";
             string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
