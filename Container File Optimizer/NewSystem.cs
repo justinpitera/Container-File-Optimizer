@@ -32,9 +32,7 @@ namespace Container_File_Optimizer
         }
         private void NewSystem_Load(object sender, FormClosedEventArgs e)
         {
-            MainScreen mainScreen = new MainScreen();
 
-            mainScreen.Enabled = true;
         }
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)

@@ -33,7 +33,7 @@ namespace Container_File_Optimizer
                 {
                     Application.EnableVisualStyles();
                     Application.SetCompatibleTextRenderingDefault(false);
-                    Application.Run(new MainScreen());
+                    Application.Run(new Main());
                 }
                 finally
                 {

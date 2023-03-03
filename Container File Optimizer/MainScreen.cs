@@ -11,18 +11,12 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Diagnostics;
 using System.Threading;
-using System.Configuration;
-using System.Data.SqlClient;
-
 
 namespace Container_File_Optimizer
 {
-    public partial class MainScreen : Form
+    public partial class Main : Form
     {
-        //conection string for SQL
-        string connectionString = "Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString";
-
-        public MainScreen()
+        public Main()
         {
             InitializeComponent();
         }
@@ -56,42 +50,6 @@ namespace Container_File_Optimizer
         private void buttonExit_Click(object sender, EventArgs e)
         {
 
-        }
-
-        /*
-        *  This Fundction uses SQL commands to view the saved applications
-        */
-        private void viewApps()
-        {
-            //get SQL connection and Command
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            using (SqlDataAdapter adp = new SqlDataAdapter("SELECT * FROM Application", cnn))
-            {
-                DataTable appTable = new DataTable();
-                adp.Fill(appTable);
-
-                cnn.Open();
-                cnn.Close();
-
-            }
-        }
-
-        /*
-       *  This Fundction uses SQL commands to view the saved Systems 
-       */
-        private void viewSystems()
-        {
-            //get SQL connection and Command
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            using (SqlDataAdapter adp = new SqlDataAdapter("SELECT * FROM System", cnn))
-            {
-                DataTable appTable = new DataTable();
-                adp.Fill(appTable);
-
-                cnn.Open();
-                cnn.Close();
-
-            }
         }
     }
 }

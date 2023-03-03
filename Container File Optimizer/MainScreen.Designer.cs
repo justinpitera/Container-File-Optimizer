@@ -1,6 +1,6 @@
 ﻿namespace Container_File_Optimizer
 {
-    partial class MainScreen
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -28,17 +28,31 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Example System 1");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Systems", new System.Windows.Forms.TreeNode[] {
+            treeNode11});
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Example Container 2");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Example Container 1");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Containers", new System.Windows.Forms.TreeNode[] {
+            treeNode13,
+            treeNode14});
             this.buttonCreateNewSystem = new System.Windows.Forms.Button();
             this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
             this.buttonExit = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.label4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // buttonCreateNewSystem
             // 
             this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateNewSystem.Location = new System.Drawing.Point(13, 13);
+            this.buttonCreateNewSystem.Location = new System.Drawing.Point(481, 125);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(340, 99);
             this.buttonCreateNewSystem.TabIndex = 0;
@@ -49,7 +63,7 @@
             // buttonCreateContainer
             // 
             this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateContainer.Location = new System.Drawing.Point(13, 118);
+            this.buttonCreateContainer.Location = new System.Drawing.Point(481, 335);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(340, 99);
             this.buttonCreateContainer.TabIndex = 1;
@@ -60,18 +74,18 @@
             // buttonEditSystem
             // 
             this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditSystem.Location = new System.Drawing.Point(358, 13);
+            this.buttonEditSystem.Location = new System.Drawing.Point(481, 230);
             this.buttonEditSystem.Name = "buttonEditSystem";
             this.buttonEditSystem.Size = new System.Drawing.Size(340, 99);
             this.buttonEditSystem.TabIndex = 2;
-            this.buttonEditSystem.Text = "Edit System";
+            this.buttonEditSystem.Text = "Edit Existing System";
             this.buttonEditSystem.UseVisualStyleBackColor = true;
             this.buttonEditSystem.Click += new System.EventHandler(this.buttonEditSystem_Click);
             // 
             // buttonExit
             // 
             this.buttonExit.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.Location = new System.Drawing.Point(358, 118);
+            this.buttonExit.Location = new System.Drawing.Point(481, 440);
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(340, 99);
             this.buttonExit.TabIndex = 3;
@@ -83,22 +97,104 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // MainScreen
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Segoe UI Variable Display", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.SystemColors.Control;
+            this.label1.Location = new System.Drawing.Point(5, 9);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(349, 40);
+            this.label1.TabIndex = 4;
+            this.label1.Text = "Container File Optimzer";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.SystemColors.Control;
+            this.label2.Location = new System.Drawing.Point(477, 91);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(133, 31);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Get Started";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.ForeColor = System.Drawing.SystemColors.Control;
+            this.label3.Location = new System.Drawing.Point(6, 91);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(136, 31);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Recent Files";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(12, 125);
+            this.richTextBox1.Multiline = false;
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(360, 33);
+            this.richTextBox1.TabIndex = 7;
+            this.richTextBox1.Text = "";
+            // 
+            // treeView1
+            // 
+            this.treeView1.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.treeView1.Location = new System.Drawing.Point(12, 165);
+            this.treeView1.Name = "treeView1";
+            treeNode11.Name = "Node2";
+            treeNode11.Text = "Example System 1";
+            treeNode12.Name = "Node0";
+            treeNode12.Text = "Systems";
+            treeNode13.Name = "Node4";
+            treeNode13.Text = "Example Container 2";
+            treeNode14.Name = "Node5";
+            treeNode14.Text = "Example Container 1";
+            treeNode15.Name = "Node1";
+            treeNode15.Text = "Containers";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode12,
+            treeNode15});
+            this.treeView1.Size = new System.Drawing.Size(360, 374);
+            this.treeView1.TabIndex = 8;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Segoe UI Variable Display", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
+            this.label4.Location = new System.Drawing.Point(93, 49);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(279, 17);
+            this.label4.TabIndex = 9;
+            this.label4.Text = "Made with love by Pythons at Rowan University";
+            // 
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(711, 228);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.ClientSize = new System.Drawing.Size(839, 551);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.treeView1);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonEditSystem);
             this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.Name = "MainScreen";
+            this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Container File Optimizer - PRESENTATION BUILD";
+            this.Text = "Container File Optimizer";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -109,6 +205,12 @@
         private System.Windows.Forms.Button buttonEditSystem;
         private System.Windows.Forms.Button buttonExit;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.Label label4;
     }
 }
 
