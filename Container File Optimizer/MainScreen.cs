@@ -39,16 +39,11 @@ namespace Container_File_Optimizer
             newContainer.ShowDialog();
         }
 
-        private void buttonExit_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
-        /*
-        *  This Fundction uses SQL commands to view the saved applications
-        */
-        private void viewApps()
+        /// <summary>
+        /// This Fundction uses SQL commands to view the saved applications
+        /// </summary>
+        /// 
+        private void ViewApps()
         {
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))

@@ -23,7 +23,8 @@ namespace Container_File_Optimizer
 
         private void NewContainer_Load(object sender, EventArgs e)
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog();   
+            for (FileDialog )
         }
 
         private void button1_Click(object sender, EventArgs e)

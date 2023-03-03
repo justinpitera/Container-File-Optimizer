@@ -13,12 +13,10 @@ using System.Configuration;
 
 namespace Container_File_Optimizer
 {
+
     public partial class NewSystem : Form
     {
-
-        //conection string for SQL
-        string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\ContainerfileDatabase.mdf;Integrated Security=True";
-
+       string dbPath = Application.StartupPath + "..\\..\\ContainerfileDatabase.mdf";
 
         public NewSystem()
         {
@@ -38,7 +36,7 @@ namespace Container_File_Optimizer
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
 
-            createSystem();
+            CreateSystem();
             EditSystem systemBuilderForm = new EditSystem();
             systemBuilderForm.Show();
             this.Close();
@@ -79,23 +77,6 @@ namespace Container_File_Optimizer
             String message = "Remove selected container from the list of containers to initialize the new system with.";
             toolTipInfo.Show(message, buttonRemoveContainer);
         }
-
-
-        // Failsafe if user accidently closes window to prevent data loss
-        // I'm commenting this out because of issues but ill re implement this if i cant fix it.
-        // NOTE: IF RE IMPLEMENTING< GO INTO THE FORM DESINGER ANd GO TO EVENTS AND RESET THIS AS THE FORM CLOSING EVENT!!!!!!
-        /*
-        private void NewSystem_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if(changesMade)
-            {
-                if (MessageBox.Show("Are you sure you want to exit? All unsaved changes will be lost.", "Exit", MessageBoxButtons.YesNo) == DialogResult.No)
-                {
-                    e.Cancel = true;
-                }
-            }
-        }
-        */
 
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
@@ -154,11 +135,8 @@ namespace Container_File_Optimizer
         /*
          *  This Fundction uses SQL commands to add a system to the database 
          */
-        private void createSystem()
+        private void CreateSystem()
         {
-
-
-            string dbPath = "C:\\Users\\ff7fa\\OneDrive\\Desktop\\Containerfile\\Container File Optimizer\\ContainerfileDatabase.mdf";
             string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -204,30 +182,31 @@ namespace Container_File_Optimizer
         /*
          *  This Fundction uses SQL commands to add a connection between a system and an application 
          */
-        private void addSysAppConection()
+        private void AddSysAppConection()
         {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@a, @b)", cnn))
+            using (SqlConnection sqlConnection = new SqlConnection(connectionString))
+            using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@system_id, @app_id)", sqlConnection))
             {
                 //Execute SQL INSERT
-                cmd.Parameters.AddWithValue("@a", "value");
-                cmd.Parameters.AddWithValue("@b", "value");
+                sqlCommand.Parameters.AddWithValue("@system_id", "value");
+                sqlCommand.Parameters.AddWithValue("@app_id", "value");
 
-                cnn.Open();
-                cmd.ExecuteNonQuery();
-                cnn.Close();
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
+                sqlConnection.Close();
 
             }
         }
 
-        private int systemCount(SqlConnection cnn)
+        private int SystemCount(SqlConnection cnn)
         {
             //get SQL connection and Command
            
           
                 SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
-                                                           "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
+                                                                                     "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
             
                 cmd.Parameters.AddWithValue("@currSystem",textBoxSystemName);
                 cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
@@ -242,11 +221,10 @@ namespace Container_File_Optimizer
 
                 return count;
         }
-        private void labelCreator_Click(object sender, EventArgs e)
-        {
-            {
 
-            }
+        private void buttonAddContainer_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
