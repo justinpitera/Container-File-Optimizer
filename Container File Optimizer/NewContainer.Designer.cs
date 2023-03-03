@@ -90,6 +90,7 @@ namespace Container_File_Optimizer
             this.textBoxCreator.Name = "textBoxCreator";
             this.textBoxCreator.Size = new System.Drawing.Size(369, 23);
             this.textBoxCreator.TabIndex = 17;
+            this.textBoxCreator.TextChanged += new System.EventHandler(this.textBoxCreator_TextChanged);
             // 
             // panel1
             // 
