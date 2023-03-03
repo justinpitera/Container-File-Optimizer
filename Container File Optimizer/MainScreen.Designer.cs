@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Example System 1");
-            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Systems", new System.Windows.Forms.TreeNode[] {
-            treeNode11});
-            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Example Container 2");
-            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Example Container 1");
-            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Containers", new System.Windows.Forms.TreeNode[] {
-            treeNode13,
-            treeNode14});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Example System 1");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Systems", new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Example Container 2");
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Example Container 1");
+            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Containers", new System.Windows.Forms.TreeNode[] {
+            treeNode3,
+            treeNode4});
             this.buttonCreateNewSystem = new System.Windows.Forms.Button();
             this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
-            this.buttonExit = new System.Windows.Forms.Button();
+            this.buttonEditContainer = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -82,16 +82,16 @@
             this.buttonEditSystem.UseVisualStyleBackColor = true;
             this.buttonEditSystem.Click += new System.EventHandler(this.buttonEditSystem_Click);
             // 
-            // buttonExit
+            // buttonEditContainer
             // 
-            this.buttonExit.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonExit.Location = new System.Drawing.Point(481, 440);
-            this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(340, 99);
-            this.buttonExit.TabIndex = 3;
-            this.buttonExit.Text = "Edit Container";
-            this.buttonExit.UseVisualStyleBackColor = true;
-            this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
+            this.buttonEditContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonEditContainer.Location = new System.Drawing.Point(481, 440);
+            this.buttonEditContainer.Name = "buttonEditContainer";
+            this.buttonEditContainer.Size = new System.Drawing.Size(340, 99);
+            this.buttonEditContainer.TabIndex = 3;
+            this.buttonEditContainer.Text = "Edit Container";
+            this.buttonEditContainer.UseVisualStyleBackColor = true;
+            this.buttonEditContainer.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // openFileDialog1
             // 
@@ -144,19 +144,19 @@
             this.treeView1.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView1.Location = new System.Drawing.Point(12, 165);
             this.treeView1.Name = "treeView1";
-            treeNode11.Name = "Node2";
-            treeNode11.Text = "Example System 1";
-            treeNode12.Name = "Node0";
-            treeNode12.Text = "Systems";
-            treeNode13.Name = "Node4";
-            treeNode13.Text = "Example Container 2";
-            treeNode14.Name = "Node5";
-            treeNode14.Text = "Example Container 1";
-            treeNode15.Name = "Node1";
-            treeNode15.Text = "Containers";
+            treeNode1.Name = "Node2";
+            treeNode1.Text = "Example System 1";
+            treeNode2.Name = "Node0";
+            treeNode2.Text = "Systems";
+            treeNode3.Name = "Node4";
+            treeNode3.Text = "Example Container 2";
+            treeNode4.Name = "Node5";
+            treeNode4.Text = "Example Container 1";
+            treeNode5.Name = "Node1";
+            treeNode5.Text = "Containers";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode12,
-            treeNode15});
+            treeNode2,
+            treeNode5});
             this.treeView1.Size = new System.Drawing.Size(360, 374);
             this.treeView1.TabIndex = 8;
             // 
@@ -183,7 +183,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.buttonExit);
+            this.Controls.Add(this.buttonEditContainer);
             this.Controls.Add(this.buttonEditSystem);
             this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
@@ -203,7 +203,7 @@
         private System.Windows.Forms.Button buttonCreateNewSystem;
         private System.Windows.Forms.Button buttonCreateContainer;
         private System.Windows.Forms.Button buttonEditSystem;
-        private System.Windows.Forms.Button buttonExit;
+        private System.Windows.Forms.Button buttonEditContainer;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
