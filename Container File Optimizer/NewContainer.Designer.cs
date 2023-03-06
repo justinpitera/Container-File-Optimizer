@@ -40,7 +40,7 @@ namespace Container_File_Optimizer
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.labelSystemNameCount = new System.Windows.Forms.Label();
             this.labelCreatorCount = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buttonAddFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
@@ -51,10 +51,9 @@ namespace Container_File_Optimizer
             // 
             this.labelCreator.AutoSize = true;
             this.labelCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCreator.Location = new System.Drawing.Point(5, 56);
-            this.labelCreator.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelCreator.Location = new System.Drawing.Point(7, 69);
             this.labelCreator.Name = "labelCreator";
-            this.labelCreator.Size = new System.Drawing.Size(83, 17);
+            this.labelCreator.Size = new System.Drawing.Size(126, 25);
             this.labelCreator.TabIndex = 16;
             this.labelCreator.Text = "Description:";
             // 
@@ -62,10 +61,9 @@ namespace Container_File_Optimizer
             // 
             this.labelSystemName.AutoSize = true;
             this.labelSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSystemName.Location = new System.Drawing.Point(5, 2);
-            this.labelSystemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelSystemName.Location = new System.Drawing.Point(7, 2);
             this.labelSystemName.Name = "labelSystemName";
-            this.labelSystemName.Size = new System.Drawing.Size(114, 17);
+            this.labelSystemName.Size = new System.Drawing.Size(173, 25);
             this.labelSystemName.TabIndex = 15;
             this.labelSystemName.Text = "Container Name:";
             // 
@@ -73,11 +71,11 @@ namespace Container_File_Optimizer
             // 
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSystemName.Location = new System.Drawing.Point(8, 22);
-            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxSystemName.Location = new System.Drawing.Point(11, 27);
+            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxSystemName.MaxLength = 32;
             this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.Size = new System.Drawing.Size(369, 23);
+            this.textBoxSystemName.Size = new System.Drawing.Size(491, 31);
             this.textBoxSystemName.TabIndex = 14;
             this.textBoxSystemName.TextChanged += new System.EventHandler(this.textBoxSystemName_TextChanged);
             // 
@@ -85,11 +83,11 @@ namespace Container_File_Optimizer
             // 
             this.textBoxCreator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCreator.Location = new System.Drawing.Point(8, 76);
-            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBoxCreator.Location = new System.Drawing.Point(11, 94);
+            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBoxCreator.MaxLength = 255;
             this.textBoxCreator.Name = "textBoxCreator";
-            this.textBoxCreator.Size = new System.Drawing.Size(369, 23);
+            this.textBoxCreator.Size = new System.Drawing.Size(491, 31);
             this.textBoxCreator.TabIndex = 17;
             this.textBoxCreator.TextChanged += new System.EventHandler(this.textBoxCreator_TextChanged);
             // 
@@ -98,18 +96,18 @@ namespace Container_File_Optimizer
             this.panel1.Controls.Add(this.buttonCreateSystem);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel1.Location = new System.Drawing.Point(0, 359);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Location = new System.Drawing.Point(0, 441);
+            this.panel1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(387, 63);
+            this.panel1.Size = new System.Drawing.Size(516, 78);
             this.panel1.TabIndex = 18;
             // 
             // buttonCreateSystem
             // 
-            this.buttonCreateSystem.Location = new System.Drawing.Point(8, 3);
-            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateSystem.Location = new System.Drawing.Point(11, 4);
+            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCreateSystem.Name = "buttonCreateSystem";
-            this.buttonCreateSystem.Size = new System.Drawing.Size(368, 53);
+            this.buttonCreateSystem.Size = new System.Drawing.Size(491, 65);
             this.buttonCreateSystem.TabIndex = 3;
             this.buttonCreateSystem.Text = "Add Container";
             this.buttonCreateSystem.UseVisualStyleBackColor = true;
@@ -119,10 +117,9 @@ namespace Container_File_Optimizer
             // 
             this.labelSystemNameCount.AutoSize = true;
             this.labelSystemNameCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSystemNameCount.Location = new System.Drawing.Point(310, 48);
-            this.labelSystemNameCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelSystemNameCount.Location = new System.Drawing.Point(413, 59);
             this.labelSystemNameCount.Name = "labelSystemNameCount";
-            this.labelSystemNameCount.Size = new System.Drawing.Size(44, 17);
+            this.labelSystemNameCount.Size = new System.Drawing.Size(66, 25);
             this.labelSystemNameCount.TabIndex = 21;
             this.labelSystemNameCount.Text = "0 / 32";
             // 
@@ -130,64 +127,63 @@ namespace Container_File_Optimizer
             // 
             this.labelCreatorCount.AutoSize = true;
             this.labelCreatorCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelCreatorCount.Location = new System.Drawing.Point(310, 102);
-            this.labelCreatorCount.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelCreatorCount.Location = new System.Drawing.Point(413, 126);
             this.labelCreatorCount.Name = "labelCreatorCount";
-            this.labelCreatorCount.Size = new System.Drawing.Size(52, 17);
+            this.labelCreatorCount.Size = new System.Drawing.Size(78, 25);
             this.labelCreatorCount.TabIndex = 20;
             this.labelCreatorCount.Text = "0 / 255";
             // 
-            // button1
+            // buttonAddFile
             // 
-            this.button1.Location = new System.Drawing.Point(301, 122);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 24);
-            this.button1.TabIndex = 22;
-            this.button1.Text = "Find file path...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buttonAddFile.Location = new System.Drawing.Point(401, 150);
+            this.buttonAddFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonAddFile.Name = "buttonAddFile";
+            this.buttonAddFile.Size = new System.Drawing.Size(100, 30);
+            this.buttonAddFile.TabIndex = 22;
+            this.buttonAddFile.Text = "Find file path...";
+            this.buttonAddFile.UseVisualStyleBackColor = true;
+            this.buttonAddFile.Click += new System.EventHandler(this.button1_AddFile);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(5, 102);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Location = new System.Drawing.Point(7, 126);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 17);
+            this.label1.Size = new System.Drawing.Size(228, 25);
             this.label1.TabIndex = 24;
             this.label1.Text = "Add file(s) to container";
             // 
             // checkedListBoxFiles
             // 
             this.checkedListBoxFiles.FormattingEnabled = true;
-            this.checkedListBoxFiles.Location = new System.Drawing.Point(8, 161);
+            this.checkedListBoxFiles.Location = new System.Drawing.Point(11, 198);
+            this.checkedListBoxFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(368, 184);
+            this.checkedListBoxFiles.Size = new System.Drawing.Size(489, 213);
             this.checkedListBoxFiles.TabIndex = 25;
             // 
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(8, 122);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
+            this.textBox1.Location = new System.Drawing.Point(11, 150);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.textBox1.MaxLength = 255;
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(289, 23);
+            this.textBox1.Size = new System.Drawing.Size(385, 31);
             this.textBox1.TabIndex = 23;
             // 
             // NewContainer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(387, 422);
+            this.ClientSize = new System.Drawing.Size(516, 519);
             this.Controls.Add(this.checkedListBoxFiles);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buttonAddFile);
             this.Controls.Add(this.labelCreator);
             this.Controls.Add(this.labelSystemName);
             this.Controls.Add(this.textBoxSystemName);
@@ -195,7 +191,7 @@ namespace Container_File_Optimizer
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelSystemNameCount);
             this.Controls.Add(this.labelCreatorCount);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "NewContainer";
             this.Text = "Create New Container - {systemName}";
             this.Load += new System.EventHandler(this.NewContainer_Load);
@@ -215,7 +211,7 @@ namespace Container_File_Optimizer
         private System.Windows.Forms.ToolTip toolTipInfo;
         private System.Windows.Forms.Label labelSystemNameCount;
         private System.Windows.Forms.Label labelCreatorCount;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buttonAddFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckedListBox checkedListBoxFiles;
         private System.Windows.Forms.TextBox textBox1;
