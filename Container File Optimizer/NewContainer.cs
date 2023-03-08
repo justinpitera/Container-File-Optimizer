@@ -16,17 +16,9 @@ using System.Runtime.InteropServices;
 namespace Container_File_Optimizer
 {
 
-
-    // TO DO: 
-    // Hash map for 
-
-    
     public partial class NewContainer : Form
     {
         string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
-
-  
-
 
 
         public NewContainer()
@@ -36,7 +28,6 @@ namespace Container_File_Optimizer
 
         private void NewContainer_Load(object sender, EventArgs e)
         {
- 
         }
 
 
@@ -106,9 +97,9 @@ namespace Container_File_Optimizer
         /*
          *  This Fundction uses SQL commands to add a connection between a system and an application 
          */
-        private void AddAppFileConection(int appID)
+        private void AddAppFileConection(int appID, string filePath)
         {
-
+            string fileName = Regex.Match(filePath, @"(?<=\\)[^\\]*$").Value;
             string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -122,11 +113,9 @@ namespace Container_File_Optimizer
 
                 SqlCommand command = new SqlCommand(query, cnn);
 
-                command.Parameters.AddWithValue("@file_name", textBoxContainerName.Text);
-                command.Parameters.AddWithValue("@file_path", textBoxContainerDesc.Text);
-                SqlDataReader reader = command.ExecuteReader();
-
-                fileID = reader.GetInt32(0);
+                command.Parameters.AddWithValue("@file_name", fileName);
+                command.Parameters.AddWithValue("@file_path", filePath);
+                fileID = (int)command.ExecuteScalar();
 
 
                 query = "INSERT INTO AppFile (app_id, file_id) VALUES (@app_id, @file_id)";
@@ -169,7 +158,6 @@ namespace Container_File_Optimizer
                 return appID;
 
             }
-
         }
 
         // Create app, then create each file from file list, then create connections in bridge table for apps and files
@@ -194,7 +182,7 @@ namespace Container_File_Optimizer
             // Creating connections between files and app
             foreach (String filePath in checkedListBoxFiles.Items)
             {
-                AddAppFileConection(GetAppID());
+                AddAppFileConection(GetAppID(), filePath);
             }
             this.Close();
         }

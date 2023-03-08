@@ -35,7 +35,6 @@ namespace Container_File_Optimizer
             this.labelSystemName = new System.Windows.Forms.Label();
             this.textBoxSystemName = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.listViewContainers = new System.Windows.Forms.ListView();
             this.textBoxCreator = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonCreateSystem = new System.Windows.Forms.Button();
@@ -44,6 +43,7 @@ namespace Container_File_Optimizer
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.labelCreatorCount = new System.Windows.Forms.Label();
             this.labelSystemNameCount = new System.Windows.Forms.Label();
+            this.checkedListBoxContainers = new System.Windows.Forms.CheckedListBox();
             this.panel2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -83,7 +83,7 @@ namespace Container_File_Optimizer
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.listViewContainers);
+            this.panel2.Controls.Add(this.checkedListBoxContainers);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(0, 165);
@@ -91,20 +91,6 @@ namespace Container_File_Optimizer
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(515, 201);
             this.panel2.TabIndex = 11;
-            // 
-            // listViewContainers
-            // 
-            this.listViewContainers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listViewContainers.HideSelection = false;
-            this.listViewContainers.Location = new System.Drawing.Point(0, 0);
-            this.listViewContainers.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.listViewContainers.Name = "listViewContainers";
-            this.listViewContainers.Size = new System.Drawing.Size(515, 201);
-            this.listViewContainers.TabIndex = 0;
-            this.listViewContainers.UseCompatibleStateImageBehavior = false;
-            this.listViewContainers.View = System.Windows.Forms.View.List;
-            this.listViewContainers.SelectedIndexChanged += new System.EventHandler(this.listViewContainers_SelectedIndexChanged);
-            this.listViewContainers.MouseHover += new System.EventHandler(this.listViewContainers_MouseHover);
             // 
             // textBoxCreator
             // 
@@ -188,6 +174,15 @@ namespace Container_File_Optimizer
             this.labelSystemNameCount.TabIndex = 13;
             this.labelSystemNameCount.Text = "0 / 32";
             // 
+            // checkedListBoxContainers
+            // 
+            this.checkedListBoxContainers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkedListBoxContainers.FormattingEnabled = true;
+            this.checkedListBoxContainers.Location = new System.Drawing.Point(0, 0);
+            this.checkedListBoxContainers.Name = "checkedListBoxContainers";
+            this.checkedListBoxContainers.Size = new System.Drawing.Size(515, 201);
+            this.checkedListBoxContainers.TabIndex = 0;
+            // 
             // NewSystem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -224,11 +219,11 @@ namespace Container_File_Optimizer
         private System.Windows.Forms.TextBox textBoxCreator;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonAddContainer;
-        private System.Windows.Forms.ListView listViewContainers;
         private System.Windows.Forms.Button buttonCreateSystem;
         private System.Windows.Forms.Button buttonRemoveContainer;
         private System.Windows.Forms.ToolTip toolTipInfo;
         private System.Windows.Forms.Label labelCreatorCount;
         private System.Windows.Forms.Label labelSystemNameCount;
+        private System.Windows.Forms.CheckedListBox checkedListBoxContainers;
     }
 }

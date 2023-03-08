@@ -10,35 +10,144 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
+using System.Collections;
+using System.Text.RegularExpressions;
 
 namespace Container_File_Optimizer
 {
 
+
+
     public partial class NewSystem : Form
     {
-       string dbPath = Application.StartupPath + "..\\..\\ContainerfileDatabase.mdf";
+
+        int currentVersionNumber = 0;
+        string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
 
         public NewSystem()
         {
             InitializeComponent();
         }
 
+
+        public void PopulateContainers()
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
+            string query = "SELECT * FROM Application";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                // Iterate through the SqlDataReader and populate the CheckedListBox
+                while (reader.Read())
+                {
+                    int app_id = reader.GetInt32(0); // see if this can work with Int16 
+                    string app_name = reader.GetString(1);
+                    string app_desc = reader.GetString(2);
+                    checkedListBoxContainers.DisplayMember = "Name";
+                    checkedListBoxContainers.ValueMember = "Id";
+                    checkedListBoxContainers.Items.Add(app_id + " - " + app_name);
+                }
+
+                // Close the SqlDataReader and the SqlConnection
+                reader.Close();
+
+                connection.Close();
+            }
+        }
+
+
+
+        private void AddApplicationSystemConnection(int app_id)
+        {
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                int system_id;
+
+
+                string query = "SELECT system_id FROM System WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number";
+
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
+                command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
+                command.Parameters.AddWithValue("@version_number", currentVersionNumber);
+
+                system_id = (int)command.ExecuteScalar();
+
+
+                query = "INSERT INTO SysApp (system_id, app_id) VALUES (@system_id, @app_id)";
+
+
+
+                command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@system_id", system_id);
+                command.Parameters.AddWithValue("@app_id", app_id);
+
+                command.ExecuteNonQuery();
+                cnn.Close();
+            }
+        }
+
+
+        private int GetSystemID()
+        {
+            int systemID = 0;
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT system_id FROM System WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number";
+
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
+                command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
+                command.Parameters.AddWithValue("@version_number", currentVersionNumber);
+
+                systemID = (int)command.ExecuteScalar();
+                cnn.Close();
+                return systemID;
+
+            }
+
+        }
+
         private void NewSystem_Load(object sender, EventArgs e)
         {
+            PopulateContainers();
+
             // To Do : 
             // Make it so the NewSystem form shows up and this form hides, then when newsystem closes this form reappears
-        }
-        private void NewSystem_Load(object sender, FormClosedEventArgs e)
-        {
-
         }
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
 
+
             CreateSystem();
+            int systemID = GetSystemID();
             EditSystem systemBuilderForm = new EditSystem();
             systemBuilderForm.Show();
+            foreach(String currentLine in checkedListBoxContainers.CheckedItems)
+            {
+                int currentSpace = currentLine.IndexOf(' ');
+                int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
+                AddSysAppConection(currentAppID, systemID);
+            }
+            
             this.Close();
             
         }
@@ -64,7 +173,7 @@ namespace Container_File_Optimizer
         private void listViewContainers_MouseHover(object sender, EventArgs e)
         {
             String message = "The list of containers to initialize the system with. \n To add more containers, click the 'Add Container' button below. \n To remove the selected container, click the 'Remove Container' button below.";
-            toolTipInfo.SetToolTip(listViewContainers, message);
+            toolTipInfo.SetToolTip(checkedListBoxContainers, message);
         }
 
         private void buttonAddContainer_MouseHover(object sender, EventArgs e)
@@ -121,9 +230,9 @@ namespace Container_File_Optimizer
 
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you would like to remove: " + listViewContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                MessageBox.Show("Removed: " + listViewContainers.SelectedItems.ToString());
+                MessageBox.Show("Removed: " + checkedListBoxContainers.SelectedItems.ToString());
             } else
             {
                 // Do nothing
@@ -171,7 +280,7 @@ namespace Container_File_Optimizer
                 command.Parameters.AddWithValue("@system_name", system_name);
                 command.Parameters.AddWithValue("@system_creator", system_creator);
                 command.Parameters.AddWithValue("@version_number", version_number);
-
+                currentVersionNumber = version_number;
                 int rowsAffected = command.ExecuteNonQuery();
 
                 connection.Close();
@@ -182,7 +291,7 @@ namespace Container_File_Optimizer
         /*
          *  This Fundction uses SQL commands to add a connection between a system and an application 
          */
-        private void AddSysAppConection()
+        private void AddSysAppConection(int currentAppID, int systemID)
         {
             string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
@@ -190,8 +299,8 @@ namespace Container_File_Optimizer
             using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@system_id, @app_id)", sqlConnection))
             {
                 //Execute SQL INSERT
-                sqlCommand.Parameters.AddWithValue("@system_id", "value");
-                sqlCommand.Parameters.AddWithValue("@app_id", "value");
+                sqlCommand.Parameters.AddWithValue("@system_id", systemID);
+                sqlCommand.Parameters.AddWithValue("@app_id", currentAppID);
 
                 sqlConnection.Open();
                 sqlCommand.ExecuteNonQuery();
