@@ -226,5 +226,10 @@ namespace Container_File_Optimizer
         {
 
         }
+
+        private void listViewContainers_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

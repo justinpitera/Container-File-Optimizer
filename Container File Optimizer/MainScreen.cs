@@ -62,7 +62,7 @@ namespace Container_File_Optimizer
         /*
        *  This Fundction uses SQL commands to view the saved Systems 
        */
-        private void viewSystems()
+        private void ViewSystems()
         {
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
@@ -73,7 +73,6 @@ namespace Container_File_Optimizer
 
                 cnn.Open();
                 cnn.Close();
-
             }
         }
     }

@@ -33,8 +33,8 @@ namespace Container_File_Optimizer
             this.components = new System.ComponentModel.Container();
             this.labelCreator = new System.Windows.Forms.Label();
             this.labelSystemName = new System.Windows.Forms.Label();
-            this.textBoxSystemName = new System.Windows.Forms.TextBox();
-            this.textBoxCreator = new System.Windows.Forms.TextBox();
+            this.textBoxContainerName = new System.Windows.Forms.TextBox();
+            this.textBoxContainerDesc = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.buttonCreateSystem = new System.Windows.Forms.Button();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
@@ -43,7 +43,6 @@ namespace Container_File_Optimizer
             this.buttonAddFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,7 +52,7 @@ namespace Container_File_Optimizer
             this.labelCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCreator.Location = new System.Drawing.Point(7, 69);
             this.labelCreator.Name = "labelCreator";
-            this.labelCreator.Size = new System.Drawing.Size(126, 25);
+            this.labelCreator.Size = new System.Drawing.Size(100, 20);
             this.labelCreator.TabIndex = 16;
             this.labelCreator.Text = "Description:";
             // 
@@ -63,33 +62,32 @@ namespace Container_File_Optimizer
             this.labelSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSystemName.Location = new System.Drawing.Point(7, 2);
             this.labelSystemName.Name = "labelSystemName";
-            this.labelSystemName.Size = new System.Drawing.Size(173, 25);
+            this.labelSystemName.Size = new System.Drawing.Size(135, 20);
             this.labelSystemName.TabIndex = 15;
             this.labelSystemName.Text = "Container Name:";
             // 
-            // textBoxSystemName
+            // textBoxContainerName
             // 
-            this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxSystemName.Location = new System.Drawing.Point(11, 27);
-            this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxSystemName.MaxLength = 32;
-            this.textBoxSystemName.Name = "textBoxSystemName";
-            this.textBoxSystemName.Size = new System.Drawing.Size(491, 31);
-            this.textBoxSystemName.TabIndex = 14;
-            this.textBoxSystemName.TextChanged += new System.EventHandler(this.textBoxSystemName_TextChanged);
+            this.textBoxContainerName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxContainerName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxContainerName.Location = new System.Drawing.Point(11, 27);
+            this.textBoxContainerName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxContainerName.MaxLength = 32;
+            this.textBoxContainerName.Name = "textBoxContainerName";
+            this.textBoxContainerName.Size = new System.Drawing.Size(491, 27);
+            this.textBoxContainerName.TabIndex = 14;
+            this.textBoxContainerName.TextChanged += new System.EventHandler(this.textBoxSystemName_TextChanged);
             // 
-            // textBoxCreator
+            // textBoxContainerDesc
             // 
-            this.textBoxCreator.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBoxCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCreator.Location = new System.Drawing.Point(11, 94);
-            this.textBoxCreator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxCreator.MaxLength = 255;
-            this.textBoxCreator.Name = "textBoxCreator";
-            this.textBoxCreator.Size = new System.Drawing.Size(491, 31);
-            this.textBoxCreator.TabIndex = 17;
-            this.textBoxCreator.TextChanged += new System.EventHandler(this.textBoxCreator_TextChanged);
+            this.textBoxContainerDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBoxContainerDesc.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBoxContainerDesc.Location = new System.Drawing.Point(11, 94);
+            this.textBoxContainerDesc.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.textBoxContainerDesc.MaxLength = 255;
+            this.textBoxContainerDesc.Name = "textBoxContainerDesc";
+            this.textBoxContainerDesc.Size = new System.Drawing.Size(491, 27);
+            this.textBoxContainerDesc.TabIndex = 17;
             // 
             // panel1
             // 
@@ -119,7 +117,7 @@ namespace Container_File_Optimizer
             this.labelSystemNameCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelSystemNameCount.Location = new System.Drawing.Point(413, 59);
             this.labelSystemNameCount.Name = "labelSystemNameCount";
-            this.labelSystemNameCount.Size = new System.Drawing.Size(66, 25);
+            this.labelSystemNameCount.Size = new System.Drawing.Size(51, 20);
             this.labelSystemNameCount.TabIndex = 21;
             this.labelSystemNameCount.Text = "0 / 32";
             // 
@@ -129,18 +127,18 @@ namespace Container_File_Optimizer
             this.labelCreatorCount.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelCreatorCount.Location = new System.Drawing.Point(413, 126);
             this.labelCreatorCount.Name = "labelCreatorCount";
-            this.labelCreatorCount.Size = new System.Drawing.Size(78, 25);
+            this.labelCreatorCount.Size = new System.Drawing.Size(60, 20);
             this.labelCreatorCount.TabIndex = 20;
             this.labelCreatorCount.Text = "0 / 255";
             // 
             // buttonAddFile
             // 
-            this.buttonAddFile.Location = new System.Drawing.Point(401, 150);
+            this.buttonAddFile.Location = new System.Drawing.Point(11, 162);
             this.buttonAddFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonAddFile.Name = "buttonAddFile";
-            this.buttonAddFile.Size = new System.Drawing.Size(100, 30);
+            this.buttonAddFile.Size = new System.Drawing.Size(489, 30);
             this.buttonAddFile.TabIndex = 22;
-            this.buttonAddFile.Text = "Find file path...";
+            this.buttonAddFile.Text = "Add File..";
             this.buttonAddFile.UseVisualStyleBackColor = true;
             this.buttonAddFile.Click += new System.EventHandler(this.button1_AddFile);
             // 
@@ -150,7 +148,7 @@ namespace Container_File_Optimizer
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(7, 126);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(228, 25);
+            this.label1.Size = new System.Drawing.Size(179, 20);
             this.label1.TabIndex = 24;
             this.label1.Text = "Add file(s) to container";
             // 
@@ -158,22 +156,10 @@ namespace Container_File_Optimizer
             // 
             this.checkedListBoxFiles.FormattingEnabled = true;
             this.checkedListBoxFiles.Location = new System.Drawing.Point(11, 198);
-            this.checkedListBoxFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.checkedListBoxFiles.Margin = new System.Windows.Forms.Padding(4);
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(489, 213);
+            this.checkedListBoxFiles.Size = new System.Drawing.Size(489, 208);
             this.checkedListBoxFiles.TabIndex = 25;
-            // 
-            // textBox1
-            // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(11, 150);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBox1.MaxLength = 255;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(385, 31);
-            this.textBox1.TabIndex = 23;
             // 
             // NewContainer
             // 
@@ -182,12 +168,11 @@ namespace Container_File_Optimizer
             this.ClientSize = new System.Drawing.Size(516, 519);
             this.Controls.Add(this.checkedListBoxFiles);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.buttonAddFile);
             this.Controls.Add(this.labelCreator);
             this.Controls.Add(this.labelSystemName);
-            this.Controls.Add(this.textBoxSystemName);
-            this.Controls.Add(this.textBoxCreator);
+            this.Controls.Add(this.textBoxContainerName);
+            this.Controls.Add(this.textBoxContainerDesc);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.labelSystemNameCount);
             this.Controls.Add(this.labelCreatorCount);
@@ -204,8 +189,8 @@ namespace Container_File_Optimizer
         #endregion
         private System.Windows.Forms.Label labelCreator;
         private System.Windows.Forms.Label labelSystemName;
-        private System.Windows.Forms.TextBox textBoxSystemName;
-        private System.Windows.Forms.TextBox textBoxCreator;
+        private System.Windows.Forms.TextBox textBoxContainerName;
+        private System.Windows.Forms.TextBox textBoxContainerDesc;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button buttonCreateSystem;
         private System.Windows.Forms.ToolTip toolTipInfo;
@@ -214,6 +199,5 @@ namespace Container_File_Optimizer
         private System.Windows.Forms.Button buttonAddFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckedListBox checkedListBoxFiles;
-        private System.Windows.Forms.TextBox textBox1;
     }
 }
