@@ -18,8 +18,12 @@ namespace Container_File_Optimizer
 
     public partial class NewContainer : Form
     {
-        string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
+        //Hardcoded:
+        //string dbPath = "C:\\Users\\justi\\Source\\Repos\\justinpitera\\Container-File-Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
 
+
+        // Not hardcoded
+        string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
 
         public NewContainer()
         {
@@ -47,7 +51,6 @@ namespace Container_File_Optimizer
         */
         private void CreateApp()
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
 
             using (SqlConnection cnn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand("INSERT INTO Application (app_name,app_desc) VALUES (@a, @b)", cnn))
@@ -72,7 +75,6 @@ namespace Container_File_Optimizer
         private void CreateFile(String filePath)
         {
 
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -100,7 +102,6 @@ namespace Container_File_Optimizer
         private void AddAppFileConection(int appID, string filePath)
         {
             string fileName = Regex.Match(filePath, @"(?<=\\)[^\\]*$").Value;
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
@@ -139,7 +140,6 @@ namespace Container_File_Optimizer
         private int GetAppID()
         {
             int appID = 0;
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {

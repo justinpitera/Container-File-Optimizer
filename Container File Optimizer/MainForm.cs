@@ -2,18 +2,19 @@
 using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace Container_File_Optimizer
 {
     public partial class Main : Form
     {
-        string connectionString = "Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString";
+        string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
         public Main()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void MainForm_Load(object sender, EventArgs e)
         {
 
         }

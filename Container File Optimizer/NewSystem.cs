@@ -12,6 +12,10 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
 using System.Collections;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices.ComTypes;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Container_File_Optimizer
 {
@@ -20,9 +24,8 @@ namespace Container_File_Optimizer
 
     public partial class NewSystem : Form
     {
-
         int currentVersionNumber = 0;
-        string dbPath = "C:\\Users\\justi\\source\\repos\\Container File Optimizer\\Container File Optimizer\\ContainerfileDatabase.mdf";
+        string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
 
         public NewSystem()
         {
@@ -32,7 +35,6 @@ namespace Container_File_Optimizer
 
         public void PopulateContainers()
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             string query = "SELECT * FROM Application";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -65,7 +67,6 @@ namespace Container_File_Optimizer
 
         private void AddApplicationSystemConnection(int app_id)
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
@@ -103,7 +104,6 @@ namespace Container_File_Optimizer
         private int GetSystemID()
         {
             int systemID = 0;
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
@@ -135,21 +135,19 @@ namespace Container_File_Optimizer
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-
-
             CreateSystem();
             int systemID = GetSystemID();
             EditSystem systemBuilderForm = new EditSystem();
             systemBuilderForm.Show();
-            foreach(String currentLine in checkedListBoxContainers.CheckedItems)
+            foreach (String currentLine in checkedListBoxContainers.CheckedItems)
             {
                 int currentSpace = currentLine.IndexOf(' ');
                 int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
                 AddSysAppConection(currentAppID, systemID);
             }
-            
+            OptimizeSystem(systemID);
             this.Close();
-            
+
         }
 
         private void ShowToolTip(object sender, EventArgs e)
@@ -193,7 +191,7 @@ namespace Container_File_Optimizer
             int max = textBoxSystemName.MaxLength;
             labelSystemNameCount.Text = current.ToString() + " / 32";
             this.Text = "Create System - " + textBoxSystemName.Text;
-            
+
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
@@ -213,7 +211,7 @@ namespace Container_File_Optimizer
             int max = textBoxCreator.MaxLength;
             labelCreatorCount.Text = current.ToString() + " / 32";
 
-                
+
 
 
 
@@ -230,7 +228,7 @@ namespace Container_File_Optimizer
 
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 MessageBox.Show("Removed: " + checkedListBoxContainers.SelectedItems.ToString());
             } else
@@ -246,7 +244,6 @@ namespace Container_File_Optimizer
          */
         private void CreateSystem()
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -293,7 +290,6 @@ namespace Container_File_Optimizer
          */
         private void AddSysAppConection(int currentAppID, int systemID)
         {
-            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=" + dbPath + ";Integrated Security=True;";
             //get SQL connection and Command
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@system_id, @app_id)", sqlConnection))
@@ -312,23 +308,24 @@ namespace Container_File_Optimizer
         private int SystemCount(SqlConnection cnn)
         {
             //get SQL connection and Command
-           
-          
-                SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
-                                                                                     "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
-            
-                cmd.Parameters.AddWithValue("@currSystem",textBoxSystemName);
-                cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
 
-                int count = 0;
-                using (SqlDataReader reader = cmd.ExecuteReader())
+
+            SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
+                                                                                 "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
+
+            cmd.Parameters.AddWithValue("@currSystem", textBoxSystemName);
+            cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
+
+            int count = 0;
+            using (SqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read()) { 
-                        count++;
-                    }
+                    count++;
                 }
+            }
 
-                return count;
+            return count;
         }
 
         private void buttonAddContainer_Click(object sender, EventArgs e)
@@ -340,5 +337,112 @@ namespace Container_File_Optimizer
         {
 
         }
+
+
+
+
+
+
+
+
+
+        public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
+        {
+            Dictionary<int, List<int>> currentSystemCollection = new Dictionary<int, List<int>>();
+
+
+            string query = "SELECT app_id FROM SysApp WHERE system_id = @system_id";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(query, connection);
+
+            connection.Open();
+            command.Parameters.AddWithValue("@system_id", systemID);
+
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int appID = reader.GetInt32(0);
+                currentSystemCollection.Add(appID, new List<int>());
+            }
+            connection.Close();
+
+            return currentSystemCollection;
+        }
+
+
+
+
+
+        //Create parent function that calls PopulateFile and Populate App id and formulates the dictionary
+
+        public List<int> PopulateFileCollection(int appID)
+        {
+
+
+
+            string query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
+
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand command = new SqlCommand(query, connection);
+
+            connection.Open();
+            command.Parameters.AddWithValue("@system_id", );
+
+
+            SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                int appID = reader.GetInt32(0);
+                currentSystemCollection.Add(appID, new List<int>());
+            }
+            connection.Close();
+
+
+
+
+
+
+
+            
+
+
+            SqlDataReader reader2;
+            foreach (int appID in currentSystemCollection.Keys)
+            {
+                command.Parameters.AddWithValue("@app_id", appID);
+                reader2 = command.ExecuteReader();
+                while (reader2.Read())
+                {
+                    currentSystemCollection[appID].Add(reader2.GetInt32(0));
+                }
+            }
+
+            connection.Close();
+
+            return currentSystemCollection;
+
+        }
+
+
+        public void OptimizeSystem(int systemID)
+        {
+            Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
+
+
+
+            foreach (int appID in currentSystemCollection.Keys)
+            {
+                List<int> fileIDs = currentSystemCollection[appID];
+                foreach (int currentID in fileIDs)
+                {
+
+                }
+            }
+        }
+
     }
 }
