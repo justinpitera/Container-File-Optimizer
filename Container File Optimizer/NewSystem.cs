@@ -139,7 +139,7 @@ namespace Container_File_Optimizer
             int systemID = GetSystemID();
             EditSystem systemBuilderForm = new EditSystem();
             systemBuilderForm.Show();
-            foreach (String currentLine in checkedListBoxContainers.CheckedItems)
+            foreach(String currentLine in checkedListBoxContainers.CheckedItems)
             {
                 int currentSpace = currentLine.IndexOf(' ');
                 int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
@@ -147,7 +147,7 @@ namespace Container_File_Optimizer
             }
             OptimizeSystem(systemID);
             this.Close();
-
+            
         }
 
         private void ShowToolTip(object sender, EventArgs e)
@@ -191,7 +191,7 @@ namespace Container_File_Optimizer
             int max = textBoxSystemName.MaxLength;
             labelSystemNameCount.Text = current.ToString() + " / 32";
             this.Text = "Create System - " + textBoxSystemName.Text;
-
+            
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
@@ -211,7 +211,7 @@ namespace Container_File_Optimizer
             int max = textBoxCreator.MaxLength;
             labelCreatorCount.Text = current.ToString() + " / 32";
 
-
+                
 
 
 
@@ -228,7 +228,7 @@ namespace Container_File_Optimizer
 
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 MessageBox.Show("Removed: " + checkedListBoxContainers.SelectedItems.ToString());
             } else
@@ -308,10 +308,10 @@ namespace Container_File_Optimizer
         private int SystemCount(SqlConnection cnn)
         {
             //get SQL connection and Command
-
-
-            SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
-                                                                                 "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
+           
+          
+                SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
+                                                                                     "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
 
             cmd.Parameters.AddWithValue("@currSystem", textBoxSystemName);
             cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
@@ -345,94 +345,62 @@ namespace Container_File_Optimizer
 
 
 
-
         public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = new Dictionary<int, List<int>>();
 
-
             string query = "SELECT app_id FROM SysApp WHERE system_id = @system_id";
 
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand command = new SqlCommand(query, connection);
-
-            connection.Open();
-            command.Parameters.AddWithValue("@system_id", systemID);
-
-
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
             {
-                int appID = reader.GetInt32(0);
-                currentSystemCollection.Add(appID, new List<int>());
+                command.Parameters.AddWithValue("@system_id", systemID);
+
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int appID = reader.GetInt32(0);
+                        currentSystemCollection.Add(appID, new List<int>());
+                    }
+                }
+
+                query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
+
+                command.CommandText = query;
+                command.Parameters.Clear();
+
+                foreach (int appID in currentSystemCollection.Keys)
+                {
+                    command.Parameters.AddWithValue("@app_id", appID);
+
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            currentSystemCollection[appID].Add(reader.GetInt32(0));
+                        }
+                    }
+
+                    command.Parameters.Clear();
+                }
+                connection.Close();
             }
-            connection.Close();
-
-            return currentSystemCollection;
-        }
-
-
-
-
-
-        //Create parent function that calls PopulateFile and Populate App id and formulates the dictionary
-
-        public List<int> PopulateFileCollection(int appID)
-        {
-
-
-
-            string query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
-
-            SqlConnection connection = new SqlConnection(connectionString);
-            SqlCommand command = new SqlCommand(query, connection);
-
-            connection.Open();
-            command.Parameters.AddWithValue("@system_id", );
-
-
-            SqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                int appID = reader.GetInt32(0);
-                currentSystemCollection.Add(appID, new List<int>());
-            }
-            connection.Close();
-
-
-
-
-
-
 
             
 
-
-            SqlDataReader reader2;
-            foreach (int appID in currentSystemCollection.Keys)
-            {
-                command.Parameters.AddWithValue("@app_id", appID);
-                reader2 = command.ExecuteReader();
-                while (reader2.Read())
-                {
-                    currentSystemCollection[appID].Add(reader2.GetInt32(0));
-                }
-            }
-
-            connection.Close();
-
             return currentSystemCollection;
-
         }
+
 
 
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
 
-
+            int CRAP = 54;
 
             foreach (int appID in currentSystemCollection.Keys)
             {
