@@ -427,10 +427,7 @@ namespace Container_File_Optimizer
                 List<int> fileIDs = currentSystemCollection[appID];
                 foreach (int currentID in fileIDs)
                 {
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        GetFileCount(currentID);
-                    }
+                    GetFileCount(currentID,systemID);
                 }
             }
         }
@@ -440,19 +437,21 @@ namespace Container_File_Optimizer
         /// </summary>
         /// <param name="currentID">The file_id that needs to be counted.</param>
         /// <returns> The count for the number of times that id appeard.</returns>
-        public void GetFileCount(int currentID) {
+        public int  GetFileCount(int currentID, int systemID) {
+            int fileCount;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                string query = "SELECT COUNT(*) FROM AppFile ap LEFT JOIN " +
-                               "SysApp sa ON ap.app_id = sa.app_id" +
-                               "WHERE ap.file_id = @file_id";
+                string query = "SELECT COUNT(*) FROM AppFile ap LEFT JOIN SysApp sa ON ap.app_id = sa.app_id WHERE ap.file_id = @file_id AND sa.system_id = @system_id";
                 SqlCommand command = new SqlCommand(query, connection);
                 command.Parameters.AddWithValue("@file_id", currentID);
-
-                int count = (int)command.ExecuteScalar();
+                command.Parameters.AddWithValue("@system_id", systemID);
+                fileCount = (int)command.ExecuteScalar();
+                connection.Close();
             }
+
+            return fileCount;
         }
 
     }
