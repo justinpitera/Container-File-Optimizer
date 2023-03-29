@@ -427,8 +427,31 @@ namespace Container_File_Optimizer
                 List<int> fileIDs = currentSystemCollection[appID];
                 foreach (int currentID in fileIDs)
                 {
-
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        GetFileCount(currentID);
+                    }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Helper Function that uses a join to get the number of times a given file apeares in a system.
+        /// </summary>
+        /// <param name="currentID">The file_id that needs to be counted.</param>
+        /// <returns> The count for the number of times that id appeard.</returns>
+        public void GetFileCount(int currentID) {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                string query = "SELECT COUNT(*) FROM AppFile ap LEFT JOIN " +
+                               "SysApp sa ON ap.app_id = sa.app_id" +
+                               "WHERE ap.file_id = @file_id";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@file_id", currentID);
+
+                int count = (int)command.ExecuteScalar();
             }
         }
 
