@@ -16,6 +16,7 @@ using System.Runtime.InteropServices.ComTypes;
 using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using static System.Windows.Forms.AxHost;
 
 namespace Container_File_Optimizer
 {
@@ -141,9 +142,11 @@ namespace Container_File_Optimizer
             systemBuilderForm.Show();
             foreach(String currentLine in checkedListBoxContainers.CheckedItems)
             {
+                // Dont ask this is some wizardry
+                // ... It gets the value before the space, which should always be the currentAppID
                 int currentSpace = currentLine.IndexOf(' ');
                 int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
-                AddSysAppConection(currentAppID, systemID);
+                AddSysAppConnection(currentAppID, systemID);
             }
             OptimizeSystem(systemID);
             this.Close();
@@ -210,11 +213,6 @@ namespace Container_File_Optimizer
             int current = textBoxCreator.Text.Length;
             int max = textBoxCreator.MaxLength;
             labelCreatorCount.Text = current.ToString() + " / 32";
-
-                
-
-
-
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
@@ -239,9 +237,9 @@ namespace Container_File_Optimizer
         }
 
 
-        /*
-         *  This Fundction uses SQL commands to add a system to the database 
-         */
+        /// <summary>
+        /// Creates a new system with the given system name and creator name in the database.
+        /// </summary>
         private void CreateSystem()
         {
 
@@ -249,6 +247,7 @@ namespace Container_File_Optimizer
             {
                 connection.Open();
 
+                // Get the system name and creator name from the text boxes
                 string system_name = textBoxSystemName.Text;
                 string system_creator = textBoxCreator.Text;
                 int version_number = 1;
@@ -285,81 +284,93 @@ namespace Container_File_Optimizer
 
         }
 
-        /*
-         *  This Fundction uses SQL commands to add a connection between a system and an application 
-         */
-        private void AddSysAppConection(int currentAppID, int systemID)
+
+        /// <summary>
+        /// Creates a new system-application connection record in the database.
+        /// </summary>
+        /// <param name="currentAppID">The ID of the current application.</param>
+        /// <param name="systemID">The ID of the system to associate with the application.</param>
+        private void AddSysAppConnection(int currentAppID, int systemID)
         {
-            //get SQL connection and Command
+            // Create a SQL command to insert a new system-application connection record
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
-            using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id,app_id) VALUES (@system_id, @app_id)", sqlConnection))
+            using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id, app_id) VALUES (@system_id, @app_id)", sqlConnection))
             {
-                //Execute SQL INSERT
+                // Add parameters to the SQL command to specify the system and application IDs
                 sqlCommand.Parameters.AddWithValue("@system_id", systemID);
                 sqlCommand.Parameters.AddWithValue("@app_id", currentAppID);
 
+                // Open the database connection, execute the SQL command, and close the connection
                 sqlConnection.Open();
                 sqlCommand.ExecuteNonQuery();
                 sqlConnection.Close();
-
             }
         }
 
+
+
+
+        /// <summary>
+        /// Returns the count of systems in the database that match the specified system name and creator.
+        /// </summary>
+        /// <param name="cnn">The SQL connection to use.</param>
+        /// <returns>The count of systems that match the specified name and creator.</returns>
         private int SystemCount(SqlConnection cnn)
         {
-            //get SQL connection and Command
-           
-          
-                SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
+
+            // Create a SQL command to retrieve the count of systems that match the specified name and creator
+            SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
                                                                                      "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
 
+
+            // Add parameters to the SQL command to match the specified system name and creator
             cmd.Parameters.AddWithValue("@currSystem", textBoxSystemName);
             cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
 
+
+            // Initialize a count variable to store the result
             int count = 0;
+            // Execute the SQL command and retrieve the count of systems
             using (SqlDataReader reader = cmd.ExecuteReader())
             {
+                // Iterate through the reader and increment the count for each row
                 while (reader.Read())
                 {
                     count++;
                 }
             }
-
+            // Return the count of systems that match the specified name and creator
             return count;
         }
 
-        private void buttonAddContainer_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void listViewContainers_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-
-
-
-
-
+        /// <summary>
+        /// Populates a dictionary with app_id and associated file_ids for a given system_id.
+        /// </summary>
+        /// <param name="systemID">The system_id for which to retrieve the app_ids and associated file_ids.</param>
+        /// <returns>A dictionary with app_id keys and associated file_id values.</returns>
         public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
         {
+            // Create an empty dictionary to store the app_id and associated file_ids
             Dictionary<int, List<int>> currentSystemCollection = new Dictionary<int, List<int>>();
 
+            // SQL query to retrieve app_id for a given system_id
             string query = "SELECT app_id FROM SysApp WHERE system_id = @system_id";
 
+            // Use a using block to ensure that resources are released even if an exception occurs
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
+                // Add system_id parameter to the SQL command
                 command.Parameters.AddWithValue("@system_id", systemID);
 
+                // Open database connection
                 connection.Open();
 
+                // Execute the SQL command and retrieve app_id values
                 using (SqlDataReader reader = command.ExecuteReader())
                 {
+                    // Iterate through the reader and add app_id to the dictionary
                     while (reader.Read())
                     {
                         int appID = reader.GetInt32(0);
@@ -367,40 +378,49 @@ namespace Container_File_Optimizer
                     }
                 }
 
+                // SQL query to retrieve file_id for a given app_id
                 query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
 
+                // Set the command text to the new query
                 command.CommandText = query;
+
+                // Clear the command parameters
                 command.Parameters.Clear();
 
+                // Iterate through the dictionary and add the file_ids for each app_id
                 foreach (int appID in currentSystemCollection.Keys)
                 {
+                    // Add app_id parameter to the SQL command
                     command.Parameters.AddWithValue("@app_id", appID);
 
+                    // Execute the SQL command and retrieve file_id values
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
+                        // Iterate through the reader and add the file_id to the list for the current app_id
                         while (reader.Read())
                         {
                             currentSystemCollection[appID].Add(reader.GetInt32(0));
                         }
                     }
 
+                    // Clear the command parameters for the next iteration
                     command.Parameters.Clear();
                 }
+
+                // Close the database connection
                 connection.Close();
             }
 
-            
-
+            // Return the dictionary with the app_id and associated file_ids
             return currentSystemCollection;
         }
+
 
 
 
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
-
-            int CRAP = 54;
 
             foreach (int appID in currentSystemCollection.Keys)
             {

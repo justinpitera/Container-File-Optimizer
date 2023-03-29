@@ -161,7 +161,6 @@ namespace Container_File_Optimizer
             this.buttonAddContainer.TabIndex = 1;
             this.buttonAddContainer.Text = "Add Container";
             this.buttonAddContainer.UseVisualStyleBackColor = true;
-            this.buttonAddContainer.Click += new System.EventHandler(this.buttonAddContainer_Click);
             this.buttonAddContainer.MouseHover += new System.EventHandler(this.buttonAddContainer_MouseHover);
             // 
             // labelCreatorCount
