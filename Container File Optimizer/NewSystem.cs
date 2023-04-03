@@ -421,14 +421,36 @@ namespace Container_File_Optimizer
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
+            Dictionary<int, int> fileCount = new Dictionary<int, int>();
+
 
             foreach (int appID in currentSystemCollection.Keys)
             {
                 List<int> fileIDs = currentSystemCollection[appID];
                 foreach (int currentID in fileIDs)
                 {
-                    GetFileCount(currentID,systemID);
+                    int currentCount = GetFileCount(currentID, systemID);
+                    if (fileCount.Keys.Contains(currentID))
+                    {
+                        // Dont add to list
+                        continue;
+                    }
+                    else
+                    {
+                        fileCount.Add(currentID, currentCount);
+                    }
                 }
+            }
+
+            // wtaf
+            List<KeyValuePair<int, int>> fileCounts = new List<KeyValuePair<int, int>>();
+            var sortedList = fileCount.ToList();
+            sortedList.Sort((x, y) => y.Value.CompareTo(x.Value));
+
+            Dictionary<int, int> sortedFileCount = new Dictionary<int, int>();
+            foreach (var keyValuePair in sortedList)
+            {
+                sortedFileCount.Add(keyValuePair.Key, keyValuePair.Value);
             }
         }
 
