@@ -12,6 +12,8 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
+using System.IO;
+using System.Xml.Linq;
 
 namespace Container_File_Optimizer
 {
@@ -80,11 +82,13 @@ namespace Container_File_Optimizer
             {
                     connection.Open();
                     string fileName = Regex.Match(filePath, @"(?<=\\)[^\\]*$").Value;
+                    string fileType = Path.GetExtension(fileName).Replace(".", "");
 
-                    string query = "INSERT INTO [File] (file_name, file_path) VALUES (@file_name, @file_path)";
+                    string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
                     SqlCommand command = new SqlCommand(query, connection);
                     command.Parameters.AddWithValue("@file_name", fileName);
                     command.Parameters.AddWithValue("@file_path", filePath);
+                    command.Parameters.AddWithValue("@file_type", fileType);
 
                     int rowsAffected = command.ExecuteNonQuery();
                     connection.Close();
@@ -174,13 +178,13 @@ namespace Container_File_Optimizer
 
             CreateApp();
             // Create files from the list into Database table for Files
-            foreach (String filePath in checkedListBoxFiles.Items)
+            foreach (String filePath in checkedListBoxFiles.CheckedItems)
             {
                 CreateFile(filePath);
 
             }
             // Creating connections between files and app
-            foreach (String filePath in checkedListBoxFiles.Items)
+            foreach (String filePath in checkedListBoxFiles.CheckedItems)
             {
                 AddAppFileConection(GetAppID(), filePath);
             }
@@ -205,6 +209,11 @@ namespace Container_File_Optimizer
                 {
                     MessageBox.Show("Error: file already exists in container: " + filePath, "Container File Optimizer");
                 }
+            }
+
+            for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+            {
+                checkedListBoxFiles.SetItemChecked(i, true);
             }
         }
     }

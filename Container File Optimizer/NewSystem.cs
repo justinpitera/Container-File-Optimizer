@@ -17,6 +17,7 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static System.Windows.Forms.AxHost;
+using System.Runtime.InteropServices;
 
 namespace Container_File_Optimizer
 {
@@ -421,6 +422,7 @@ namespace Container_File_Optimizer
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
+            //Temporary
             Dictionary<int, int> fileCount = new Dictionary<int, int>();
 
 
@@ -452,6 +454,13 @@ namespace Container_File_Optimizer
             {
                 sortedFileCount.Add(keyValuePair.Key, keyValuePair.Value);
             }
+
+
+
+            GenerateOptimizedFiles(currentSystemCollection, sortedFileCount);
+
+
+
         }
 
         /// <summary>
@@ -474,6 +483,93 @@ namespace Container_File_Optimizer
             }
 
             return fileCount;
+        }
+
+
+
+
+
+
+
+
+
+        private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
+        {
+            foreach(int appID in currentSystemCollection.Keys)
+            {
+                try
+                {
+                    using (StreamWriter writer = new StreamWriter(GetAppName(appID) + "." + appID))
+                    {
+                        writer.WriteLine("FROM ubi8:latest");
+                        writer.WriteLine("");
+                        writer.WriteLine("RUN useradd elvis && mkdir -p /home/elvis/lib \n");
+
+
+                        foreach (int fileID in sortedFileCount.Keys)
+                        {
+                            // More than one occurance in system and in the current app's collection
+                            string fileType = Path.GetExtension(GetFilePath(fileID));
+                            if (sortedFileCount[fileID] > 1 && currentSystemCollection[appID].Contains(fileID) && fileType == ".so")
+                            {
+                                writer.Write("COPY ");
+                                writer.WriteLine(GetFilePath(fileID) + " \\");
+                                writer.WriteLine("/home/elvis/lib \n");
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error creating optimized file");
+                }
+            }
+        }
+
+
+        // Returns the fileName of a specific file from the database
+        private string GetAppName(int appID)
+        {
+            string file_name = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT app_name FROM Application WHERE app_id = @app_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@app_id", appID);
+
+
+                file_name = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_name.Trim();
+
+            }
+        }
+
+        // returns the specific filepath of a file in the database
+        private string GetFilePath(int fileID)
+        {
+            string file_path = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_path FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_path = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_path;
+
+            }
         }
 
     }
