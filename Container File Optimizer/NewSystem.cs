@@ -420,6 +420,14 @@ namespace Container_File_Optimizer
 
         public void OptimizeSystem(int systemID)
         {
+            string root = @"C:\Optimized_Folder";
+            // If directory does not exist, create it.
+            // TODO: Check overwrite or not?
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
+
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
 
             foreach (int appID in currentSystemCollection.Keys)
@@ -429,6 +437,67 @@ namespace Container_File_Optimizer
                 {
                     GetFileCount(currentID,systemID);
                 }
+                foreach (int currentID in fileIDs)
+                {
+                    string fileName = GetFileName(currentID);
+                    string filePath = GetFilePath(currentID);
+
+                    // Copy file data using location INTO new file
+                    if (File.Exists(filePath))
+                    {
+                        string destinationPath = Path.Combine(root, fileName + Path.GetExtension(filePath));
+                        File.Copy(filePath, destinationPath, true); // copies data from filePath to destinationPath
+                    }
+                    else
+                    {
+                        MessageBox.Show("File does not exist at filePath: " + filePath);
+                    }
+                }
+            }
+
+        }
+
+        // Returns the fileName of a specific file from the database
+        private string GetFileName(int fileID)
+        {
+            string file_name = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_name FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_name = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_name;
+
+            }
+        }
+
+        // returns the specific filepath of a file in the database
+        private string GetFilePath(int fileID)
+        {
+            string file_path = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_path FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_path = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_path;
+
             }
         }
 
@@ -437,7 +506,7 @@ namespace Container_File_Optimizer
         /// </summary>
         /// <param name="currentID">The file_id that needs to be counted.</param>
         /// <returns> The count for the number of times that id appeard.</returns>
-        public int  GetFileCount(int currentID, int systemID) {
+        public int GetFileCount(int currentID, int systemID) {
             int fileCount;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Windows.Forms.VisualStyles;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Container_File_Optimizer
 {
@@ -43,9 +44,6 @@ namespace Container_File_Optimizer
         }
 
 
-
-
-
         /*
         *  This Fundction uses SQL commands to add a application to the database 
         */
@@ -65,9 +63,6 @@ namespace Container_File_Optimizer
 
             }
         }
-
-
-
 
         /*
        *  This Fundction uses SQL commands to add a File to the database 
@@ -92,9 +87,6 @@ namespace Container_File_Optimizer
             }
 
         }
-
-
-
 
         /*
          *  This Fundction uses SQL commands to add a connection between a system and an application 
@@ -135,8 +127,6 @@ namespace Container_File_Optimizer
             }
         }
 
-
-
         private int GetAppID()
         {
             int appID = 0;
@@ -164,29 +154,72 @@ namespace Container_File_Optimizer
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
 
-
-
-
-
-
-
-
+            string root = @"C:\Saved_Files";
+            // If directory does not exist, create it.
+            // TODO: Check overwrite or not?
+            if (!Directory.Exists(root))
+            {
+                Directory.CreateDirectory(root);
+            }
 
             CreateApp();
+            //TODO: pull application name from database that was just created, use as a new subfolder of root
+            //Directory.CreateDirectory(root + textBoxContainerName.Text);
+
+
             // Create files from the list into Database table for Files
-            foreach (String filePath in checkedListBoxFiles.Items)
+            foreach (String filePath in checkedListBoxFiles.CheckedItems)
             {
                 CreateFile(filePath);
 
             }
             // Creating connections between files and app
-            foreach (String filePath in checkedListBoxFiles.Items)
+            foreach (String filePath in checkedListBoxFiles.CheckedItems)
             {
                 AddAppFileConection(GetAppID(), filePath);
+            }
+
+            // Saves selected files onto the disk
+            foreach (String filePath in checkedListBoxFiles.CheckedItems)
+            {
+                // Calls query to pull file's id
+                string fileName = GetFileName(filePath);
+
+                // Copy file data using location INTO new file
+                if (File.Exists(filePath))
+                {
+                    string destinationPath = Path.Combine(root, fileName + Path.GetExtension(filePath));
+                    File.Copy(filePath, destinationPath, true); // copies data from filePath to destinationPath
+                }
+                else
+                {
+                    MessageBox.Show("File does not exist at filePath: " + filePath);
+                }
             }
             this.Close();
         }
 
+        // Returns the fileName of a specific file from the database
+        private string GetFileName(string filePath)
+        {
+            string file_name = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_name FROM [File] WHERE file_path = @file_path";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_path", filePath);
+
+
+                file_name = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_name;
+
+            }
+        }
 
         private void button1_AddFile(object sender, EventArgs e)
         {
