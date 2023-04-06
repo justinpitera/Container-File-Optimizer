@@ -499,7 +499,7 @@ namespace Container_File_Optimizer
             {
                 try
                 {
-                    using (StreamWriter writer = new StreamWriter(GetAppName(appID) + "." + appID))
+                    using (StreamWriter writer = new StreamWriter(GetAppName(appID) + ".app" + appID))
                     {
                         writer.WriteLine("FROM ubi8:latest");
                         writer.WriteLine("");
@@ -508,15 +508,38 @@ namespace Container_File_Optimizer
 
                         foreach (int fileID in sortedFileCount.Keys)
                         {
-                            // More than one occurance in system and in the current app's collection
-                            string fileType = Path.GetExtension(GetFilePath(fileID));
-                            if (sortedFileCount[fileID] > 1 && currentSystemCollection[appID].Contains(fileID) && fileType == ".so")
+                            string fileType = GetFileType(fileID).Trim();
+                            // Question: are all application file types .so
+                            // Removed : sortedFileCount[fileID] > 1 && 
+                            if (currentSystemCollection[appID].Contains(fileID))
                             {
-                                writer.Write("COPY ");
-                                writer.WriteLine(GetFilePath(fileID) + " \\");
-                                writer.WriteLine("/home/elvis/lib \n");
+                                switch(fileType)
+                                {
+                                    case ".so": // Library files
+                                        writer.Write("COPY ");
+                                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                                        writer.WriteLine("/home/elvis/lib \n");
+                                        break;
+                                    case ".bin": 
+                                        writer.Write("COPY ");
+                                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                                        writer.WriteLine("/home/elvis/ \n");
+                                        break;
+                                    default: // Everything else includes configs
+                                        writer.Write("COPY ");
+                                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                                        writer.WriteLine("/home/elvis/config \n");
+                                        break;
+                                }
+
                             }
+
+
+
+
                         }
+                        writer.WriteLine("CMD[\"/bin/bash\"]");
+                        writer.Close();
 
                     }
                 }
@@ -568,6 +591,30 @@ namespace Container_File_Optimizer
                 file_path = (string)command.ExecuteScalar();
                 cnn.Close();
                 return file_path;
+
+            }
+        }
+
+
+
+        // returns the specific filepath of a file in the database
+        private string GetFileType(int fileID)
+        {
+            string file_type = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_type FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_type = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_type;
 
             }
         }

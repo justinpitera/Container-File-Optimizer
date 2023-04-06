@@ -76,22 +76,30 @@ namespace Container_File_Optimizer
        */
         private void CreateFile(String filePath)
         {
-
-
+            string fileName = Path.GetFileName(filePath);
+            string fileType = Path.GetExtension(filePath);
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                    connection.Open();
-                    string fileName = Regex.Match(filePath, @"(?<=\\)[^\\]*$").Value;
-                    string fileType = Path.GetExtension(fileName).Replace(".", "");
+                connection.Open();
 
-                    string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@file_name", fileName);
+                string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@file_name", fileName);
+                if (FileHasNullBytes(filePath) && fileType != ".so")
+                {
+                    command.Parameters.AddWithValue("@file_path", filePath);
+                    command.Parameters.AddWithValue("@file_type", ".bin");
+                    int rowsAffected = command.ExecuteNonQuery();
+                }
+                else
+                {
                     command.Parameters.AddWithValue("@file_path", filePath);
                     command.Parameters.AddWithValue("@file_type", fileType);
-
                     int rowsAffected = command.ExecuteNonQuery();
-                    connection.Close();
+                }
+
+
+                connection.Close();
 
             }
 
@@ -168,20 +176,11 @@ namespace Container_File_Optimizer
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
 
-
-
-
-
-
-
-
-
             CreateApp();
             // Create files from the list into Database table for Files
             foreach (String filePath in checkedListBoxFiles.CheckedItems)
             {
                 CreateFile(filePath);
-
             }
             // Creating connections between files and app
             foreach (String filePath in checkedListBoxFiles.CheckedItems)
@@ -216,5 +215,32 @@ namespace Container_File_Optimizer
                 checkedListBoxFiles.SetItemChecked(i, true);
             }
         }
+
+        // Used to determine if file is an executable or not
+        public static bool FileHasNullBytes(string filePath)
+        {
+            // Open the file as a binary stream
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            {
+                int byteValue;
+                // Read the file byte by byte
+                while ((byteValue = fileStream.ReadByte()) != -1)
+                {
+                    // Check if the byte value is 0 (a null byte)
+                    if (byteValue == 0)
+                    {
+                        // If a null byte is found, return true
+                        return true;
+                    }
+                }
+            }
+            // If no null bytes are found, return false
+            return false;
+        }
+
+
+
+
+
     }
 }
