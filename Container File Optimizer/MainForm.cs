@@ -27,8 +27,8 @@ namespace Container_File_Optimizer
 
         private void buttonEditSystem_Click(object sender, EventArgs e)
         {
-            EditSystem editSystemForm = new EditSystem();
-            editSystemForm.ShowDialog();
+            SystemViewer viewer = new SystemViewer();
+            viewer.Show();
         }
 
         private void buttonCreateContainer_Click(object sender, EventArgs e)
@@ -72,6 +72,11 @@ namespace Container_File_Optimizer
                 cnn.Open();
                 cnn.Close();
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("hello");
         }
     }
 }

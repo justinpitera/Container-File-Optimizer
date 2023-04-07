@@ -102,6 +102,12 @@
     <Compile Include="SharedDependencies.Designer.cs">
       <DependentUpon>SharedDependencies.cs</DependentUpon>
     </Compile>
+    <Compile Include="SystemViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SystemViewer.Designer.cs">
+      <DependentUpon>SystemViewer.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EditSystem.resx">
       <DependentUpon>EditSystem.cs</DependentUpon>
     </EmbeddedResource>
@@ -125,6 +131,9 @@
     </Compile>
     <EmbeddedResource Include="SharedDependencies.resx">
       <DependentUpon>SharedDependencies.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SystemViewer.resx">
+      <DependentUpon>SystemViewer.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="ContainerfileDatabaseDataSet.xsc">
       <DependentUpon>ContainerfileDatabaseDataSet.xsd</DependentUpon>

@@ -28,14 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Example System 1");
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Systems", new System.Windows.Forms.TreeNode[] {
-            treeNode1});
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Example Container 2");
-            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("Example Container 1");
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("Containers", new System.Windows.Forms.TreeNode[] {
-            treeNode3,
-            treeNode4});
+            System.Windows.Forms.TreeNode treeNode11 = new System.Windows.Forms.TreeNode("Example System 1");
+            System.Windows.Forms.TreeNode treeNode12 = new System.Windows.Forms.TreeNode("Systems", new System.Windows.Forms.TreeNode[] {
+            treeNode11});
+            System.Windows.Forms.TreeNode treeNode13 = new System.Windows.Forms.TreeNode("Example Container 2");
+            System.Windows.Forms.TreeNode treeNode14 = new System.Windows.Forms.TreeNode("Example Container 1");
+            System.Windows.Forms.TreeNode treeNode15 = new System.Windows.Forms.TreeNode("Containers", new System.Windows.Forms.TreeNode[] {
+            treeNode13,
+            treeNode14});
             this.buttonCreateNewSystem = new System.Windows.Forms.Button();
             this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
@@ -53,7 +53,7 @@
             // 
             this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateNewSystem.Location = new System.Drawing.Point(361, 102);
-            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateNewSystem.TabIndex = 0;
@@ -65,7 +65,7 @@
             // 
             this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonCreateContainer.Location = new System.Drawing.Point(361, 272);
-            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateContainer.TabIndex = 1;
@@ -77,7 +77,7 @@
             // 
             this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEditSystem.Location = new System.Drawing.Point(361, 187);
-            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditSystem.Name = "buttonEditSystem";
             this.buttonEditSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonEditSystem.TabIndex = 2;
@@ -89,7 +89,7 @@
             // 
             this.buttonEditContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonEditContainer.Location = new System.Drawing.Point(361, 358);
-            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditContainer.Name = "buttonEditContainer";
             this.buttonEditContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonEditContainer.TabIndex = 3;
@@ -139,7 +139,7 @@
             // richTextBox1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(9, 102);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBox1.Multiline = false;
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(271, 28);
@@ -150,21 +150,21 @@
             // 
             this.treeView1.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.treeView1.Location = new System.Drawing.Point(9, 134);
-            this.treeView1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.treeView1.Margin = new System.Windows.Forms.Padding(2);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Node2";
-            treeNode1.Text = "Example System 1";
-            treeNode2.Name = "Node0";
-            treeNode2.Text = "Systems";
-            treeNode3.Name = "Node4";
-            treeNode3.Text = "Example Container 2";
-            treeNode4.Name = "Node5";
-            treeNode4.Text = "Example Container 1";
-            treeNode5.Name = "Node1";
-            treeNode5.Text = "Containers";
+            treeNode11.Name = "Node2";
+            treeNode11.Text = "Example System 1";
+            treeNode12.Name = "Node0";
+            treeNode12.Text = "Systems";
+            treeNode13.Name = "Node4";
+            treeNode13.Text = "Example Container 2";
+            treeNode14.Name = "Node5";
+            treeNode14.Text = "Example Container 1";
+            treeNode15.Name = "Node1";
+            treeNode15.Text = "Containers";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2,
-            treeNode5});
+            treeNode12,
+            treeNode15});
             this.treeView1.Size = new System.Drawing.Size(271, 305);
             this.treeView1.TabIndex = 8;
             // 
@@ -197,7 +197,7 @@
             this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
