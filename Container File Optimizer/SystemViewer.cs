@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Container_File_Optimizer
 {
@@ -61,10 +55,6 @@ namespace Container_File_Optimizer
                     systemIDCollection.Add(i, systemId);
                 }
             }
-            foreach (int i in systemIDCollection.Keys)
-            {
-                MessageBox.Show(i + " - " + systemIDCollection[i].ToString());
-            }
         }
 
         /// <summary>
@@ -103,10 +93,6 @@ namespace Container_File_Optimizer
                     listBox2.Items.Add(app_name);
                     appIDCollection.Add(i, app_ID);
                 }
-            }
-            foreach (int i in systemIDCollection.Keys)
-            {
-                MessageBox.Show(i + " - " + systemIDCollection[i].ToString());
             }
 
 
@@ -182,12 +168,18 @@ namespace Container_File_Optimizer
             appIDCollection.Clear();
             listBox2.Items.Clear();
             GetApps(systemIDCollection[listBox1.SelectedIndex]);
+            listBox3.Items.Clear();
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
-            listBox3.Items.Clear();
-            GetFileIDS(appIDCollection[listBox2.SelectedIndex]);
+            // Put this here to avoid crashing if they dont select anything 
+            if (listBox2.SelectedItems.Count > 0)
+            {
+                listBox3.Items.Clear();
+                GetFileIDS(appIDCollection[listBox2.SelectedIndex]);
+            }
+
         }
     }
 

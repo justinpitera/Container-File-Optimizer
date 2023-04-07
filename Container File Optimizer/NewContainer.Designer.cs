@@ -182,7 +182,8 @@ namespace Container_File_Optimizer
             this.Controls.Add(this.labelCreatorCount);
             this.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.Name = "NewContainer";
-            this.Text = "Create New Container - {systemName}";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Create New Container";
             this.Load += new System.EventHandler(this.NewContainer_Load);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

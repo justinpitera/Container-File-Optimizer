@@ -101,6 +101,7 @@
             this.Controls.Add(this.listBox2);
             this.Controls.Add(this.listBox1);
             this.Name = "SystemViewer";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SystemViewer";
             this.Load += new System.EventHandler(this.SystemViewer_Load);
             this.ResumeLayout(false);

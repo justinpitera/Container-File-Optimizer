@@ -21,5 +21,10 @@ namespace Container_File_Optimizer
         {
 
         }
+
+        private void SharedDependencies_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
