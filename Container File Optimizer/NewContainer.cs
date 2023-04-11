@@ -201,9 +201,10 @@ namespace Container_File_Optimizer
             }
 
             for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
-            {
+            { 
                 checkedListBoxFiles.SetItemChecked(i, true);
             }
+            
         }
 
         // Used to determine if file is an executable or not

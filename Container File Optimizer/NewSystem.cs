@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Configuration;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace Container_File_Optimizer
 {
@@ -128,21 +129,29 @@ namespace Container_File_Optimizer
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
             //
-            CreateSystem();
-            int systemID = GetSystemID();
-            SystemViewer systemViewer = new SystemViewer();
-            systemViewer.Show();
-            foreach(String currentLine in checkedListBoxContainers.CheckedItems)
+            if (!(textBoxSystemName.Text == string.Empty))
             {
+                CreateSystem();
+                int systemID = GetSystemID();
+                SystemViewer systemViewer = new SystemViewer();
+                systemViewer.Show();
+                foreach (String currentLine in checkedListBoxContainers.CheckedItems)
+                {
 
-                // Gets the integer before space in listbox which happens to be the currentAppID
-                int currentSpace = currentLine.IndexOf(' ');
-                int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
-                // Create a system app connection in the database
-                AddSysAppConnection(currentAppID, systemID);
+                    // Gets the integer before space in listbox which happens to be the currentAppID
+                    int currentSpace = currentLine.IndexOf(' ');
+                    int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
+                    // Create a system app connection in the database
+                    AddSysAppConnection(currentAppID, systemID);
+                }
+                OptimizeSystem(systemID);
+                this.Close();
             }
-            OptimizeSystem(systemID);
-            this.Close();
+            else
+            {
+                MessageBox.Show("Please provide a system name to continue...");
+            }
+
             
         }
 
@@ -412,65 +421,180 @@ namespace Container_File_Optimizer
 
 
 
-
+        
 
 
         private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
         {
-            foreach(int appID in currentSystemCollection.Keys)
+            foreach (int appID in currentSystemCollection.Keys)
             {
+                Dictionary<int, int> tempFileCounts = new Dictionary<int, int>(sortedFileCount);
+
+
+
+                using (StreamWriter writer = new StreamWriter(GetAppName(appID) + ".app" + appID))
+                {
+                    writer.WriteLine("FROM ubi8:latest");
+                    writer.WriteLine("");
+                    writer.WriteLine("RUN useradd elvis && mkdir -p /home/elvis/lib \n");
+
+                    sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
+
+                    sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);
+
+                    sortedFileCount = WriteBinaries(tempFileCounts, currentSystemCollection, appID, writer);
+
+
+                    writer.WriteLine("CMD[\"/bin/bash\"]");
+                    writer.Close();
+
+                }
+
+
                 try
                 {
-                    using (StreamWriter writer = new StreamWriter(GetAppName(appID) + ".app" + appID))
-                    {
-                        writer.WriteLine("FROM ubi8:latest");
-                        writer.WriteLine("");
-                        writer.WriteLine("RUN useradd elvis && mkdir -p /home/elvis/lib \n");
 
-
-                        foreach (int fileID in sortedFileCount.Keys)
-                        {
-                            string fileType = GetFileType(fileID).Trim();
-                            // Question: are all application file types .so
-                            // Removed : sortedFileCount[fileID] > 1 && 
-                            if (currentSystemCollection[appID].Contains(fileID))
-                            {
-                                switch(fileType)
-                                {
-                                    case ".so": // Library files
-                                        writer.Write("COPY ");
-                                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                                        writer.WriteLine("/home/elvis/lib \n");
-                                        break;
-                                    case ".bin": 
-                                        writer.Write("COPY ");
-                                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                                        writer.WriteLine("/home/elvis/ \n");
-                                        break;
-                                    default: // Everything else includes configs
-                                        writer.Write("COPY ");
-                                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                                        writer.WriteLine("/home/elvis/config \n");
-                                        break;
-                                }
-
-                            }
-
-
-
-
-                        }
-                        writer.WriteLine("CMD[\"/bin/bash\"]");
-                        writer.Close();
-
-                    }
+                
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error creating optimized file");
+                    MessageBox.Show("Error creating optimized file: " + ex);
                 }
             }
         }
+
+
+
+        public Dictionary<int, int> WriteLibraries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("/home/elvis/lib \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(tempFileCounts.Count == 0))
+            {
+                writer.Write("COPY ");
+
+
+                foreach (int fileID in tempFileCounts.Keys.ToList())
+                {
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] <= 1)
+                    {
+
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        //tempFileCounts.Remove(fileID);
+
+                    }
+                }
+
+                writer.WriteLine("/home/elvis/lib \n");
+            }
+            return tempFileCounts;
+        }
+
+
+
+
+
+
+
+        public Dictionary<int, int> WriteBinaries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("/home/elvis/config \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(tempFileCounts.Count == 0))
+            {
+                writer.Write("COPY ");
+
+
+                foreach (int fileID in tempFileCounts.Keys.ToList())
+                {
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
+                    {
+
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        //tempFileCounts.Remove(fileID);
+
+                    }
+                }
+
+                writer.WriteLine("/home/elvis/config \n");
+            }
+            return tempFileCounts;
+        }
+
+
+
+        public Dictionary<int, int> WriteConfigs(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("/home/elvis/bin \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(tempFileCounts.Count == 0))
+            {
+                writer.Write("COPY ");
+
+
+                foreach (int fileID in tempFileCounts.Keys.ToList())
+                {
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] <= 1)
+                    {
+
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                       // tempFileCounts.Remove(fileID);
+
+                    }
+                }
+
+                writer.WriteLine("/home/elvis/bin \n");
+            }
+            return tempFileCounts;
+        }
+
+
+
+
+
+
 
 
         // Returns the fileName of a specific file from the database

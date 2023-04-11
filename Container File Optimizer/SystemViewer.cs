@@ -111,7 +111,7 @@ namespace Container_File_Optimizer
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 connection.Open();
-                command.Parameters.Add("@app_id", appID);
+                command.Parameters.AddWithValue("@app_id", appID);
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -141,7 +141,7 @@ namespace Container_File_Optimizer
             using (SqlCommand command = new SqlCommand(query, connection))
             {
                 connection.Open();
-                command.Parameters.Add("@app_id", appID);
+                command.Parameters.AddWithValue("@app_id", appID);
 
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -165,10 +165,15 @@ namespace Container_File_Optimizer
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            appIDCollection.Clear();
-            listBox2.Items.Clear();
-            GetApps(systemIDCollection[listBox1.SelectedIndex]);
-            listBox3.Items.Clear();
+            // Put this here to avoid crashing if they dont select anything 
+            if (listBox1.SelectedItems.Count > 0)
+            {
+                appIDCollection.Clear();
+                listBox2.Items.Clear();
+                GetApps(systemIDCollection[listBox1.SelectedIndex]);
+                listBox3.Items.Clear();
+            }
+
         }
 
         private void listBox2_SelectedIndexChanged(object sender, EventArgs e)
