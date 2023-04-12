@@ -499,7 +499,7 @@ namespace Container_File_Optimizer
                     }
                 }
 
-               // writer.WriteLine("/home/elvis/lib \n");
+                writer.WriteLine("/home/elvis/lib \n");
             }
             return tempFileCounts;
         }
@@ -528,23 +528,30 @@ namespace Container_File_Optimizer
             }
             if (!(!tempFileCounts.Any()))
             {
-                writer.Write("COPY ");
+                Boolean containsCopy = false;
+                if (!containsCopy) {
+                    writer.Write("COPY ");
 
-
-                foreach (int fileID in tempFileCounts.Keys.ToList())
-                {
-
-                    string fileType = GetFileType(fileID).Trim();
-                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
+                    foreach (int fileID in tempFileCounts.Keys.ToList())
                     {
 
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                        //tempFileCounts.Remove(fileID);
+                        if (!containsCopy)
+                        {
+                            string fileType = GetFileType(fileID).Trim();
+                            if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
+                            {
 
+                                writer.WriteLine(GetFilePath(fileID) + " \\");
+                                //tempFileCounts.Remove(fileID);
+
+                            }
+                        }
+
+                        writer.WriteLine("/home/elvis/config \n");
                     }
+                    
                 }
-
-                //writer.WriteLine("/home/elvis/config \n");
+               
             }
             return tempFileCounts;
         }
@@ -585,7 +592,7 @@ namespace Container_File_Optimizer
                     }
                 }
 
-                //writer.WriteLine("/home/elvis/bin \n");
+                writer.WriteLine("/home/elvis/bin \n");
             }
             return tempFileCounts;
         }
