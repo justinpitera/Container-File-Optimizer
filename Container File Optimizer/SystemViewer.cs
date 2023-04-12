@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Windows.Forms;
 
 namespace Container_File_Optimizer
@@ -10,8 +11,10 @@ namespace Container_File_Optimizer
     public partial class SystemViewer : Form
     {
         string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
+        //        listbox[index]   database[index]
         Dictionary<int, int> systemIDCollection = new Dictionary<int, int>();
-        Dictionary<int,int> appIDCollection = new Dictionary<int, int>();
+        Dictionary<int, int> appIDCollection = new Dictionary<int, int>();
+        Dictionary<int, int> fileIDCollection = new Dictionary<int, int>();
         public SystemViewer()
         {
             InitializeComponent();
@@ -94,6 +97,42 @@ namespace Container_File_Optimizer
                     appIDCollection.Add(i, app_ID);
                 }
             }
+        }
+
+
+
+
+        public void GetAppIDs(int fileID)
+        {
+            // Define SQL query to retrieve system_name and system_id columns
+
+            //string query = "SELECT * FROM [File] fi LEFT JOIN AppFile af ON fi.file_id = af.file_id WHERE sa.system_id = @file_id";
+            string query = "SELECT app_id FROM AppFile WHERE file_id = @file_id";
+
+            // Create SqlConnection and SqlCommand objects
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, cnn))
+            {
+                cmd.Parameters.AddWithValue("@file_id", fileID);
+                // Create a new DataTable to hold the results
+                DataTable dataTable = new DataTable();
+
+                // Create a new SqlDataAdapter and fill the DataTable
+                using (SqlDataAdapter adp = new SqlDataAdapter(cmd))
+                {
+                    adp.Fill(dataTable);
+                }
+
+                // Create a new Dictionary to store ListView index and system_id
+
+                // Add each system_name value to the ListView and add ListView index and system_id to the dictionary
+                for (int i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    DataRow row = dataTable.Rows[i];
+                    int app_ID = Convert.ToInt32(row["app_id"]);
+                    fileIDCollection.Add(i, app_ID);
+                }
+            }
 
 
         }
@@ -103,9 +142,9 @@ namespace Container_File_Optimizer
 
 
 
-        public void GetFileIDS(int appID)
+        public void GetFileName(int appID)
         {
-            string query = "SELECT * FROM AppFile WHERE app_id = @app_id";
+            string query = "SELECT * FROM AppFile af LEFT JOIN [File] fi ON af.file_id = fi.file_id WHERE af.app_id = @app_id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
@@ -120,7 +159,8 @@ namespace Container_File_Optimizer
                 {
                     int app_id = reader.GetInt32(0); // see if this can work with Int16 
                     int file_id = reader.GetInt32(1); // Same with this 
-                    listBox3.Items.Add(file_id);
+                    string file_name = reader.GetString(3);
+                    listBox3.Items.Add(file_name);
 
                 }
 
@@ -162,6 +202,39 @@ namespace Container_File_Optimizer
         }
 
 
+        public void GetSharedApps(int fileID, int systemID)
+        {
+            string query = "SELECT app_name FROM Application app LEFT JOIN SysApp sa ON ap.system_id = sa.system_id LEFT JOIN AppFile af ON app.app_id = af.app_id WHERE af.file_id = @file_id AND sa.system_id = @system_id";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand(query, connection))
+            {
+                connection.Open();
+                command.Parameters.AddWithValue("@file_id", fileID);
+                command.Parameters.AddWithValue("@system_id", systemID);
+
+                SqlDataReader reader = command.ExecuteReader();
+
+                // Iterate through the SqlDataReader and populate the CheckedListBox
+                string listOfSharedContainers = "";
+                string fileName = listBox3.GetItemText(listBox3.SelectedItem);
+                while (reader.Read())
+                {
+                    string app_name = reader.GetString(1);
+
+                    listOfSharedContainers = listOfSharedContainers + app_name;
+                    // concatenate everything to list of Shared containers string
+
+                }
+                MessageBox.Show("List of shared containers for " + fileName + listOfSharedContainers) ;
+                // Close the SqlDataReader and the SqlConnection
+                reader.Close();
+
+                connection.Close();
+            }
+        }
+
+
 
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -182,9 +255,19 @@ namespace Container_File_Optimizer
             if (listBox2.SelectedItems.Count > 0)
             {
                 listBox3.Items.Clear();
-                GetFileIDS(appIDCollection[listBox2.SelectedIndex]);
+                GetFileName(appIDCollection[listBox2.SelectedIndex]);
+                
+               
             }
 
+        }
+
+        private void listBox3_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (listBox3.SelectedItems.Count > 0)
+            {
+               // GetSharedApps(fileIDCollection[listBox3.SelectedIndex], systemIDCollection[listBox1.SelectedIndex]);
+            }
         }
     }
 

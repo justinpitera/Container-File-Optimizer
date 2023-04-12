@@ -129,7 +129,7 @@ namespace Container_File_Optimizer
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
             //
-            if (!(textBoxSystemName.Text == string.Empty))
+            if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
             {
                 CreateSystem();
                 int systemID = GetSystemID();
@@ -149,7 +149,7 @@ namespace Container_File_Optimizer
             }
             else
             {
-                MessageBox.Show("Please provide a system name to continue...");
+                MessageBox.Show("Please provide a system name and creator to continue...");
             }
 
             
@@ -436,7 +436,7 @@ namespace Container_File_Optimizer
                 {
                     writer.WriteLine("FROM ubi8:latest");
                     writer.WriteLine("");
-                    writer.WriteLine("RUN useradd elvis && mkdir -p /home/elvis/lib \n");
+                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/lib \n");
 
                     sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
 
@@ -475,7 +475,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     writer.WriteLine(GetFilePath(fileID) + " \\");
-                    writer.WriteLine("/home/elvis/lib \n");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
                     //tempFileCounts.Remove(fileID);
 
                 }
@@ -483,23 +483,36 @@ namespace Container_File_Optimizer
             }
             if (!(!tempFileCounts.Any()))
             {
-                writer.Write("COPY ");
 
 
+                bool containsCopy = false;
                 foreach (int fileID in tempFileCounts.Keys.ToList())
                 {
+                    
+
+
 
                     string fileType = GetFileType(fileID).Trim();
                     if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] <= 1)
                     {
-
+                        if (!containsCopy)
+                        {
+                            writer.Write("COPY ");
+                            containsCopy = true;
+                        }
                         writer.WriteLine(GetFilePath(fileID) + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
+
                 }
 
-                writer.WriteLine("/home/elvis/lib \n");
+                if (containsCopy == true)
+                {
+
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
+                }
+
             }
             return tempFileCounts;
         }
@@ -520,7 +533,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     writer.WriteLine(GetFilePath(fileID) + " \\");
-                    writer.WriteLine("/home/elvis/config \n");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
                     //tempFileCounts.Remove(fileID);
 
                 }
@@ -528,30 +541,35 @@ namespace Container_File_Optimizer
             }
             if (!(!tempFileCounts.Any()))
             {
-                Boolean containsCopy = false;
-                if (!containsCopy) {
-                    writer.Write("COPY ");
+                bool containsCopy = false;
 
                     foreach (int fileID in tempFileCounts.Keys.ToList())
                     {
 
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
+                    {
                         if (!containsCopy)
                         {
-                            string fileType = GetFileType(fileID).Trim();
-                            if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
-                            {
-
-                                writer.WriteLine(GetFilePath(fileID) + " \\");
-                                //tempFileCounts.Remove(fileID);
-
-                            }
+                            writer.Write("COPY ");
+                            containsCopy = true;
                         }
 
-                        writer.WriteLine("/home/elvis/config \n");
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        //tempFileCounts.Remove(fileID);
+
                     }
+
+                        
                     
                 }
-               
+
+
+                if (containsCopy == true)
+                {
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
+                }
+
             }
             return tempFileCounts;
         }
@@ -568,7 +586,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     writer.WriteLine(GetFilePath(fileID) + " \\");
-                    writer.WriteLine("/home/elvis/bin \n");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
                     //tempFileCounts.Remove(fileID);
 
                 }
@@ -576,7 +594,7 @@ namespace Container_File_Optimizer
             }
             if (!(!tempFileCounts.Any()))
             {
-                writer.Write("COPY ");
+                bool containsCopy = false;
 
 
                 foreach (int fileID in tempFileCounts.Keys.ToList())
@@ -585,14 +603,22 @@ namespace Container_File_Optimizer
                     string fileType = GetFileType(fileID).Trim();
                     if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] <= 1)
                     {
-
+                        if (!containsCopy)
+                        {
+                            writer.Write("COPY ");
+                            containsCopy = true;
+                        }
                         writer.WriteLine(GetFilePath(fileID) + " \\");
                        // tempFileCounts.Remove(fileID);
 
                     }
                 }
+                if (containsCopy == true)
+                {
 
-                writer.WriteLine("/home/elvis/bin \n");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
+                }
+
             }
             return tempFileCounts;
         }
