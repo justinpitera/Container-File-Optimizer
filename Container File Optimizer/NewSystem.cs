@@ -481,7 +481,7 @@ namespace Container_File_Optimizer
                 }
 
             }
-            if (!(tempFileCounts.Count == 0))
+            if (!(!tempFileCounts.Any()))
             {
                 writer.Write("COPY ");
 
@@ -499,7 +499,7 @@ namespace Container_File_Optimizer
                     }
                 }
 
-                writer.WriteLine("/home/elvis/lib \n");
+               // writer.WriteLine("/home/elvis/lib \n");
             }
             return tempFileCounts;
         }
@@ -510,7 +510,7 @@ namespace Container_File_Optimizer
 
 
 
-        public Dictionary<int, int> WriteBinaries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        public Dictionary<int, int> WriteConfigs(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
         {
 
             foreach (int fileID in tempFileCounts.Keys.ToList())
@@ -526,7 +526,7 @@ namespace Container_File_Optimizer
                 }
 
             }
-            if (!(tempFileCounts.Count == 0))
+            if (!(!tempFileCounts.Any()))
             {
                 writer.Write("COPY ");
 
@@ -544,14 +544,14 @@ namespace Container_File_Optimizer
                     }
                 }
 
-                writer.WriteLine("/home/elvis/config \n");
+                //writer.WriteLine("/home/elvis/config \n");
             }
             return tempFileCounts;
         }
 
 
 
-        public Dictionary<int, int> WriteConfigs(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        public Dictionary<int, int> WriteBinaries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
         {
 
             foreach (int fileID in tempFileCounts.Keys.ToList())
@@ -567,7 +567,7 @@ namespace Container_File_Optimizer
                 }
 
             }
-            if (!(tempFileCounts.Count == 0))
+            if (!(!tempFileCounts.Any()))
             {
                 writer.Write("COPY ");
 
@@ -585,7 +585,7 @@ namespace Container_File_Optimizer
                     }
                 }
 
-                writer.WriteLine("/home/elvis/bin \n");
+                //writer.WriteLine("/home/elvis/bin \n");
             }
             return tempFileCounts;
         }
