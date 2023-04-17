@@ -29,13 +29,6 @@ namespace Container_File_Optimizer
 
 
 
-        private void textBoxSystemName_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
-
 
 
         /*
@@ -163,25 +156,35 @@ namespace Container_File_Optimizer
         }
 
         // Create app, then create each file from file list, then create connections in bridge table for apps and files
-        private void buttonCreateSystem_Click(object sender, EventArgs e)
+        private void buttonCreateContainer_Click(object sender, EventArgs e)
         {
 
-            CreateApp();
-            // Create files from the list into Database table for Files
-            foreach (String filePath in checkedListBoxFiles.CheckedItems)
+            if (checkedListBoxFiles.Items.Count == 0 || textBoxContainerName.Text == string.Empty)
             {
-                CreateFile(filePath);
+                MessageBox.Show("Please select at least one file and provide a name for the container.");
             }
-            // Creating connections between files and app
-            foreach (String filePath in checkedListBoxFiles.CheckedItems)
+            else
             {
-                AddAppFileConection(GetAppID(), filePath);
+                CreateApp();
+                // Create files from the list into Database table for Files
+                foreach (String filePath in checkedListBoxFiles.CheckedItems)
+                {
+                    CreateFile(filePath);
+                }
+                // Creating connections between files and app
+                foreach (String filePath in checkedListBoxFiles.CheckedItems)
+                {
+                    AddAppFileConection(GetAppID(), filePath);
+                }
+                this.Close();
             }
-            this.Close();
+
+
+
         }
 
 
-        private void button1_AddFile(object sender, EventArgs e)
+        private void buttonAddFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog findFiles = new OpenFileDialog();
             findFiles.Multiselect = true;
@@ -201,10 +204,16 @@ namespace Container_File_Optimizer
             }
 
             for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
-            { 
+            {
                 checkedListBoxFiles.SetItemChecked(i, true);
             }
-            
+
+        }
+
+
+        private void buttonRemoveFile_Click(object sender, EventArgs e)
+        {
+            checkedListBoxFiles.Items.RemoveAt(checkedListBoxFiles.SelectedIndex);
         }
 
         // Used to determine if file is an executable or not
@@ -228,9 +237,6 @@ namespace Container_File_Optimizer
             // If no null bytes are found, return false
             return false;
         }
-
-
-
 
 
     }

@@ -28,7 +28,7 @@ namespace Container_File_Optimizer
         private void buttonEditSystem_Click(object sender, EventArgs e)
         {
             SystemViewer viewer = new SystemViewer();
-            viewer.Show();
+            viewer.ShowDialog();
         }
 
         private void buttonCreateContainer_Click(object sender, EventArgs e)

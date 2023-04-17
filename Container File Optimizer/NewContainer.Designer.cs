@@ -36,13 +36,14 @@ namespace Container_File_Optimizer
             this.textBoxContainerName = new System.Windows.Forms.TextBox();
             this.textBoxContainerDesc = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.buttonCreateSystem = new System.Windows.Forms.Button();
+            this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.toolTipInfo = new System.Windows.Forms.ToolTip(this.components);
             this.labelSystemNameCount = new System.Windows.Forms.Label();
             this.labelCreatorCount = new System.Windows.Forms.Label();
             this.buttonAddFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
+            this.buttonRemoveFile = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,7 +79,6 @@ namespace Container_File_Optimizer
             this.textBoxContainerName.Name = "textBoxContainerName";
             this.textBoxContainerName.Size = new System.Drawing.Size(369, 23);
             this.textBoxContainerName.TabIndex = 14;
-            this.textBoxContainerName.TextChanged += new System.EventHandler(this.textBoxSystemName_TextChanged);
             // 
             // textBoxContainerDesc
             // 
@@ -93,7 +93,7 @@ namespace Container_File_Optimizer
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.buttonCreateSystem);
+            this.panel1.Controls.Add(this.buttonCreateContainer);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel1.Location = new System.Drawing.Point(0, 326);
@@ -102,16 +102,16 @@ namespace Container_File_Optimizer
             this.panel1.Size = new System.Drawing.Size(387, 64);
             this.panel1.TabIndex = 18;
             // 
-            // buttonCreateSystem
+            // buttonCreateContainer
             // 
-            this.buttonCreateSystem.Location = new System.Drawing.Point(8, 3);
-            this.buttonCreateSystem.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
-            this.buttonCreateSystem.Name = "buttonCreateSystem";
-            this.buttonCreateSystem.Size = new System.Drawing.Size(368, 53);
-            this.buttonCreateSystem.TabIndex = 3;
-            this.buttonCreateSystem.Text = "Add Container";
-            this.buttonCreateSystem.UseVisualStyleBackColor = true;
-            this.buttonCreateSystem.Click += new System.EventHandler(this.buttonCreateSystem_Click);
+            this.buttonCreateContainer.Location = new System.Drawing.Point(8, 3);
+            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.buttonCreateContainer.Name = "buttonCreateContainer";
+            this.buttonCreateContainer.Size = new System.Drawing.Size(368, 53);
+            this.buttonCreateContainer.TabIndex = 3;
+            this.buttonCreateContainer.Text = "Add Container";
+            this.buttonCreateContainer.UseVisualStyleBackColor = true;
+            this.buttonCreateContainer.Click += new System.EventHandler(this.buttonCreateContainer_Click);
             // 
             // labelSystemNameCount
             // 
@@ -137,14 +137,14 @@ namespace Container_File_Optimizer
             // 
             // buttonAddFile
             // 
-            this.buttonAddFile.Location = new System.Drawing.Point(8, 131);
+            this.buttonAddFile.Location = new System.Drawing.Point(8, 121);
             this.buttonAddFile.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
             this.buttonAddFile.Name = "buttonAddFile";
             this.buttonAddFile.Size = new System.Drawing.Size(367, 25);
             this.buttonAddFile.TabIndex = 22;
             this.buttonAddFile.Text = "Add File..";
             this.buttonAddFile.UseVisualStyleBackColor = true;
-            this.buttonAddFile.Click += new System.EventHandler(this.button1_AddFile);
+            this.buttonAddFile.Click += new System.EventHandler(this.buttonAddFile_Click);
             // 
             // label1
             // 
@@ -153,23 +153,35 @@ namespace Container_File_Optimizer
             this.label1.Location = new System.Drawing.Point(5, 103);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(151, 17);
+            this.label1.Size = new System.Drawing.Size(207, 17);
             this.label1.TabIndex = 24;
-            this.label1.Text = "Add file(s) to container";
+            this.label1.Text = "Add/Remove file(s) to container";
             // 
             // checkedListBoxFiles
             // 
             this.checkedListBoxFiles.FormattingEnabled = true;
-            this.checkedListBoxFiles.Location = new System.Drawing.Point(8, 161);
+            this.checkedListBoxFiles.Location = new System.Drawing.Point(8, 176);
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(368, 154);
+            this.checkedListBoxFiles.Size = new System.Drawing.Size(368, 139);
             this.checkedListBoxFiles.TabIndex = 25;
+            // 
+            // buttonRemoveFile
+            // 
+            this.buttonRemoveFile.Location = new System.Drawing.Point(8, 148);
+            this.buttonRemoveFile.Margin = new System.Windows.Forms.Padding(2, 1, 2, 1);
+            this.buttonRemoveFile.Name = "buttonRemoveFile";
+            this.buttonRemoveFile.Size = new System.Drawing.Size(367, 25);
+            this.buttonRemoveFile.TabIndex = 26;
+            this.buttonRemoveFile.Text = "Remove File..";
+            this.buttonRemoveFile.UseVisualStyleBackColor = true;
+            this.buttonRemoveFile.Click += new System.EventHandler(this.buttonRemoveFile_Click);
             // 
             // NewContainer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(387, 390);
+            this.Controls.Add(this.buttonRemoveFile);
             this.Controls.Add(this.checkedListBoxFiles);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonAddFile);
@@ -197,12 +209,13 @@ namespace Container_File_Optimizer
         private System.Windows.Forms.TextBox textBoxContainerName;
         private System.Windows.Forms.TextBox textBoxContainerDesc;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button buttonCreateSystem;
+        private System.Windows.Forms.Button buttonCreateContainer;
         private System.Windows.Forms.ToolTip toolTipInfo;
         private System.Windows.Forms.Label labelSystemNameCount;
         private System.Windows.Forms.Label labelCreatorCount;
         private System.Windows.Forms.Button buttonAddFile;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckedListBox checkedListBoxFiles;
+        private System.Windows.Forms.Button buttonRemoveFile;
     }
 }

@@ -119,7 +119,6 @@ namespace Container_File_Optimizer
         private void NewSystem_Load(object sender, EventArgs e)
         {
             PopulateContainers();
-
             // To Do : 
             // Make it so the NewSystem form shows up and this form hides, then when newsystem closes this form reappears
         }
@@ -131,6 +130,26 @@ namespace Container_File_Optimizer
             //
             if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
             {
+
+                if (Directory.Exists(textBoxSystemName.Text))
+                {
+                    // Prompt the user to confirm if they want to overwrite the folder
+                    DialogResult result = MessageBox.Show("A System with that name already exists. Do you want to overwrite it?", "Confirm System Overwrite", MessageBoxButtons.YesNo);
+
+                    // If the user chooses not to overwrite the folder, exit the method
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+                    if (result == DialogResult.Yes)
+                    {
+
+                        // If the user chooses to overwrite the folder, delete it and recreate it
+                        Directory.Delete(textBoxSystemName.Text, true);
+                    }
+
+
+                }
                 CreateSystem();
                 int systemID = GetSystemID();
                 SystemViewer systemViewer = new SystemViewer();
@@ -426,13 +445,20 @@ namespace Container_File_Optimizer
 
         private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
         {
+
+
+            // Create the folder
+
+            Directory.CreateDirectory(Application.StartupPath + "\\" + textBoxSystemName.Text);
+
             foreach (int appID in currentSystemCollection.Keys)
             {
                 Dictionary<int, int> tempFileCounts = new Dictionary<int, int>(sortedFileCount);
 
 
 
-                using (StreamWriter writer = new StreamWriter(GetAppName(appID) + ".app" + appID))
+
+                using (StreamWriter writer = new StreamWriter(textBoxSystemName.Text + "\\" + GetAppName(appID) + ".app" + appID))
                 {
                     writer.WriteLine("FROM ubi8:latest");
                     writer.WriteLine("");
@@ -698,61 +724,6 @@ namespace Container_File_Optimizer
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        private void ShowToolTip(object sender, EventArgs e)
-        {
-            String message = "Initialize System with above applications, and continue to the System Builder interface.";
-            toolTipInfo.SetToolTip(buttonCreateSystem, message);
-        }
-
-        private void textBoxSystemName_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Enter the name of the system to be created.";
-            toolTipInfo.SetToolTip(textBoxSystemName, message);
-        }
-
-        private void textBoxCreator_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Enter the name of the person responsible for the system.";
-            toolTipInfo.SetToolTip(textBoxCreator, message);
-        }
-
-        private void listViewContainers_MouseHover(object sender, EventArgs e)
-        {
-            String message = "The list of containers to initialize the system with. \n To add more containers, click the 'Add Container' button below. \n To remove the selected container, click the 'Remove Container' button below.";
-            toolTipInfo.SetToolTip(checkedListBoxContainers, message);
-        }
-
-        private void buttonAddContainer_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Add a new container to the list of containers to initialize the new system with.";
-            toolTipInfo.Show(message, buttonAddContainer);
-        }
-        private void buttonRemoveContainer_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Remove selected container from the list of containers to initialize the new system with.";
-            toolTipInfo.Show(message, buttonRemoveContainer);
-        }
-
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
             int current = textBoxSystemName.Text.Length;
@@ -766,7 +737,7 @@ namespace Container_File_Optimizer
             }
             else
             {
-                labelSystemNameCount.ForeColor = Form.DefaultForeColor;
+                labelSystemNameCount.ForeColor = Color.White;
             }
             if (current == 0)
             {
@@ -785,7 +756,7 @@ namespace Container_File_Optimizer
             }
             else
             {
-                labelCreatorCount.ForeColor = Form.DefaultForeColor;
+                labelCreatorCount.ForeColor = Color.White;
             }
 
         }

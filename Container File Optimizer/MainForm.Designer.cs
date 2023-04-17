@@ -32,7 +32,6 @@
             this.buttonCreateContainer = new System.Windows.Forms.Button();
             this.buttonEditSystem = new System.Windows.Forms.Button();
             this.buttonEditContainer = new System.Windows.Forms.Button();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -86,10 +85,6 @@
             this.buttonEditContainer.Text = "Container Viewer";
             this.buttonEditContainer.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -119,9 +114,9 @@
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
             this.label2.Location = new System.Drawing.Point(6, 90);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(133, 31);
+            this.label2.Size = new System.Drawing.Size(84, 31);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Get Started";
+            this.label2.Text = "Create";
             // 
             // label3
             // 
@@ -139,7 +134,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(755, 346);
+            this.ClientSize = new System.Drawing.Size(755, 342);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -166,7 +161,6 @@
         private System.Windows.Forms.Button buttonCreateContainer;
         private System.Windows.Forms.Button buttonEditSystem;
         private System.Windows.Forms.Button buttonEditContainer;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label2;
