@@ -1,22 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Configuration;
-using System.Collections;
-using System.Text.RegularExpressions;
-using System.Runtime.InteropServices.ComTypes;
 using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
-using static System.Windows.Forms.AxHost;
+using System.Runtime.CompilerServices;
 
 namespace Container_File_Optimizer
 {
@@ -129,100 +119,61 @@ namespace Container_File_Optimizer
         private void NewSystem_Load(object sender, EventArgs e)
         {
             PopulateContainers();
-
             // To Do : 
             // Make it so the NewSystem form shows up and this form hides, then when newsystem closes this form reappears
         }
 
+
+
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-            CreateSystem();
-            int systemID = GetSystemID();
-            EditSystem systemBuilderForm = new EditSystem();
-            systemBuilderForm.Show();
-            foreach(String currentLine in checkedListBoxContainers.CheckedItems)
+            //
+            if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
             {
-                // Dont ask this is some wizardry
-                // ... It gets the value before the space, which should always be the currentAppID
-                int currentSpace = currentLine.IndexOf(' ');
-                int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
-                AddSysAppConnection(currentAppID, systemID);
-            }
-            OptimizeSystem(systemID);
-            this.Close();
-            
-        }
 
-        private void ShowToolTip(object sender, EventArgs e)
-        {
-            String message = "Initialize System with above applications, and continue to the System Builder interface.";
-            toolTipInfo.SetToolTip(buttonCreateSystem, message);
-        }
+                if (Directory.Exists(textBoxSystemName.Text))
+                {
+                    // Prompt the user to confirm if they want to overwrite the folder
+                    DialogResult result = MessageBox.Show("A System with that name already exists. Do you want to overwrite it?", "Confirm System Overwrite", MessageBoxButtons.YesNo);
 
-        private void textBoxSystemName_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Enter the name of the system to be created.";
-            toolTipInfo.SetToolTip(textBoxSystemName, message);
-        }
+                    // If the user chooses not to overwrite the folder, exit the method
+                    if (result == DialogResult.No)
+                    {
+                        return;
+                    }
+                    if (result == DialogResult.Yes)
+                    {
 
-        private void textBoxCreator_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Enter the name of the person responsible for the system.";
-            toolTipInfo.SetToolTip(textBoxCreator, message);
-        }
+                        // If the user chooses to overwrite the folder, delete it and recreate it
+                        Directory.Delete(textBoxSystemName.Text, true);
+                    }
 
-        private void listViewContainers_MouseHover(object sender, EventArgs e)
-        {
-            String message = "The list of containers to initialize the system with. \n To add more containers, click the 'Add Container' button below. \n To remove the selected container, click the 'Remove Container' button below.";
-            toolTipInfo.SetToolTip(checkedListBoxContainers, message);
-        }
 
-        private void buttonAddContainer_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Add a new container to the list of containers to initialize the new system with.";
-            toolTipInfo.Show(message, buttonAddContainer);
-        }
-        private void buttonRemoveContainer_MouseHover(object sender, EventArgs e)
-        {
-            String message = "Remove selected container from the list of containers to initialize the new system with.";
-            toolTipInfo.Show(message, buttonRemoveContainer);
-        }
+                }
+                CreateSystem();
+                int systemID = GetSystemID();
+                SystemViewer systemViewer = new SystemViewer();
+                systemViewer.Show();
+                foreach (String currentLine in checkedListBoxContainers.CheckedItems)
+                {
 
-        private void textBoxSystemName_TextChanged(object sender, EventArgs e)
-        {
-            int current = textBoxSystemName.Text.Length;
-            int max = textBoxSystemName.MaxLength;
-            labelSystemNameCount.Text = current.ToString() + " / 32";
-            this.Text = "Create System - " + textBoxSystemName.Text;
-            
-            if (current == max)
-            {
-                labelSystemNameCount.ForeColor = Color.Red;
+                    // Gets the integer before space in listbox which happens to be the currentAppID
+                    int currentSpace = currentLine.IndexOf(' ');
+                    int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
+                    // Create a system app connection in the database
+                    AddSysAppConnection(currentAppID, systemID);
+                }
+                OptimizeSystem(systemID);
+                this.Close();
             }
             else
             {
-                labelSystemNameCount.ForeColor = Form.DefaultForeColor;
-            }
-            if (current == 0) {
-                this.Text = "Create System - New System" + textBoxSystemName.Text;
-            }
-        }
-
-        private void textBoxCreatorName_TextChanged(object sender, EventArgs e)
-        {
-            int current = textBoxCreator.Text.Length;
-            int max = textBoxCreator.MaxLength;
-            labelCreatorCount.Text = current.ToString() + " / 32";
-            if (current == max)
-            {
-                labelCreatorCount.ForeColor = Color.Red;
-            }
-            else
-            {
-                labelCreatorCount.ForeColor = Form.DefaultForeColor;
+                MessageBox.Show("Please provide a system name and creator to continue...");
             }
 
+            
         }
+
 
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
@@ -421,15 +372,45 @@ namespace Container_File_Optimizer
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
+            //Temporary
+            Dictionary<int, int> fileCount = new Dictionary<int, int>();
+
 
             foreach (int appID in currentSystemCollection.Keys)
             {
                 List<int> fileIDs = currentSystemCollection[appID];
                 foreach (int currentID in fileIDs)
                 {
-                    GetFileCount(currentID,systemID);
+                    int currentCount = GetFileCount(currentID, systemID);
+                    if (fileCount.Keys.Contains(currentID))
+                    {
+                        // Dont add to list
+                        continue;
+                    }
+                    else
+                    {
+                        fileCount.Add(currentID, currentCount);
+                    }
                 }
             }
+
+            // wtaf
+            List<KeyValuePair<int, int>> fileCounts = new List<KeyValuePair<int, int>>();
+            var sortedList = fileCount.ToList();
+            sortedList.Sort((x, y) => y.Value.CompareTo(x.Value));
+
+            Dictionary<int, int> sortedFileCount = new Dictionary<int, int>();
+            foreach (var keyValuePair in sortedList)
+            {
+                sortedFileCount.Add(keyValuePair.Key, keyValuePair.Value);
+            }
+
+
+
+            GenerateOptimizedFiles(currentSystemCollection, sortedFileCount);
+
+
+
         }
 
         /// <summary>
@@ -452,6 +433,332 @@ namespace Container_File_Optimizer
             }
 
             return fileCount;
+        }
+
+
+
+
+
+
+        
+
+
+        private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
+        {
+
+
+            // Create the folder
+
+            Directory.CreateDirectory(Application.StartupPath + "\\" + textBoxSystemName.Text);
+
+            foreach (int appID in currentSystemCollection.Keys)
+            {
+                Dictionary<int, int> tempFileCounts = new Dictionary<int, int>(sortedFileCount);
+
+
+
+
+                using (StreamWriter writer = new StreamWriter(textBoxSystemName.Text + "\\" + GetAppName(appID) + ".app" + appID))
+                {
+                    writer.WriteLine("FROM ubi8:latest");
+                    writer.WriteLine("");
+                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/lib \n");
+
+                    sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
+
+                    sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);
+
+                    sortedFileCount = WriteBinaries(tempFileCounts, currentSystemCollection, appID, writer);
+
+
+                    writer.WriteLine("CMD[\"/bin/bash\"]");
+                    writer.Close();
+
+                }
+
+
+                try
+                {
+
+                
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error creating optimized file: " + ex);
+                }
+            }
+        }
+
+
+
+        public Dictionary<int, int> WriteLibraries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(!tempFileCounts.Any()))
+            {
+
+
+                bool containsCopy = false;
+                foreach (int fileID in tempFileCounts.Keys.ToList())
+                {
+                    
+
+
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] <= 1)
+                    {
+                        if (!containsCopy)
+                        {
+                            writer.Write("COPY ");
+                            containsCopy = true;
+                        }
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        //tempFileCounts.Remove(fileID);
+
+                    }
+
+                }
+
+                if (containsCopy == true)
+                {
+
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
+                }
+
+            }
+            return tempFileCounts;
+        }
+
+
+
+
+
+
+
+        public Dictionary<int, int> WriteConfigs(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(!tempFileCounts.Any()))
+            {
+                bool containsCopy = false;
+
+                    foreach (int fileID in tempFileCounts.Keys.ToList())
+                    {
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
+                    {
+                        if (!containsCopy)
+                        {
+                            writer.Write("COPY ");
+                            containsCopy = true;
+                        }
+
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        //tempFileCounts.Remove(fileID);
+
+                    }
+
+                        
+                    
+                }
+
+
+                if (containsCopy == true)
+                {
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
+                }
+
+            }
+            return tempFileCounts;
+        }
+
+
+
+        public Dictionary<int, int> WriteBinaries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
+        {
+
+            foreach (int fileID in tempFileCounts.Keys.ToList())
+            {
+                string fileType = GetFileType(fileID).Trim();
+                if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] > 1)
+                {
+                    writer.Write("COPY ");
+                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
+                    //tempFileCounts.Remove(fileID);
+
+                }
+
+            }
+            if (!(!tempFileCounts.Any()))
+            {
+                bool containsCopy = false;
+
+
+                foreach (int fileID in tempFileCounts.Keys.ToList())
+                {
+
+                    string fileType = GetFileType(fileID).Trim();
+                    if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] <= 1)
+                    {
+                        if (!containsCopy)
+                        {
+                            writer.Write("COPY ");
+                            containsCopy = true;
+                        }
+                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                       // tempFileCounts.Remove(fileID);
+
+                    }
+                }
+                if (containsCopy == true)
+                {
+
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
+                }
+
+            }
+            return tempFileCounts;
+        }
+
+
+
+
+
+
+
+
+        // Returns the fileName of a specific file from the database
+        private string GetAppName(int appID)
+        {
+            string file_name = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT app_name FROM Application WHERE app_id = @app_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@app_id", appID);
+
+
+                file_name = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_name.Trim();
+
+            }
+        }
+
+        // returns the specific filepath of a file in the database
+        private string GetFilePath(int fileID)
+        {
+            string file_path = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_path FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_path = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_path;
+
+            }
+        }
+
+
+
+        // returns the specific filepath of a file in the database
+        private string GetFileType(int fileID)
+        {
+            string file_type = "";
+            //get SQL connection and Command
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                cnn.Open();
+                string query = "SELECT file_type FROM [File] WHERE file_id = @file_id";
+
+                SqlCommand command = new SqlCommand(query, cnn);
+
+                command.Parameters.AddWithValue("@file_id", fileID);
+
+
+                file_type = (string)command.ExecuteScalar();
+                cnn.Close();
+                return file_type;
+
+            }
+        }
+
+        private void textBoxSystemName_TextChanged(object sender, EventArgs e)
+        {
+            int current = textBoxSystemName.Text.Length;
+            int max = textBoxSystemName.MaxLength;
+            labelSystemNameCount.Text = current.ToString() + " / 32";
+            this.Text = "Create System - " + textBoxSystemName.Text;
+
+            if (current == max)
+            {
+                labelSystemNameCount.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelSystemNameCount.ForeColor = Color.White;
+            }
+            if (current == 0)
+            {
+                this.Text = "Create System - New System" + textBoxSystemName.Text;
+            }
+        }
+
+        private void textBoxCreatorName_TextChanged(object sender, EventArgs e)
+        {
+            int current = textBoxCreator.Text.Length;
+            int max = textBoxCreator.MaxLength;
+            labelCreatorCount.Text = current.ToString() + " / 32";
+            if (current == max)
+            {
+                labelCreatorCount.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelCreatorCount.ForeColor = Color.White;
+            }
+
         }
 
     }
