@@ -7,6 +7,7 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Container_File_Optimizer
 {
@@ -496,11 +497,14 @@ namespace Container_File_Optimizer
 
             foreach (int fileID in tempFileCounts.Keys.ToList())
             {
+
+
                 string fileType = GetFileType(fileID).Trim();
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                    writer.WriteLine("./lib/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -526,7 +530,8 @@ namespace Container_File_Optimizer
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                        writer.WriteLine("./lib/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -558,7 +563,8 @@ namespace Container_File_Optimizer
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                    writer.WriteLine("./config/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -581,7 +587,8 @@ namespace Container_File_Optimizer
                             containsCopy = true;
                         }
 
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                        writer.WriteLine("./config/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -611,7 +618,8 @@ namespace Container_File_Optimizer
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                    writer.WriteLine("./bin/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -634,8 +642,9 @@ namespace Container_File_Optimizer
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                       // tempFileCounts.Remove(fileID);
+                        string fileName = Regex.Match(GetFilePath((fileID)), @"(?<=\\)[^\\]*$").Value;
+                        writer.WriteLine("./bin/" + fileName + " \\");
+                        // tempFileCounts.Remove(fileID);
 
                     }
                 }
