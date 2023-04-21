@@ -204,7 +204,7 @@ namespace Container_File_Optimizer
             this.MaximizeBox = false;
             this.Name = "NewSystem";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Create System - New System";
+            this.Text = "Create New System";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NewSystem_Load);
             this.Load += new System.EventHandler(this.NewSystem_Load);
             this.panel2.ResumeLayout(false);
