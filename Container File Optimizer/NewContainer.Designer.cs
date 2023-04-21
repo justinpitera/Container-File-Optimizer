@@ -50,24 +50,24 @@ namespace Container_File_Optimizer
             // labelCreator
             // 
             this.labelCreator.AutoSize = true;
-            this.labelCreator.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 12F, System.Drawing.FontStyle.Bold);
+            this.labelCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.labelCreator.ForeColor = System.Drawing.SystemColors.Control;
             this.labelCreator.Location = new System.Drawing.Point(5, 56);
             this.labelCreator.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCreator.Name = "labelCreator";
-            this.labelCreator.Size = new System.Drawing.Size(98, 21);
+            this.labelCreator.Size = new System.Drawing.Size(105, 20);
             this.labelCreator.TabIndex = 16;
             this.labelCreator.Text = "Description:";
             // 
             // labelSystemName
             // 
             this.labelSystemName.AutoSize = true;
-            this.labelSystemName.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 12F, System.Drawing.FontStyle.Bold);
+            this.labelSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.labelSystemName.ForeColor = System.Drawing.SystemColors.Control;
             this.labelSystemName.Location = new System.Drawing.Point(5, 1);
             this.labelSystemName.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelSystemName.Name = "labelSystemName";
-            this.labelSystemName.Size = new System.Drawing.Size(133, 21);
+            this.labelSystemName.Size = new System.Drawing.Size(143, 20);
             this.labelSystemName.TabIndex = 15;
             this.labelSystemName.Text = "Container Name:";
             // 
@@ -153,12 +153,12 @@ namespace Container_File_Optimizer
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 12F, System.Drawing.FontStyle.Bold);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
             this.label1.Location = new System.Drawing.Point(5, 103);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(244, 21);
+            this.label1.Size = new System.Drawing.Size(262, 20);
             this.label1.TabIndex = 24;
             this.label1.Text = "Add/Remove file(s) to container";
             // 
@@ -169,6 +169,7 @@ namespace Container_File_Optimizer
             this.checkedListBoxFiles.Name = "checkedListBoxFiles";
             this.checkedListBoxFiles.Size = new System.Drawing.Size(368, 139);
             this.checkedListBoxFiles.TabIndex = 25;
+            this.checkedListBoxFiles.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxFiles_SelectedIndexChanged);
             // 
             // buttonRemoveFile
             // 

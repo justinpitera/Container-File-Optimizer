@@ -96,10 +96,10 @@ namespace Container_File_Optimizer
                     command.Parameters.AddWithValue("@file_type", ".bin");
                     int rowsAffected = command.ExecuteNonQuery();
                 }
-                else if (fileType == ".so")
+                else if (fileType == "so")
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", fileType);
+                    command.Parameters.AddWithValue("@file_type", "." + fileType);
                     int rowsAffected = command.ExecuteNonQuery();
                 }
                 else
@@ -276,8 +276,9 @@ namespace Container_File_Optimizer
 
         }
 
-       
+        private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
-
+        }
     }
 }
