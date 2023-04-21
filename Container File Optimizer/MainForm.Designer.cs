@@ -57,7 +57,7 @@
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateNewSystem.TabIndex = 0;
-            this.buttonCreateNewSystem.Text = "Create New System";
+            this.buttonCreateNewSystem.Text = "New System";
             this.buttonCreateNewSystem.UseVisualStyleBackColor = true;
             this.buttonCreateNewSystem.Click += new System.EventHandler(this.buttonCreateNewSystem_Click);
             // 
@@ -69,7 +69,7 @@
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateContainer.TabIndex = 1;
-            this.buttonCreateContainer.Text = "Create Container";
+            this.buttonCreateContainer.Text = "New Container";
             this.buttonCreateContainer.UseVisualStyleBackColor = true;
             this.buttonCreateContainer.Click += new System.EventHandler(this.buttonCreateContainer_Click);
             // 
