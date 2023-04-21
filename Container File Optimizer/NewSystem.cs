@@ -462,8 +462,9 @@ namespace Container_File_Optimizer
                 {
                     writer.WriteLine("FROM ubi8:latest");
                     writer.WriteLine("");
-                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/lib \n");
-
+                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/{lib,config} \n");
+                    // scary stuff
+                    // originally had sortedFileCount
                     sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
 
                     sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);

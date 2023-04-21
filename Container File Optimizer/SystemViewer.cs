@@ -112,18 +112,18 @@ namespace Container_File_Optimizer
 
 
         // Gets all of the apps that a file is contained in and returns their ids.
-        public void GetAppIDs(int fileID)
+        public void GetFileIDS(int appID)
         {
             // Define SQL query to retrieve system_name and system_id columns
 
             //string query = "SELECT * FROM [File] fi LEFT JOIN AppFile af ON fi.file_id = af.file_id WHERE sa.system_id = @file_id";
-            string query = "SELECT app_id FROM AppFile WHERE file_id = @file_id";
+            string query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
 
             // Create SqlConnection and SqlCommand objects
             using (SqlConnection cnn = new SqlConnection(connectionString))
             using (SqlCommand cmd = new SqlCommand(query, cnn))
             {
-                cmd.Parameters.AddWithValue("@file_id", fileID);
+                cmd.Parameters.AddWithValue("@app_id", appID);
                 // Create a new DataTable to hold the results
                 DataTable dataTable = new DataTable();
 
@@ -139,8 +139,8 @@ namespace Container_File_Optimizer
                 for (int i = 0; i < dataTable.Rows.Count; i++)
                 {
                     DataRow row = dataTable.Rows[i];
-                    int app_ID = Convert.ToInt32(row["app_id"]);
-                    fileIDCollection.Add(i, app_ID);
+                    int file_id = Convert.ToInt32(row["file_id"]);
+                    fileIDCollection.Add(i, file_id);
                 }
             }
 
@@ -218,7 +218,7 @@ namespace Container_File_Optimizer
         // Get the list of shared apps that a certain file ID shares within a system
         public void GetSharedApps(int fileID, int systemID)
         {
-            string query = "SELECT app_name FROM Application app LEFT JOIN SysApp sa ON ap.system_id = sa.system_id LEFT JOIN AppFile af ON app.app_id = af.app_id WHERE af.file_id = @file_id AND sa.system_id = @system_id";
+            string query = "SELECT app_name FROM Application ap LEFT JOIN SysApp sa ON ap.app_id = sa.app_id LEFT JOIN AppFile af ON af.app_id = ap.app_id WHERE sa.system_id = @system_id AND af.file_id = @file_id";
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
@@ -230,17 +230,17 @@ namespace Container_File_Optimizer
                 SqlDataReader reader = command.ExecuteReader();
 
                 // Iterate through the SqlDataReader and populate the CheckedListBox
-                string listOfSharedContainers = "";
+                List<string> listOfSharedContainers = new List<string>();
                 string fileName = listBoxFiles.GetItemText(listBoxFiles.SelectedItem);
                 while (reader.Read())
                 {
-                    string app_name = reader.GetString(1);
-
-                    listOfSharedContainers = listOfSharedContainers + app_name;
-                    // concatenate everything to list of Shared containers string
+                    string app_name = reader.GetString(0);
+                    listOfSharedContainers.Add(app_name);
 
                 }
-                MessageBox.Show("List of shared containers for " + fileName + listOfSharedContainers) ;
+                // concatenate everything to list of Shared containers string
+
+                MessageBox.Show("List of shared containers for " + fileName + ":\n" + string.Join(Environment.NewLine,listOfSharedContainers)) ;
                 // Close the SqlDataReader and the SqlConnection
                 reader.Close();
 
@@ -271,20 +271,19 @@ namespace Container_File_Optimizer
             if (listBoxContainers.SelectedItems.Count > 0)
             {
                 listBoxFiles.Items.Clear();
+                fileIDCollection.Clear();
                 GetFileNames(appIDCollection[listBoxContainers.SelectedIndex]);
-                
-               
+                GetFileIDS(appIDCollection[listBoxContainers.SelectedIndex]);
             }
 
         }
 
 
-        
         private void listBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBoxFiles.SelectedItems.Count > 0)
             {
-               // GetSharedApps(fileIDCollection[listBox3.SelectedIndex], systemIDCollection[listBox1.SelectedIndex]);
+               GetSharedApps(fileIDCollection[listBoxFiles.SelectedIndex], systemIDCollection[listBoxSystems.SelectedIndex]);
             }
         }
     }

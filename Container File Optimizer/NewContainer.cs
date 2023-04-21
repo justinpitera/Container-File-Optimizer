@@ -75,7 +75,9 @@ namespace Container_File_Optimizer
         {
             // Extract the file name and type from the file path.
             string fileName = Path.GetFileName(filePath);
-            string fileType = Path.GetExtension(filePath);
+            string pattern = @"(?<=\.)\w+$"; // matches the file extension after the dot
+            Match match = Regex.Match(fileName, pattern);
+            string fileType = match.Value;
 
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -88,22 +90,22 @@ namespace Container_File_Optimizer
                 command.Parameters.AddWithValue("@file_name", fileName);
 
                 // Determine the file type based on its content.
-                if (FileHasNullBytes(filePath) && fileType != ".so")
+                if (fileType == string.Empty)
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
                     command.Parameters.AddWithValue("@file_type", ".bin");
                     int rowsAffected = command.ExecuteNonQuery();
                 }
-                else if (!FileHasNullBytes(filePath) && fileType != ".so")
+                else if (fileType == ".so")
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".config");
+                    command.Parameters.AddWithValue("@file_type", fileType);
                     int rowsAffected = command.ExecuteNonQuery();
                 }
                 else
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", fileType);
+                    command.Parameters.AddWithValue("@file_type", ".config");
                     int rowsAffected = command.ExecuteNonQuery();
                 }
 
@@ -271,30 +273,10 @@ namespace Container_File_Optimizer
                 // Display error
                 MessageBox.Show("Error: Must select a file to remove.");
             }
-            
+
         }
 
-        // Used to determine if file is an executable or not
-        public static bool FileHasNullBytes(string filePath)
-        {
-            // Open the file as a binary stream
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
-            {
-                int byteValue;
-                // Read the file byte by byte
-                while ((byteValue = fileStream.ReadByte()) != -1)
-                {
-                    // Check if the byte value is 0 (a null byte)
-                    if (byteValue == 0)
-                    {
-                        // If a null byte is found, return true
-                        return true;
-                    }
-                }
-            }
-            // If no null bytes are found, return false
-            return false;
-        }
+       
 
 
     }

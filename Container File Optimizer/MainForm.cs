@@ -78,5 +78,11 @@ namespace Container_File_Optimizer
         {
             MessageBox.Show("hello");
         }
+
+        private void buttonEditContainer_Click(object sender, EventArgs e)
+        {
+            ContainerViewer containerViewer = new ContainerViewer();
+            containerViewer.ShowDialog();
+        }
     }
 }
