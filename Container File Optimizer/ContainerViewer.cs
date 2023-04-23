@@ -195,7 +195,7 @@ namespace Container_File_Optimizer
         /// It will also delete the system files from the optimized folder
         /// </summary>
         /// <param name="fileID">The file_id that needs to be dleted.</param>
-        public void deleteFile(int fileID)
+        public void deleteFile(int fileID, int appID)
         {
             //variable to hold the file count
             int fileCount = getFileCount(fileID);
@@ -203,15 +203,16 @@ namespace Container_File_Optimizer
             try
             {
                 //this query deletes the File from the AppFile table
-                string query = "DELETE FROM AppFile Where file_ID = @fileID";
+                string query = "DELETE FROM AppFile Where file_ID = @fileID AND app_id = @appID";
                 using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
                 using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
                 {
                     //open connection
                     connection.Open();
 
-                    //sets the  file_id paramater in the query to the fileID variable 
+                    //sets the  paramater in the query to the correct variable 
                     command.Parameters.AddWithValue("@fileID", fileID);
+                    command.Parameters.AddWithValue("@app_id", appID);
 
                     //exacute the delete
                     command.ExecuteNonQuery();
