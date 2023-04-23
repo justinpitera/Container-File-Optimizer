@@ -248,6 +248,74 @@ namespace Container_File_Optimizer
             }
         }
 
+        /// <summary>
+        /// This function deletes the selected system from both the System and SysApp tables.
+        /// It will also delete the system files from the optimized folder
+        /// </summary>
+        /// <param name="systemID">The file_id that needs to be dleted.</param>
+        public void deleteSystem(int systemID) 
+        {
+            try
+            {
+                //this query deletes the system from the System table
+                string query = "DELETE FROM System Where system_id = @system_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  system_id paramater in the query to the systemID variable 
+                    command.Parameters.AddWithValue("@system_id", systemID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch(SqlException ex) {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the system!");
+            }
+
+
+            try
+            {
+                //this query deletes the system from the SysApp table
+                string query = "DELETE FROM SyApp Where system_id = @system_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  system_id paramater in the query to the suystemID variable 
+                    command.Parameters.AddWithValue("@system_id", systemID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+                    //message to show the system was deleted
+                    MessageBox.Show("Deleted...");
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the system!");
+            }
+
+        }
+
 
         // Updates containers list box based on the selecteed index of the systems list box 
         private void listBoxSystems_SelectedIndexChanged(object sender, EventArgs e)

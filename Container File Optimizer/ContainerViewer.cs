@@ -95,6 +95,215 @@ namespace Container_File_Optimizer
             }
         }
 
+        /// <summary>
+        /// This function deletes the selected application from the Application, SysApp, and AppFile tables.
+        /// </summary>
+        /// <param name="aplicationID">The file_id that needs to be dleted.</param>
+        public void deleteApplication(int aplicationID)
+        {
+            try
+            {
+                //this query deletes the application from the application table
+                string query = "DELETE FROM Application Where app_id = @app_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  app_id paramater in the query to the appID variable 
+                    command.Parameters.AddWithValue("@app_id", aplicationID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the Application!");
+            }
+
+            try
+            {
+                //this query deletes the aplication from the SysApp table
+                string query = "DELETE FROM SysApp Where app_id = @app_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  app_id paramater in the query to the appID variable 
+                    command.Parameters.AddWithValue("@app_id", aplicationID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the Application!");
+            }
+
+            try
+            {
+                //this query deletes the aplication from the AppFile table
+                string query = "DELETE FROM AppFile Where app_id = @app_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  app_id paramater in the query to the appID variable 
+                    command.Parameters.AddWithValue("@app_id", aplicationID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+                    //message to show the system was deleted
+                    MessageBox.Show("Deleted...");
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the Application!");
+            }
+
+        }
+
+        /// <summary>
+        /// This function deletes the selected File from both the File and AppFile tables.
+        /// It will also delete the system files from the optimized folder
+        /// </summary>
+        /// <param name="fileID">The file_id that needs to be dleted.</param>
+        public void deleteFile(int fileID)
+        {
+            //variable to hold the file count
+            int fileCount = getFileCount(fileID);
+
+            try
+            {
+                //this query deletes the File from the AppFile table
+                string query = "DELETE FROM AppFile Where file_ID = @fileID";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  file_id paramater in the query to the fileID variable 
+                    command.Parameters.AddWithValue("@fileID", fileID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the file!");
+            }
+
+            if (fileCount <= 0) {
+                try
+                {
+                    //this query deletes the aplication from the AppFile table
+                    string query = "DELETE FROM AppFile Where file_id = @file_id";
+                    using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                    using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                    {
+                        //open connection
+                        connection.Open();
+
+                        //sets the  file_id paramater in the query to the fileID variable 
+                        command.Parameters.AddWithValue("@file_id", fileID);
+
+                        //exacute the delete
+                        command.ExecuteNonQuery();
+
+                        //message to show the system was deleted
+                        MessageBox.Show("Deleted...");
+
+
+                        //close connection
+                        connection.Close();
+                    }
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error ocurs during delete
+                    MessageBox.Show("An error ocured when attempting to delete the Application!");
+                }
+
+
+            }  
+        }
+        /// <summary>
+        /// This function return the count for the number of times a given file apears in AppFile
+        /// </summary>
+        /// <param name="fileID">The file_id to be counted.</param>
+        public int getFileCount(int fileID)
+        {
+            //variable to hold the file count
+            int fileCount = 0;
+
+            try
+            {
+                //this query get the file countfrom the AppFile table
+                string query = "SELECT COUNT(*) FROM AppFile WHERE file_id = @fileID";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  file_id paramater in the query to the fileID variable 
+                    command.Parameters.AddWithValue("@fileID", fileID);
+
+                    //exacute the command
+                    fileCount = (int)command.ExecuteScalar();
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured!");
+            }
+
+            return fileCount;
+        }
+
+
         private void listBoxContainerViewer_SelectedIndexChanged(object sender, EventArgs e)
         {
             listBoxFiles.Items.Clear();
