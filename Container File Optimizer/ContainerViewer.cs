@@ -228,7 +228,7 @@ namespace Container_File_Optimizer
                 MessageBox.Show("An error ocured when attempting to delete the file!");
             }
 
-            if (fileCount <= 0) {
+            if (fileCount <= 1) {
                 try
                 {
                     //this query deletes the aplication from the AppFile table
