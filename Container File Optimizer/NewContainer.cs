@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Container_File_Optimizer
 {
@@ -20,10 +22,8 @@ namespace Container_File_Optimizer
 
         private void NewContainer_Load(object sender, EventArgs e)
         {
+
         }
-
-
-
 
 
 
@@ -75,7 +75,9 @@ namespace Container_File_Optimizer
         {
             // Extract the file name and type from the file path.
             string fileName = Path.GetFileName(filePath);
-            string fileType = Path.GetExtension(filePath);
+            string pattern = @"(?<=\.)\w+$"; // matches the file extension after the dot
+            Match match = Regex.Match(fileName, pattern);
+            string fileType = match.Value;
 
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -88,22 +90,22 @@ namespace Container_File_Optimizer
                 command.Parameters.AddWithValue("@file_name", fileName);
 
                 // Determine the file type based on its content.
-                if (FileHasNullBytes(filePath) && fileType != ".so")
+                if (fileType == string.Empty)
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
                     command.Parameters.AddWithValue("@file_type", ".bin");
                     int rowsAffected = command.ExecuteNonQuery();
                 }
-                else if (!FileHasNullBytes(filePath) && fileType != ".so")
+                else if (fileType == "so")
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".config");
+                    command.Parameters.AddWithValue("@file_type", "." + fileType);
                     int rowsAffected = command.ExecuteNonQuery();
                 }
                 else
                 {
                     command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", fileType);
+                    command.Parameters.AddWithValue("@file_type", ".config");
                     int rowsAffected = command.ExecuteNonQuery();
                 }
 
@@ -217,13 +219,15 @@ namespace Container_File_Optimizer
                 {
                     AddAppFileConnection(GetAppID(), filePath);
                 }
+                ContainerViewer containerViewer = new ContainerViewer();
+                containerViewer.Show();
                 this.Close();
+
             }
 
 
 
         }
-
         // Add a file of list of files to add to container
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
@@ -233,15 +237,21 @@ namespace Container_File_Optimizer
 
             findFiles.ShowDialog();
 
+            // Get the currently selected items before adding new files
+            List<string> selectedFiles = new List<string>();
+            foreach (var item in checkedListBoxFiles.CheckedItems)
+            {
+                selectedFiles.Add(item.ToString());
+            }
 
-            // For each file in the open file dialog selected
+            // Add new files to list box and automatically select them
             foreach (String filePath in findFiles.FileNames)
             {
                 // Check if file is already in the list based on its file path
                 if (!checkedListBoxFiles.Items.Contains(filePath))
                 {
                     // Add file
-                    checkedListBoxFiles.Items.Add(filePath);
+                    checkedListBoxFiles.Items.Add(filePath, true); // Automatically select new items
                 }
                 else
                 {
@@ -249,13 +259,29 @@ namespace Container_File_Optimizer
                     MessageBox.Show("Error: file already exists in container: " + filePath, "Container File Optimizer");
                 }
             }
-            // by default, set all items to checked
-            for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
-            {
-                checkedListBoxFiles.SetItemChecked(i, true);
-            }
 
+            // If there are no items in the list box, select all by default
+            if (checkedListBoxFiles.Items.Count > 0)
+            {
+                // Check the previously selected files and select new items
+                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                {
+                    if (selectedFiles.Contains(checkedListBoxFiles.Items[i].ToString()))
+                    {
+                        checkedListBoxFiles.SetItemChecked(i, true);
+                    }
+                }
+            }
+            else // Automatically select everything if there are no items in the list box
+            {
+                for (int i = 0; i < findFiles.FileNames.Length; i++)
+                {
+                    checkedListBoxFiles.SetItemChecked(i, true);
+                }
+            }
         }
+
+
 
         // Remove a file from the list of files to add to the container
         private void buttonRemoveFile_Click(object sender, EventArgs e)
@@ -271,31 +297,52 @@ namespace Container_File_Optimizer
                 // Display error
                 MessageBox.Show("Error: Must select a file to remove.");
             }
-            
+
         }
 
-        // Used to determine if file is an executable or not
-        public static bool FileHasNullBytes(string filePath)
+
+
+
+        private void textBoxContainer_TextChanged(object sender, EventArgs e)
         {
-            // Open the file as a binary stream
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            int current = textBoxContainerName.Text.Length;
+            int max = textBoxContainerName.MaxLength;
+            labelSystemNameCount.Text = current.ToString() + " / 50";
+
+            if (current == max)
             {
-                int byteValue;
-                // Read the file byte by byte
-                while ((byteValue = fileStream.ReadByte()) != -1)
-                {
-                    // Check if the byte value is 0 (a null byte)
-                    if (byteValue == 0)
-                    {
-                        // If a null byte is found, return true
-                        return true;
-                    }
-                }
+                labelSystemNameCount.ForeColor = Color.Red;
             }
-            // If no null bytes are found, return false
-            return false;
+            else
+            {
+                labelSystemNameCount.ForeColor = Color.White;
+            }
+        }
+
+        private void textBoxContainerDesc_TextChanged(object sender, EventArgs e)
+        {
+            int current = textBoxContainerDesc.Text.Length;
+            int max = textBoxContainerDesc.MaxLength;
+            labelCreatorCount.Text = current.ToString() + " / 50";
+            if (current == max)
+            {
+                labelCreatorCount.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelCreatorCount.ForeColor = Color.White;
+            }
+
         }
 
 
+
+
+
+
+        private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

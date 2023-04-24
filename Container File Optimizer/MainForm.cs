@@ -29,6 +29,7 @@ namespace Container_File_Optimizer
         {
             SystemViewer viewer = new SystemViewer();
             viewer.ShowDialog();
+
         }
 
         private void buttonCreateContainer_Click(object sender, EventArgs e)
@@ -77,6 +78,12 @@ namespace Container_File_Optimizer
         private void button1_Click(object sender, EventArgs e)
         {
             MessageBox.Show("hello");
+        }
+
+        private void buttonEditContainer_Click(object sender, EventArgs e)
+        {
+            ContainerViewer containerViewer = new ContainerViewer();
+            containerViewer.ShowDialog();
         }
     }
 }

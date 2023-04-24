@@ -70,6 +70,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ContainerfileDatabaseDataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="ContainerViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ContainerViewer.Designer.cs">
+      <DependentUpon>ContainerViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -96,6 +102,9 @@
     <Compile Include="SystemViewer.Designer.cs">
       <DependentUpon>SystemViewer.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ContainerViewer.resx">
+      <DependentUpon>ContainerViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

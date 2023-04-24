@@ -41,31 +41,31 @@
             // buttonCreateNewSystem
             // 
             this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateNewSystem.Location = new System.Drawing.Point(10, 125);
+            this.buttonCreateNewSystem.Location = new System.Drawing.Point(11, 126);
             this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(340, 98);
             this.buttonCreateNewSystem.TabIndex = 0;
-            this.buttonCreateNewSystem.Text = "Create New System";
+            this.buttonCreateNewSystem.Text = "New System";
             this.buttonCreateNewSystem.UseVisualStyleBackColor = true;
             this.buttonCreateNewSystem.Click += new System.EventHandler(this.buttonCreateNewSystem_Click);
             // 
             // buttonCreateContainer
             // 
             this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateContainer.Location = new System.Drawing.Point(10, 227);
+            this.buttonCreateContainer.Location = new System.Drawing.Point(11, 226);
             this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(340, 98);
             this.buttonCreateContainer.TabIndex = 1;
-            this.buttonCreateContainer.Text = "Create Container";
+            this.buttonCreateContainer.Text = "New Container";
             this.buttonCreateContainer.UseVisualStyleBackColor = true;
             this.buttonCreateContainer.Click += new System.EventHandler(this.buttonCreateContainer_Click);
             // 
             // buttonEditSystem
             // 
             this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditSystem.Location = new System.Drawing.Point(402, 125);
+            this.buttonEditSystem.Location = new System.Drawing.Point(403, 126);
             this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonEditSystem.Name = "buttonEditSystem";
             this.buttonEditSystem.Size = new System.Drawing.Size(340, 98);
@@ -77,13 +77,14 @@
             // buttonEditContainer
             // 
             this.buttonEditContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditContainer.Location = new System.Drawing.Point(402, 227);
+            this.buttonEditContainer.Location = new System.Drawing.Point(403, 226);
             this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonEditContainer.Name = "buttonEditContainer";
             this.buttonEditContainer.Size = new System.Drawing.Size(340, 98);
             this.buttonEditContainer.TabIndex = 3;
             this.buttonEditContainer.Text = "Container Viewer";
             this.buttonEditContainer.UseVisualStyleBackColor = true;
+            this.buttonEditContainer.Click += new System.EventHandler(this.buttonEditContainer_Click);
             // 
             // label1
             // 
@@ -101,7 +102,7 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI Variable Display", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label4.Location = new System.Drawing.Point(93, 51);
+            this.label4.Location = new System.Drawing.Point(93, 50);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(279, 17);
             this.label4.TabIndex = 9;
@@ -112,7 +113,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(6, 90);
+            this.label2.Location = new System.Drawing.Point(5, 90);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(84, 31);
             this.label2.TabIndex = 5;
@@ -125,9 +126,9 @@
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
             this.label3.Location = new System.Drawing.Point(396, 90);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 31);
+            this.label3.Size = new System.Drawing.Size(64, 31);
             this.label3.TabIndex = 6;
-            this.label3.Text = "Modify";
+            this.label3.Text = "View";
             // 
             // Main
             // 

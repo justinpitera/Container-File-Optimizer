@@ -127,7 +127,7 @@ namespace Container_File_Optimizer
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-            //
+            
             if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
             {
 
@@ -164,6 +164,7 @@ namespace Container_File_Optimizer
                     AddSysAppConnection(currentAppID, systemID);
                 }
                 OptimizeSystem(systemID);
+                MessageBox.Show("Created and optimized system: " + textBoxSystemName.Text);
                 this.Close();
             }
             else
@@ -462,8 +463,9 @@ namespace Container_File_Optimizer
                 {
                     writer.WriteLine("FROM ubi8:latest");
                     writer.WriteLine("");
-                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/lib \n");
-
+                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/{lib,config} \n");
+     
+                    // originally had sortedFileCount
                     sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
 
                     sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);
@@ -500,7 +502,8 @@ namespace Container_File_Optimizer
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Path.GetFileName(GetFilePath(fileID));
+                    writer.WriteLine("\t./lib/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -514,8 +517,8 @@ namespace Container_File_Optimizer
                 bool containsCopy = false;
                 foreach (int fileID in tempFileCounts.Keys.ToList())
                 {
-                    
 
+   
 
 
                     string fileType = GetFileType(fileID).Trim();
@@ -526,7 +529,8 @@ namespace Container_File_Optimizer
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        string fileName = Path.GetFileName(GetFilePath(fileID));
+                        writer.WriteLine("\t./lib/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -558,7 +562,8 @@ namespace Container_File_Optimizer
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Path.GetFileName(GetFilePath(fileID));
+                    writer.WriteLine("\t./config/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -581,7 +586,8 @@ namespace Container_File_Optimizer
                             containsCopy = true;
                         }
 
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
+                        string fileName = Path.GetFileName(GetFilePath(fileID));
+                        writer.WriteLine("\t./config/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -611,7 +617,8 @@ namespace Container_File_Optimizer
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] > 1)
                 {
                     writer.Write("COPY ");
-                    writer.WriteLine(GetFilePath(fileID) + " \\");
+                    string fileName = Path.GetFileName(GetFilePath(fileID));
+                    writer.WriteLine("\t./bin/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -634,8 +641,9 @@ namespace Container_File_Optimizer
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
-                        writer.WriteLine(GetFilePath(fileID) + " \\");
-                       // tempFileCounts.Remove(fileID);
+                        string fileName = Path.GetFileName(GetFilePath(fileID));
+                        writer.WriteLine("\t./bin/" + fileName + " \\");
+                        // tempFileCounts.Remove(fileID);
 
                     }
                 }
@@ -728,8 +736,7 @@ namespace Container_File_Optimizer
         {
             int current = textBoxSystemName.Text.Length;
             int max = textBoxSystemName.MaxLength;
-            labelSystemNameCount.Text = current.ToString() + " / 32";
-            this.Text = "Create System - " + textBoxSystemName.Text;
+            labelSystemNameCount.Text = current.ToString() + " / 50";
 
             if (current == max)
             {
@@ -739,17 +746,13 @@ namespace Container_File_Optimizer
             {
                 labelSystemNameCount.ForeColor = Color.White;
             }
-            if (current == 0)
-            {
-                this.Text = "Create System - New System" + textBoxSystemName.Text;
-            }
         }
 
         private void textBoxCreatorName_TextChanged(object sender, EventArgs e)
         {
             int current = textBoxCreator.Text.Length;
             int max = textBoxCreator.MaxLength;
-            labelCreatorCount.Text = current.ToString() + " / 32";
+            labelCreatorCount.Text = current.ToString() + " / 50";
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
@@ -761,5 +764,11 @@ namespace Container_File_Optimizer
 
         }
 
+        private void buttonAddContainer_Click(object sender, EventArgs e)
+        {
+            ContainerViewer newContainerViewerForm = new ContainerViewer();
+            newContainerViewerForm.Show();
+            this.Close();
+        }
     }
 }
