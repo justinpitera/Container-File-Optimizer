@@ -340,7 +340,9 @@ namespace Container_File_Optimizer
             {
                 listBoxFiles.Items.Clear();
                 fileIDCollection.Clear();
+                // To populate the list box
                 GetFileNames(appIDCollection[listBoxContainers.SelectedIndex]);
+                // to populate the dictionary
                 GetFileIDS(appIDCollection[listBoxContainers.SelectedIndex]);
             }
 
@@ -353,6 +355,13 @@ namespace Container_File_Optimizer
             {
                GetSharedApps(fileIDCollection[listBoxFiles.SelectedIndex], systemIDCollection[listBoxSystems.SelectedIndex]);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            ContainerViewer containerViewerForm = new ContainerViewer();
+            containerViewerForm.Show();
+            this.Close();
         }
     }
 

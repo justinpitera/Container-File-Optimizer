@@ -74,7 +74,7 @@ namespace Container_File_Optimizer
             this.textBoxSystemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxSystemName.Location = new System.Drawing.Point(13, 35);
             this.textBoxSystemName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxSystemName.MaxLength = 32;
+            this.textBoxSystemName.MaxLength = 50;
             this.textBoxSystemName.Name = "textBoxSystemName";
             this.textBoxSystemName.Size = new System.Drawing.Size(491, 27);
             this.textBoxSystemName.TabIndex = 5;
@@ -107,7 +107,7 @@ namespace Container_File_Optimizer
             this.textBoxCreator.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBoxCreator.Location = new System.Drawing.Point(11, 96);
             this.textBoxCreator.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.textBoxCreator.MaxLength = 32;
+            this.textBoxCreator.MaxLength = 50;
             this.textBoxCreator.Name = "textBoxCreator";
             this.textBoxCreator.Size = new System.Drawing.Size(491, 27);
             this.textBoxCreator.TabIndex = 10;
@@ -149,6 +149,7 @@ namespace Container_File_Optimizer
             this.buttonAddContainer.TabIndex = 1;
             this.buttonAddContainer.Text = "Container Viewer";
             this.buttonAddContainer.UseVisualStyleBackColor = true;
+            this.buttonAddContainer.Click += new System.EventHandler(this.buttonAddContainer_Click);
             // 
             // labelCreatorCount
             // 
@@ -159,7 +160,7 @@ namespace Container_File_Optimizer
             this.labelCreatorCount.Name = "labelCreatorCount";
             this.labelCreatorCount.Size = new System.Drawing.Size(51, 20);
             this.labelCreatorCount.TabIndex = 12;
-            this.labelCreatorCount.Text = "0 / 32";
+            this.labelCreatorCount.Text = "0 / 50";
             // 
             // labelSystemNameCount
             // 
@@ -170,7 +171,7 @@ namespace Container_File_Optimizer
             this.labelSystemNameCount.Name = "labelSystemNameCount";
             this.labelSystemNameCount.Size = new System.Drawing.Size(51, 20);
             this.labelSystemNameCount.TabIndex = 13;
-            this.labelSystemNameCount.Text = "0 / 32";
+            this.labelSystemNameCount.Text = "0 / 50";
             // 
             // label1
             // 
@@ -203,8 +204,10 @@ namespace Container_File_Optimizer
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.MaximizeBox = false;
             this.Name = "NewSystem";
+            this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Create System - New System";
+            this.Text = "New System";
+            this.TopMost = true;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.NewSystem_Load);
             this.Load += new System.EventHandler(this.NewSystem_Load);
             this.panel2.ResumeLayout(false);
