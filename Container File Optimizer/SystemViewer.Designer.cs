@@ -38,8 +38,6 @@
             this.buttonShowAppDirectory = new System.Windows.Forms.Button();
             this.buttonNewSystem = new System.Windows.Forms.Button();
             this.buttonDeleteSystem = new System.Windows.Forms.Button();
-            this.buttonNewContainer = new System.Windows.Forms.Button();
-            this.buttonDeleteContainer = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBoxSystems
@@ -110,7 +108,7 @@
             // 
             // buttonOpenContainerViewer
             // 
-            this.buttonOpenContainerViewer.Location = new System.Drawing.Point(266, 350);
+            this.buttonOpenContainerViewer.Location = new System.Drawing.Point(12, 351);
             this.buttonOpenContainerViewer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOpenContainerViewer.Name = "buttonOpenContainerViewer";
             this.buttonOpenContainerViewer.Size = new System.Drawing.Size(134, 43);
@@ -152,36 +150,12 @@
             this.buttonDeleteSystem.UseVisualStyleBackColor = true;
             this.buttonDeleteSystem.Click += new System.EventHandler(this.buttonDeleteSystem_Click);
             // 
-            // buttonNewContainer
-            // 
-            this.buttonNewContainer.Location = new System.Drawing.Point(12, 351);
-            this.buttonNewContainer.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonNewContainer.Name = "buttonNewContainer";
-            this.buttonNewContainer.Size = new System.Drawing.Size(123, 43);
-            this.buttonNewContainer.TabIndex = 15;
-            this.buttonNewContainer.Text = "New Container";
-            this.buttonNewContainer.UseVisualStyleBackColor = true;
-            this.buttonNewContainer.Click += new System.EventHandler(this.buttonNewContainer_Click);
-            // 
-            // buttonDeleteContainer
-            // 
-            this.buttonDeleteContainer.Location = new System.Drawing.Point(139, 350);
-            this.buttonDeleteContainer.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonDeleteContainer.Name = "buttonDeleteContainer";
-            this.buttonDeleteContainer.Size = new System.Drawing.Size(123, 43);
-            this.buttonDeleteContainer.TabIndex = 14;
-            this.buttonDeleteContainer.Text = "Delete Container";
-            this.buttonDeleteContainer.UseVisualStyleBackColor = true;
-            this.buttonDeleteContainer.Click += new System.EventHandler(this.buttonDeleteContainer_Click);
-            // 
             // SystemViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(453, 554);
-            this.Controls.Add(this.buttonNewContainer);
-            this.Controls.Add(this.buttonDeleteContainer);
             this.Controls.Add(this.buttonNewSystem);
             this.Controls.Add(this.buttonDeleteSystem);
             this.Controls.Add(this.buttonShowAppDirectory);
@@ -215,7 +189,5 @@
         private System.Windows.Forms.Button buttonShowAppDirectory;
         private System.Windows.Forms.Button buttonNewSystem;
         private System.Windows.Forms.Button buttonDeleteSystem;
-        private System.Windows.Forms.Button buttonNewContainer;
-        private System.Windows.Forms.Button buttonDeleteContainer;
     }
 }
