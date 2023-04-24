@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Container_File_Optimizer
@@ -255,6 +257,38 @@ namespace Container_File_Optimizer
         /// <param name="systemID">The file_id that needs to be dleted.</param>
         public void deleteSystem(int systemID) 
         {
+
+            try
+            {
+                //this query deletes the system from the SysApp table
+                string query = "DELETE FROM SysApp Where system_id = @system_id";
+                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
+                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
+                {
+                    //open connection
+                    connection.Open();
+
+                    //sets the  system_id paramater in the query to the suystemID variable 
+                    command.Parameters.AddWithValue("@system_id", systemID);
+
+                    //exacute the delete
+                    command.ExecuteNonQuery();
+
+                    //message to show the system was deleted
+                    MessageBox.Show("Deleted system: " + listBoxSystems.SelectedItem.ToString());
+
+
+                    //close connection
+                    connection.Close();
+                }
+            }
+            catch (SqlException ex)
+            {
+
+                //error message to show if error ocurs during delete
+                MessageBox.Show("An error ocured when attempting to delete the system!" + ex);
+            }
+
             try
             {
                 //this query deletes the system from the System table
@@ -279,40 +313,9 @@ namespace Container_File_Optimizer
             catch(SqlException ex) {
 
                 //error message to show if error ocurs during delete
-                MessageBox.Show("An error ocured when attempting to delete the system!");
+                MessageBox.Show("An error ocured when attempting to delete the system!" + ex);
             }
 
-
-            try
-            {
-                //this query deletes the system from the SysApp table
-                string query = "DELETE FROM SyApp Where system_id = @system_id";
-                using (SqlConnection connection = new SqlConnection(connectionString)) //connection for query
-                using (SqlCommand command = new SqlCommand(query, connection)) //command to execute
-                {
-                    //open connection
-                    connection.Open();
-
-                    //sets the  system_id paramater in the query to the suystemID variable 
-                    command.Parameters.AddWithValue("@system_id", systemID);
-
-                    //exacute the delete
-                    command.ExecuteNonQuery();
-
-                    //message to show the system was deleted
-                    MessageBox.Show("Deleted...");
-
-
-                    //close connection
-                    connection.Close();
-                }
-            }
-            catch (SqlException ex)
-            {
-
-                //error message to show if error ocurs during delete
-                MessageBox.Show("An error ocured when attempting to delete the system!");
-            }
 
         }
 
@@ -357,11 +360,54 @@ namespace Container_File_Optimizer
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonOpenContainerViewer_Click(object sender, EventArgs e)
         {
             ContainerViewer containerViewerForm = new ContainerViewer();
             containerViewerForm.Show();
             this.Close();
+        }
+
+        private void buttonShowAppDirectory_Click(object sender, EventArgs e)
+        {
+            Process.Start(Application.StartupPath);
+        }
+
+        private void buttonDeleteContainer_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonNewContainer_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            NewContainer newContainerForm = new NewContainer();
+            newContainerForm.Show();
+        }
+
+        private void buttonDeleteSystem_Click(object sender, EventArgs e)
+        {
+
+            if (listBoxSystems.SelectedItems.Count > 0)
+            {
+                deleteSystem(systemIDCollection[listBoxSystems.SelectedIndex]);
+                Directory.Delete(listBoxSystems.SelectedItem.ToString(), true);
+            }
+            else
+            {
+                MessageBox.Show("Error: No system was selected to be deleted.");
+            }
+            listBoxSystems.Items.Clear();
+            listBoxContainers.Items.Clear();
+            listBoxFiles.Items.Clear();
+            systemIDCollection.Clear();
+            ViewSystems();
+        }
+
+        private void buttonNewSystem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            NewSystem newSystemForm = new NewSystem();
+            newSystemForm.Show();
         }
     }
 

@@ -127,7 +127,7 @@ namespace Container_File_Optimizer
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-            //
+            
             if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
             {
 
@@ -164,6 +164,7 @@ namespace Container_File_Optimizer
                     AddSysAppConnection(currentAppID, systemID);
                 }
                 OptimizeSystem(systemID);
+                MessageBox.Show("Created and optimized system: " + textBoxSystemName.Text);
                 this.Close();
             }
             else
@@ -502,7 +503,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
-                    writer.WriteLine("./lib/" + fileName + " \\");
+                    writer.WriteLine("\t./lib/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -529,7 +530,7 @@ namespace Container_File_Optimizer
                             containsCopy = true;
                         }
                         string fileName = Path.GetFileName(GetFilePath(fileID));
-                        writer.WriteLine("./lib/" + fileName + " \\");
+                        writer.WriteLine("\t./lib/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -562,7 +563,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
-                    writer.WriteLine("./config/" + fileName + " \\");
+                    writer.WriteLine("\t./config/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -586,7 +587,7 @@ namespace Container_File_Optimizer
                         }
 
                         string fileName = Path.GetFileName(GetFilePath(fileID));
-                        writer.WriteLine("./config/" + fileName + " \\");
+                        writer.WriteLine("\t./config/" + fileName + " \\");
                         //tempFileCounts.Remove(fileID);
 
                     }
@@ -617,7 +618,7 @@ namespace Container_File_Optimizer
                 {
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
-                    writer.WriteLine("./bin/" + fileName + " \\");
+                    writer.WriteLine("\t./bin/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
                     //tempFileCounts.Remove(fileID);
 
@@ -641,7 +642,7 @@ namespace Container_File_Optimizer
                             containsCopy = true;
                         }
                         string fileName = Path.GetFileName(GetFilePath(fileID));
-                        writer.WriteLine("./bin/" + fileName + " \\");
+                        writer.WriteLine("\t./bin/" + fileName + " \\");
                         // tempFileCounts.Remove(fileID);
 
                     }
@@ -765,8 +766,8 @@ namespace Container_File_Optimizer
 
         private void buttonAddContainer_Click(object sender, EventArgs e)
         {
-            NewContainer newContainerForm = new NewContainer();
-            newContainerForm.Show();
+            ContainerViewer newContainerViewerForm = new ContainerViewer();
+            newContainerViewerForm.Show();
             this.Close();
         }
     }

@@ -4,6 +4,8 @@ using System.Windows.Forms;
 using System.Configuration;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Container_File_Optimizer
 {
@@ -20,10 +22,8 @@ namespace Container_File_Optimizer
 
         private void NewContainer_Load(object sender, EventArgs e)
         {
+
         }
-
-
-
 
 
 
@@ -219,13 +219,15 @@ namespace Container_File_Optimizer
                 {
                     AddAppFileConnection(GetAppID(), filePath);
                 }
+                ContainerViewer containerViewer = new ContainerViewer();
+                containerViewer.Show();
                 this.Close();
+
             }
 
 
 
         }
-
         // Add a file of list of files to add to container
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
@@ -235,15 +237,21 @@ namespace Container_File_Optimizer
 
             findFiles.ShowDialog();
 
+            // Get the currently selected items before adding new files
+            List<string> selectedFiles = new List<string>();
+            foreach (var item in checkedListBoxFiles.CheckedItems)
+            {
+                selectedFiles.Add(item.ToString());
+            }
 
-            // For each file in the open file dialog selected
+            // Add new files to list box and automatically select them
             foreach (String filePath in findFiles.FileNames)
             {
                 // Check if file is already in the list based on its file path
                 if (!checkedListBoxFiles.Items.Contains(filePath))
                 {
                     // Add file
-                    checkedListBoxFiles.Items.Add(filePath);
+                    checkedListBoxFiles.Items.Add(filePath, true); // Automatically select new items
                 }
                 else
                 {
@@ -251,13 +259,29 @@ namespace Container_File_Optimizer
                     MessageBox.Show("Error: file already exists in container: " + filePath, "Container File Optimizer");
                 }
             }
-            // by default, set all items to checked
-            for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
-            {
-                checkedListBoxFiles.SetItemChecked(i, true);
-            }
 
+            // If there are no items in the list box, select all by default
+            if (checkedListBoxFiles.Items.Count > 0)
+            {
+                // Check the previously selected files and select new items
+                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                {
+                    if (selectedFiles.Contains(checkedListBoxFiles.Items[i].ToString()))
+                    {
+                        checkedListBoxFiles.SetItemChecked(i, true);
+                    }
+                }
+            }
+            else // Automatically select everything if there are no items in the list box
+            {
+                for (int i = 0; i < findFiles.FileNames.Length; i++)
+                {
+                    checkedListBoxFiles.SetItemChecked(i, true);
+                }
+            }
         }
+
+
 
         // Remove a file from the list of files to add to the container
         private void buttonRemoveFile_Click(object sender, EventArgs e)
@@ -275,6 +299,46 @@ namespace Container_File_Optimizer
             }
 
         }
+
+
+
+
+        private void textBoxContainer_TextChanged(object sender, EventArgs e)
+        {
+            int current = textBoxContainerName.Text.Length;
+            int max = textBoxContainerName.MaxLength;
+            labelSystemNameCount.Text = current.ToString() + " / 50";
+
+            if (current == max)
+            {
+                labelSystemNameCount.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelSystemNameCount.ForeColor = Color.White;
+            }
+        }
+
+        private void textBoxContainerDesc_TextChanged(object sender, EventArgs e)
+        {
+            int current = textBoxContainerDesc.Text.Length;
+            int max = textBoxContainerDesc.MaxLength;
+            labelCreatorCount.Text = current.ToString() + " / 50";
+            if (current == max)
+            {
+                labelCreatorCount.ForeColor = Color.Red;
+            }
+            else
+            {
+                labelCreatorCount.ForeColor = Color.White;
+            }
+
+        }
+
+
+
+
+
 
         private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
