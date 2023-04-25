@@ -5,6 +5,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -357,58 +358,73 @@ namespace Container_File_Optimizer
         {
             if (listBoxFiles.SelectedItems.Count > 0)
             {
-                MessageBox.Show("Deleted file: " + listBoxFiles.SelectedItem.ToString() + " from " + listBoxContainerViewer.SelectedItem.ToString());
-                deleteFile(fileIDCollection[listBoxFiles.SelectedIndex], appIDCollection[listBoxContainerViewer.SelectedIndex]);
-                //Clear the list box and id collection dictionary 
-                listBoxFiles.Items.Clear();
-                fileIDCollection.Clear();
-                // To populate the list box
-                GetFileNames(appIDCollection[listBoxContainerViewer.SelectedIndex]);
-                // to populate the dictionary
-                GetFileIDS(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxFiles.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+
+                    MessageBox.Show("Deleted file: " + listBoxFiles.SelectedItem.ToString() + " from " + listBoxContainerViewer.SelectedItem.ToString());
+                    deleteFile(fileIDCollection[listBoxFiles.SelectedIndex], appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    //Clear the list box and id collection dictionary 
+                    listBoxFiles.Items.Clear();
+                    fileIDCollection.Clear();
+                    // To populate the list box
+                    GetFileNames(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    // to populate the dictionary
+                    GetFileIDS(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                }
+                else
+                {
+                    // Do nothing
+                    MessageBox.Show("No changes made");
+                }
+
             }
             else
             {
-                MessageBox.Show("Error: No file was selected to delete. Please first select a file.");
+                MessageBox.Show("Error: No file was selected to be deleted...");
             }
-
         }
 
         private void buttonDeleteContainer_Click(object sender, EventArgs e)
         {
-            if(listBoxContainerViewer.Items.Count > 0)
+            if (listBoxContainerViewer.SelectedItems.Count > 0)
             {
-                MessageBox.Show("Deleted container: " + listBoxContainerViewer.SelectedItem.ToString());
-                // First delete all the files in that app if they only occur once which is done through the deleteFiles() function
-                for (int i = 0; i < listBoxFiles.Items.Count; i ++)
+                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxContainerViewer.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    deleteFile(fileIDCollection[i], appIDCollection[listBoxContainerViewer.SelectedIndex]);
+
+                    // First delete all the files in that app if they only occur once which is done through the deleteFiles() function
+                    for (int i = 0; i < listBoxFiles.Items.Count; i++)
+                    {
+                        deleteFile(fileIDCollection[i], appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    }
+                    // Next delete the empty container
+                    deleteApplication(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    MessageBox.Show("Deleted container: " + listBoxContainerViewer.SelectedItem.ToString());
+
+                    // Clear form objects and collections
+
+                    appIDCollection.Clear();
+                    listBoxContainerViewer.Items.Clear();
+
+                    fileIDCollection.Clear();
+                    listBoxFiles.Items.Clear();
+
+                    // Populate list box and app ids collection dictionary
+                    ViewContainers();
                 }
-                // Next delete the empty container
-                deleteApplication(appIDCollection[listBoxContainerViewer.SelectedIndex]);
-
-
-                // Clear form objects and collections
-
-                appIDCollection.Clear();
-                listBoxContainerViewer.Items.Clear();
-
-                fileIDCollection.Clear();
-                listBoxFiles.Items.Clear();
-
-
-
-
-
-
-                // Populate list box and app ids collection dictionary
-                ViewContainers();
+                else
+                {
+                    // Do nothing
+                    MessageBox.Show("No changes made");
+                }
 
             }
             else
             {
                 MessageBox.Show("Error: No container was selected to be deleted...");
             }
+
+
+
 
         }
 

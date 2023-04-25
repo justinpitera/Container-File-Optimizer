@@ -35,9 +35,45 @@ namespace Container_File_Optimizer
 
 
 
-        // Gets all of the systems within a system
 
-        public void ViewSystems()
+
+
+
+
+
+
+    public int GetVersionNumber(int system_id)
+    {
+        int versionNumber = 0;
+        // SQL query to retrieve version number from the System table where system_id matches the provided parameter value
+        string sqlQuery = "SELECT version_number FROM System WHERE system_id = @system_id";
+
+        // Create a SqlConnection object and open the connection to the database
+        using (SqlConnection connection = new SqlConnection(connectionString))
+        {
+            connection.Open();
+
+            // Create a SqlCommand object with the SQL query and the SqlConnection object
+            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+            {
+                // Add a parameter for the system_id value to the SqlCommand object
+                command.Parameters.AddWithValue("@system_id", system_id);
+
+                // Execute the SQL query and retrieve the version number using the ExecuteScalar method
+                object result = command.ExecuteScalar();
+                // Convert the result to an int and assign it to the versionNumber variable
+                versionNumber = Convert.ToInt32(result);
+             }
+        }
+
+        return versionNumber + 1;
+    }
+
+
+
+    // Gets all of the systems within a system
+
+    public void ViewSystems()
         {
             // Define SQL query to retrieve system_name and system_id columns
             string sqlQuery = "SELECT system_name, system_id FROM System";
@@ -369,7 +405,7 @@ namespace Container_File_Optimizer
 
         private void buttonShowAppDirectory_Click(object sender, EventArgs e)
         {
-            Process.Start(Application.StartupPath);
+            Process.Start(Application.StartupPath + @"\\Systems");
         }
 
         private void buttonDeleteContainer_Click(object sender, EventArgs e)
@@ -386,21 +422,32 @@ namespace Container_File_Optimizer
 
         private void buttonDeleteSystem_Click(object sender, EventArgs e)
         {
-
             if (listBoxSystems.SelectedItems.Count > 0)
             {
-                deleteSystem(systemIDCollection[listBoxSystems.SelectedIndex]);
-                Directory.Delete(listBoxSystems.SelectedItem.ToString(), true);
+                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxSystems.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    //Delete the system
+                    deleteSystem(systemIDCollection[listBoxSystems.SelectedIndex]);
+
+
+                    Directory.Delete(Application.StartupPath + "\\Systems\\" + listBoxSystems.SelectedItem.ToString().Trim() + " Version " + GetVersionNumber(systemIDCollection[listBoxSystems.SelectedIndex]), true);
+                    listBoxSystems.Items.Clear();
+                    listBoxContainers.Items.Clear();
+                    listBoxFiles.Items.Clear();
+                    systemIDCollection.Clear();
+                    ViewSystems();
+                }
+                else
+                {
+                    // Do nothing
+                    MessageBox.Show("No changes made");
+                }
+
             }
             else
             {
                 MessageBox.Show("Error: No system was selected to be deleted.");
             }
-            listBoxSystems.Items.Clear();
-            listBoxContainers.Items.Clear();
-            listBoxFiles.Items.Clear();
-            systemIDCollection.Clear();
-            ViewSystems();
         }
 
         private void buttonNewSystem_Click(object sender, EventArgs e)

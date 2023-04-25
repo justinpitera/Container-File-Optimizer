@@ -124,7 +124,7 @@
             this.buttonShowAppDirectory.Name = "buttonShowAppDirectory";
             this.buttonShowAppDirectory.Size = new System.Drawing.Size(134, 32);
             this.buttonShowAppDirectory.TabIndex = 8;
-            this.buttonShowAppDirectory.Text = "Open App Directory";
+            this.buttonShowAppDirectory.Text = "Open Systems Directory";
             this.buttonShowAppDirectory.UseVisualStyleBackColor = true;
             this.buttonShowAppDirectory.Click += new System.EventHandler(this.buttonShowAppDirectory_Click);
             // 
@@ -169,7 +169,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SystemViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "System Viewer";
+            this.Text = "Existing Systems";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SystemViewer_Load);
             this.ResumeLayout(false);

@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace Container_File_Optimizer
 {
@@ -343,6 +344,16 @@ namespace Container_File_Optimizer
         private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void textBoxContainerName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the key pressed is not the backspace key and is an invalid character for a file path
+            if (e.KeyChar != '\b' && Path.GetInvalidFileNameChars().Contains(e.KeyChar))
+            {
+                // Cancel the key press if it is an invalid character
+                e.Handled = true;
+            }
         }
     }
 }

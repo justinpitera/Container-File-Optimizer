@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using System.Configuration;
 using System.IO;
-using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 
 namespace Container_File_Optimizer
 {
@@ -15,8 +15,12 @@ namespace Container_File_Optimizer
 
     public partial class NewSystem : Form
     {
-        int currentVersionNumber = 0;
-        string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
+        public int currentVersionNumber = 0;
+        public string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
+        public string systemPath = "";
+
+
+
 
         public NewSystem()
         {
@@ -55,124 +59,71 @@ namespace Container_File_Optimizer
         }
 
 
-
-        private void AddApplicationSystemConnection(int app_id)
-        {
-            //get SQL connection and Command
-            using (SqlConnection cnn = new SqlConnection(connectionString))
-            {
-                cnn.Open();
-                int system_id;
-
-
-                string query = "SELECT system_id FROM System WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number";
-
-
-                SqlCommand command = new SqlCommand(query, cnn);
-
-                command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
-                command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
-                command.Parameters.AddWithValue("@version_number", currentVersionNumber);
-
-                system_id = (int)command.ExecuteScalar();
-
-
-                query = "INSERT INTO SysApp (system_id, app_id) VALUES (@system_id, @app_id)";
-
-
-
-                command = new SqlCommand(query, cnn);
-
-                command.Parameters.AddWithValue("@system_id", system_id);
-                command.Parameters.AddWithValue("@app_id", app_id);
-
-                command.ExecuteNonQuery();
-                cnn.Close();
-            }
-        }
-
-
         private int GetSystemID()
         {
             int systemID = 0;
-            //get SQL connection and Command
+
+            // Establish connection to database and prepare SQL command
             using (SqlConnection cnn = new SqlConnection(connectionString))
+            using (SqlCommand command = new SqlCommand("SELECT system_id FROM [System] WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number", cnn))
             {
-                cnn.Open();
-                string query = "SELECT system_id FROM System WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number";
-
-
-                SqlCommand command = new SqlCommand(query, cnn);
-
                 command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
                 command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
                 command.Parameters.AddWithValue("@version_number", currentVersionNumber);
 
+                // Open database connection, execute the SQL command, and retrieve the system ID
+                cnn.Open();
                 systemID = (int)command.ExecuteScalar();
                 cnn.Close();
-                return systemID;
-
             }
 
+            return systemID;
         }
+
 
         private void NewSystem_Load(object sender, EventArgs e)
         {
             PopulateContainers();
-            // To Do : 
-            // Make it so the NewSystem form shows up and this form hides, then when newsystem closes this form reappears
+
         }
 
 
 
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
-            
-            if (!(textBoxSystemName.Text == string.Empty) && !(textBoxCreator.Text == string.Empty) && checkedListBoxContainers.SelectedItems.Count > 0)
+            // Check if required fields are filled in and at least one container is selected
+            if (textBoxSystemName.Text.Trim() == string.Empty || textBoxCreator.Text.Trim() == string.Empty || checkedListBoxContainers.CheckedItems.Count == 0)
             {
+                MessageBox.Show("Please provide a system name, creator, and select at least one container to continue...");
+                return;
+            }
 
-                if (Directory.Exists(textBoxSystemName.Text))
+            // Create system in the database and get system ID
+            CreateSystem();
+            int systemID = GetSystemID();
+
+            // Create system-app connections in the database for each selected container
+            foreach (string currentLine in checkedListBoxContainers.CheckedItems)
+            {
+                // Extract the current app ID from the selected item
+                int currentAppID;
+                if (int.TryParse(Regex.Match(currentLine, @"^\d+").Value, out currentAppID))
                 {
-                    // Prompt the user to confirm if they want to overwrite the folder
-                    DialogResult result = MessageBox.Show("A System with that name already exists. Do you want to overwrite it?", "Confirm System Overwrite", MessageBoxButtons.YesNo);
-
-                    // If the user chooses not to overwrite the folder, exit the method
-                    if (result == DialogResult.No)
-                    {
-                        return;
-                    }
-                    if (result == DialogResult.Yes)
-                    {
-
-                        // If the user chooses to overwrite the folder, delete it and recreate it
-                        Directory.Delete(textBoxSystemName.Text, true);
-                    }
-
-
-                }
-                CreateSystem();
-                int systemID = GetSystemID();
-                SystemViewer systemViewer = new SystemViewer();
-                systemViewer.Show();
-                foreach (String currentLine in checkedListBoxContainers.CheckedItems)
-                {
-
-                    // Gets the integer before space in listbox which happens to be the currentAppID
-                    int currentSpace = currentLine.IndexOf(' ');
-                    int currentAppID = Convert.ToInt32(currentLine.Substring(0, currentSpace));
-                    // Create a system app connection in the database
+                    // Create system-app connection in the database
                     AddSysAppConnection(currentAppID, systemID);
                 }
-                OptimizeSystem(systemID);
-                MessageBox.Show("Created and optimized system: " + textBoxSystemName.Text);
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Please provide a system name and creator to continue...");
             }
 
-            
+            // Optimize the system
+            OptimizeSystem(systemID);
+
+            // Show a success message and open the system viewer
+            MessageBox.Show("Created and optimized system: " + textBoxSystemName.Text);
+            SystemViewer systemViewer = new SystemViewer();
+            systemViewer.Show();
+
+            // Close the current form
+            this.Close();
         }
 
 
@@ -188,60 +139,59 @@ namespace Container_File_Optimizer
             }
         }
 
-
-        /// <summary>
-        /// Creates a new system with the given system name and creator name in the database.
-        /// </summary>
         private void CreateSystem()
         {
-
+            
+            int versionNumber;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
 
-                // Get the system name and creator name from the text boxes
-                string system_name = textBoxSystemName.Text;
-                string system_creator = textBoxCreator.Text;
-                int version_number = 1;
+                string systemName = textBoxSystemName.Text;
+                string creatorName = textBoxCreator.Text;
+                versionNumber = 1;
 
-                // Check if a system with the same system_name and system_creator already exists
-                string query = "SELECT COUNT(*) FROM System WHERE system_name = @system_name AND system_creator = @system_creator";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@system_name", system_name);
-                command.Parameters.AddWithValue("@system_creator", system_creator);
-
-                int count = (int)command.ExecuteScalar();
-
-                // If a system with the same system_name and system_creator already exists, increment the version_number number
-                if (count > 0)
+                // Check if a system with the same systemName and creatorName already exists
+                string checkQuery = "SELECT COUNT(*) FROM System WHERE system_name = @systemName AND system_creator = @creatorName";
+                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
-                    query = "SELECT MAX(version_number) FROM System WHERE system_name = @system_name AND system_creator = @system_creator";
-                    command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@system_name", system_name);
-                    command.Parameters.AddWithValue("@system_creator", system_creator);
-                    version_number = count + 1;
-                }
+                    checkCommand.Parameters.AddWithValue("@systemName", systemName);
+                    checkCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                    int count = (int)checkCommand.ExecuteScalar();
 
-                // Add the new system to the Systems table
-                query = "INSERT INTO System (system_name, system_creator, version_number) VALUES (@system_name, @system_creator, @version_number)";
-                command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@system_name", system_name);
-                command.Parameters.AddWithValue("@system_creator", system_creator);
-                command.Parameters.AddWithValue("@version_number", version_number);
-                currentVersionNumber = version_number;
-                int rowsAffected = command.ExecuteNonQuery();
+                    // If a system with the same systemName and creatorName already exists, increment the version number
+                    if (count > 0)
+                    {
+                        string versionQuery = "SELECT MAX(version_number) FROM System WHERE system_name = @systemName AND system_creator = @creatorName";
+                        using (SqlCommand versionCommand = new SqlCommand(versionQuery, connection))
+                        {
+                            versionCommand.Parameters.AddWithValue("@systemName", systemName);
+                            versionCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                            versionNumber = count + 1;
+                        }
+                    }
+
+                    // Add the new system to the Systems table
+                    string insertQuery = "INSERT INTO System (system_name, system_creator, version_number, optimized_path) VALUES (@systemName, @creatorName, @versionNumber, @optimizedPath)";
+                    using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                    {
+                        systemPath = Application.StartupPath + "\\Systems\\" + textBoxSystemName.Text.Trim() + " Version " + versionNumber;
+                        insertCommand.Parameters.AddWithValue("@systemName", systemName);
+                        insertCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                        insertCommand.Parameters.AddWithValue("@versionNumber", versionNumber);
+                        insertCommand.Parameters.AddWithValue("@optimizedPath", systemPath);
+                        currentVersionNumber = versionNumber;
+                        int rowsAffected = insertCommand.ExecuteNonQuery();
+                    }
+                    // Create the folder for the optimized system
+                    Directory.CreateDirectory(systemPath);
+                }
 
                 connection.Close();
             }
-
         }
 
 
-        /// <summary>
-        /// Creates a new system-application connection record in the database.
-        /// </summary>
-        /// <param name="currentAppID">The ID of the current application.</param>
-        /// <param name="systemID">The ID of the system to associate with the application.</param>
         private void AddSysAppConnection(int currentAppID, int systemID)
         {
             // Create a SQL command to insert a new system-application connection record
@@ -260,47 +210,6 @@ namespace Container_File_Optimizer
         }
 
 
-
-
-        /// <summary>
-        /// Returns the count of systems in the database that match the specified system name and creator.
-        /// </summary>
-        /// <param name="cnn">The SQL connection to use.</param>
-        /// <returns>The count of systems that match the specified name and creator.</returns>
-        private int SystemCount(SqlConnection cnn)
-        {
-
-            // Create a SQL command to retrieve the count of systems that match the specified name and creator
-            SqlCommand cmd = new SqlCommand("SELECT count(*) FROM System" +
-                                                                                     "WHERE system_name = @currSystem AND system_creator = @currCreator", cnn);
-
-
-            // Add parameters to the SQL command to match the specified system name and creator
-            cmd.Parameters.AddWithValue("@currSystem", textBoxSystemName);
-            cmd.Parameters.AddWithValue("@currCreator", textBoxSystemName);
-
-
-            // Initialize a count variable to store the result
-            int count = 0;
-            // Execute the SQL command and retrieve the count of systems
-            using (SqlDataReader reader = cmd.ExecuteReader())
-            {
-                // Iterate through the reader and increment the count for each row
-                while (reader.Read())
-                {
-                    count++;
-                }
-            }
-            // Return the count of systems that match the specified name and creator
-            return count;
-        }
-
-
-        /// <summary>
-        /// Populates a dictionary with app_id and associated file_ids for a given system_id.
-        /// </summary>
-        /// <param name="systemID">The system_id for which to retrieve the app_ids and associated file_ids.</param>
-        /// <returns>A dictionary with app_id keys and associated file_id values.</returns>
         public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
         {
             // Create an empty dictionary to store the app_id and associated file_ids
@@ -414,11 +323,7 @@ namespace Container_File_Optimizer
 
         }
 
-        /// <summary>
-        /// Helper Function that uses a join to get the number of times a given file apeares in a system.
-        /// </summary>
-        /// <param name="currentID">The file_id that needs to be counted.</param>
-        /// <returns> The count for the number of times that id appeard.</returns>
+
         public int  GetFileCount(int currentID, int systemID) {
             int fileCount;
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -441,55 +346,47 @@ namespace Container_File_Optimizer
 
 
 
-        
+
 
 
         private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
         {
-
-
-            // Create the folder
-
-            Directory.CreateDirectory(Application.StartupPath + "\\" + textBoxSystemName.Text);
-
+            // Loop through each app ID in the collection
             foreach (int appID in currentSystemCollection.Keys)
             {
+                // Create a temporary copy of the sortedFileCount dictionary
                 Dictionary<int, int> tempFileCounts = new Dictionary<int, int>(sortedFileCount);
-
-
-
-
-                using (StreamWriter writer = new StreamWriter(textBoxSystemName.Text + "\\" + GetAppName(appID) + ".app" + appID))
-                {
-                    writer.WriteLine("FROM ubi8:latest");
-                    writer.WriteLine("");
-                    writer.WriteLine("RUN useradd " + textBoxCreator.Text + " && mkdir -p /home/" + textBoxCreator.Text + "/{lib,config} \n");
-     
-                    // originally had sortedFileCount
-                    sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
-
-                    sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);
-
-                    sortedFileCount = WriteBinaries(tempFileCounts, currentSystemCollection, appID, writer);
-
-
-                    writer.WriteLine("CMD[\"/bin/bash\"]");
-                    writer.Close();
-
-                }
-
 
                 try
                 {
+                    // Create a new file for the current app ID
+                    string fileName = $"{GetAppName(appID)}.app{appID}";
+                    string filePath = Path.Combine(Application.StartupPath, "Systems", $"{textBoxSystemName.Text} Version {currentVersionNumber}", fileName);
 
-                
+                    using (StreamWriter writer = new StreamWriter(filePath))
+                    {
+                        // Write Dockerfile commands to install dependencies and create directories
+                        writer.WriteLine("FROM ubi8:latest");
+                        writer.WriteLine("");
+                        writer.WriteLine($"RUN useradd {textBoxCreator.Text} && mkdir -p /home/{textBoxCreator.Text}/{{lib,config}} \n");
+
+                        // Write libraries, configs, and binaries to the file, updating the file count dictionary
+                        sortedFileCount = WriteLibraries(tempFileCounts, currentSystemCollection, appID, writer);
+                        sortedFileCount = WriteConfigs(tempFileCounts, currentSystemCollection, appID, writer);
+                        sortedFileCount = WriteBinaries(tempFileCounts, currentSystemCollection, appID, writer);
+
+                        // Write the final command and close the file
+                        writer.WriteLine("CMD[\"/bin/bash\"]");
+                    }
                 }
                 catch (Exception ex)
                 {
+                    // Show an error message if file creation fails
                     MessageBox.Show("Error creating optimized file: " + ex);
                 }
             }
         }
+
 
 
 
@@ -591,9 +488,6 @@ namespace Container_File_Optimizer
                         //tempFileCounts.Remove(fileID);
 
                     }
-
-                        
-                    
                 }
 
 
@@ -732,6 +626,19 @@ namespace Container_File_Optimizer
             }
         }
 
+
+
+        private void textBoxSystemName_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Check if the key pressed is not the backspace key and is an invalid character for a file path
+            if (e.KeyChar != '\b' && Path.GetInvalidFileNameChars().Contains(e.KeyChar))
+            {
+                // Cancel the key press if it is an invalid character
+                e.Handled = true;
+            }
+        }
+
+
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
             int current = textBoxSystemName.Text.Length;
@@ -768,6 +675,13 @@ namespace Container_File_Optimizer
         {
             ContainerViewer newContainerViewerForm = new ContainerViewer();
             newContainerViewerForm.Show();
+            this.Close();
+        }
+
+        private void buttonSystemViewer_Click(object sender, EventArgs e)
+        {
+            SystemViewer systemViewerForm = new SystemViewer();
+            systemViewerForm.Show();
             this.Close();
         }
     }

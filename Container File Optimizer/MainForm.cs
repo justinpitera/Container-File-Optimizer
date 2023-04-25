@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
 using System.Configuration;
+using System.IO;
 
 namespace Container_File_Optimizer
 {
@@ -16,6 +17,11 @@ namespace Container_File_Optimizer
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            string directoryPath = Application.StartupPath + "\\Systems";
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
 
         }
 
@@ -75,10 +81,6 @@ namespace Container_File_Optimizer
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("hello");
-        }
 
         private void buttonEditContainer_Click(object sender, EventArgs e)
         {

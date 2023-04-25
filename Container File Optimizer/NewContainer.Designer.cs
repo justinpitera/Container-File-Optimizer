@@ -81,6 +81,7 @@ namespace Container_File_Optimizer
             this.textBoxContainerName.Size = new System.Drawing.Size(369, 23);
             this.textBoxContainerName.TabIndex = 14;
             this.textBoxContainerName.TextChanged += new System.EventHandler(this.textBoxContainer_TextChanged);
+            this.textBoxContainerName.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxContainerName_KeyPress);
             // 
             // textBoxContainerDesc
             // 
@@ -192,7 +193,7 @@ namespace Container_File_Optimizer
             this.Name = "NewContainer";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Create New Container";
+            this.Text = "New Container";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.NewContainer_Load);
             this.panel1.ResumeLayout(false);
