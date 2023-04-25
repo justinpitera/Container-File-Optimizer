@@ -152,7 +152,7 @@ namespace Container_File_Optimizer
                 versionNumber = 1;
 
                 // Check if a system with the same systemName and creatorName already exists
-                string checkQuery = "SELECT COUNT(*) FROM System WHERE system_name = @systemName AND system_creator = @creatorName";
+                string checkQuery = "SELECT COUNT(*) FROM System WHERE system_name = @systemName";
                 using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                 {
                     checkCommand.Parameters.AddWithValue("@systemName", systemName);
@@ -316,11 +316,40 @@ namespace Container_File_Optimizer
             }
 
 
-
+            
             GenerateOptimizedFiles(currentSystemCollection, sortedFileCount);
 
 
 
+        }
+        
+
+
+        public int GetVersionNumber(int system_id)
+        {
+            int versionNumber = 0;
+            // SQL query to retrieve version number from the System table where system_id matches the provided parameter value
+            string sqlQuery = "SELECT version_number FROM System WHERE system_id = @system_id";
+
+            // Create a SqlConnection object and open the connection to the database
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                // Create a SqlCommand object with the SQL query and the SqlConnection object
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    // Add a parameter for the system_id value to the SqlCommand object
+                    command.Parameters.AddWithValue("@system_id", system_id);
+
+                    // Execute the SQL query and retrieve the version number using the ExecuteScalar method
+                    object result = command.ExecuteScalar();
+                    // Convert the result to an int and assign it to the versionNumber variable
+                    versionNumber = Convert.ToInt32(result);
+                }
+            }
+
+            return versionNumber + 1;
         }
 
 

@@ -42,38 +42,38 @@ namespace Container_File_Optimizer
 
 
 
-    public int GetVersionNumber(int system_id)
-    {
-        int versionNumber = 0;
-        // SQL query to retrieve version number from the System table where system_id matches the provided parameter value
-        string sqlQuery = "SELECT version_number FROM System WHERE system_id = @system_id";
-
-        // Create a SqlConnection object and open the connection to the database
-        using (SqlConnection connection = new SqlConnection(connectionString))
+        public int GetVersionNumber(int system_id)
         {
-            connection.Open();
+            int versionNumber = 0;
+            // SQL query to retrieve version number from the System table where system_id matches the provided parameter value
+            string sqlQuery = "SELECT version_number FROM System WHERE system_id = @system_id";
 
-            // Create a SqlCommand object with the SQL query and the SqlConnection object
-            using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+            // Create a SqlConnection object and open the connection to the database
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                // Add a parameter for the system_id value to the SqlCommand object
-                command.Parameters.AddWithValue("@system_id", system_id);
+                connection.Open();
 
-                // Execute the SQL query and retrieve the version number using the ExecuteScalar method
-                object result = command.ExecuteScalar();
-                // Convert the result to an int and assign it to the versionNumber variable
-                versionNumber = Convert.ToInt32(result);
-             }
+                // Create a SqlCommand object with the SQL query and the SqlConnection object
+                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                {
+                    // Add a parameter for the system_id value to the SqlCommand object
+                    command.Parameters.AddWithValue("@system_id", system_id);
+
+                    // Execute the SQL query and retrieve the version number using the ExecuteScalar method
+                    object result = command.ExecuteScalar();
+                    // Convert the result to an int and assign it to the versionNumber variable
+                    versionNumber = Convert.ToInt32(result);
+                }
+            }
+
+            return versionNumber;
         }
 
-        return versionNumber + 1;
-    }
 
 
+        // Gets all of the systems within a system
 
-    // Gets all of the systems within a system
-
-    public void ViewSystems()
+        public void ViewSystems()
         {
             // Define SQL query to retrieve system_name and system_id columns
             string sqlQuery = "SELECT system_name, system_id FROM System";
@@ -100,8 +100,9 @@ namespace Container_File_Optimizer
                     DataRow row = dataTable.Rows[i];
                     string systemName = row["system_name"].ToString();
                     int systemId = Convert.ToInt32(row["system_id"]);
-                    listBoxSystems.Items.Add(systemName);
                     systemIDCollection.Add(i, systemId);
+                    listBoxSystems.Items.Add(systemName.Trim() + " Version " + GetVersionNumber(systemId));
+
                 }
             }
         }
@@ -412,6 +413,34 @@ namespace Container_File_Optimizer
         {
 
         }
+        public string GetOptimizedPath(int system_id)
+        {
+            string optimized_path = "";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                string query = "SELECT optimized_path FROM System WHERE system_id = @systemId";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@systemId", system_id);
+
+                try
+                {
+                    connection.Open();
+                    SqlDataReader reader = command.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        optimized_path = reader["optimized_path"].ToString();
+                    }
+                    reader.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("error:" + ex.ToString());
+                }
+            }
+
+            return optimized_path;
+        }
 
         private void buttonNewContainer_Click(object sender, EventArgs e)
         {
@@ -426,11 +455,12 @@ namespace Container_File_Optimizer
             {
                 if (MessageBox.Show("Are you sure you would like to remove: " + listBoxSystems.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    Directory.Delete(GetOptimizedPath(systemIDCollection[listBoxSystems.SelectedIndex]),true);
                     //Delete the system
                     deleteSystem(systemIDCollection[listBoxSystems.SelectedIndex]);
 
 
-                    Directory.Delete(Application.StartupPath + "\\Systems\\" + listBoxSystems.SelectedItem.ToString().Trim() + " Version " + GetVersionNumber(systemIDCollection[listBoxSystems.SelectedIndex]), true);
+
                     listBoxSystems.Items.Clear();
                     listBoxContainers.Items.Clear();
                     listBoxFiles.Items.Clear();
