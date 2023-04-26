@@ -110,7 +110,7 @@ namespace Container_File_Optimizer
                         int file_id = reader.GetInt32(1); // Same with this 
                         string file_name = reader.GetString(3);
                         filesList.Items.Add(file_name);
-
+                       
                     }
 
                     // Close the SqlDataReader and the SqlConnection
@@ -436,7 +436,7 @@ namespace Container_File_Optimizer
                 if (count > 0)
                 {
                     // Ask the user if they want to overwrite the existing file.
-                    var result = MessageBox.Show("The file already exists in the database. Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    var result = MessageBox.Show("The file already exists in the database: " + fileName + "Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                     if (result == DialogResult.Yes)
                     {
                         // Define the SQL query for updating an existing file record.
@@ -728,13 +728,14 @@ namespace Container_File_Optimizer
 
 
             // Clear form objects and collections
-            appIDCollection.Clear();
-            containerList.Items.Clear();
             fileIDCollection.Clear();
             filesList.Items.Clear();
 
-            // Refresh the list of containers
-            ViewContainers();
+
+            // To populate the list box
+            GetFileNames(appIDCollection[containerList.SelectedIndex]);
+            // to populate the dictionary
+            GetFileIDS(appIDCollection[containerList.SelectedIndex]);
         }
 
        
