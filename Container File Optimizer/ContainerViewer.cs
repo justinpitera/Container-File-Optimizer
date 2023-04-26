@@ -450,7 +450,7 @@ namespace Container_File_Optimizer
         /// This method adds a connection between an application and a file in the database, based on the app ID and file path.
         /// </summary>
         /// <param name="appID">The application to connect the file to.</param>
-        /// /// <param name="filePath">The file path of the file to be added to the database.</param>
+        /// <param name="filePath">The file path of the file to be added to the database.</param>
         private void AddAppFileConnection(int appID, string filePath)
         {
             // Extract the file name from the file path using a regular expression.
