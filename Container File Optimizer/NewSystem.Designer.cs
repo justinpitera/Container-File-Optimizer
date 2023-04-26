@@ -135,7 +135,7 @@ namespace Container_File_Optimizer
             // 
             this.buttonAddContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonAddContainer.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonAddContainer.Location = new System.Drawing.Point(234, 49);
+            this.buttonAddContainer.Location = new System.Drawing.Point(234, 4);
             this.buttonAddContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAddContainer.Name = "buttonAddContainer";
             this.buttonAddContainer.Size = new System.Drawing.Size(150, 44);
@@ -148,7 +148,7 @@ namespace Container_File_Optimizer
             // 
             this.buttonSystemViewer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSystemViewer.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.buttonSystemViewer.Location = new System.Drawing.Point(234, 4);
+            this.buttonSystemViewer.Location = new System.Drawing.Point(234, 49);
             this.buttonSystemViewer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSystemViewer.Name = "buttonSystemViewer";
             this.buttonSystemViewer.Size = new System.Drawing.Size(150, 44);

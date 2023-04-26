@@ -41,8 +41,8 @@
             // buttonCreateNewSystem
             // 
             this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateNewSystem.Location = new System.Drawing.Point(9, 96);
-            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateNewSystem.Location = new System.Drawing.Point(11, 178);
+            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
             this.buttonCreateNewSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateNewSystem.TabIndex = 0;
@@ -53,8 +53,8 @@
             // buttonCreateContainer
             // 
             this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateContainer.Location = new System.Drawing.Point(9, 178);
-            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCreateContainer.Location = new System.Drawing.Point(11, 95);
+            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
             this.buttonCreateContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateContainer.TabIndex = 1;
@@ -65,8 +65,8 @@
             // buttonEditSystem
             // 
             this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditSystem.Location = new System.Drawing.Point(300, 96);
-            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEditSystem.Location = new System.Drawing.Point(296, 178);
+            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditSystem.Name = "buttonEditSystem";
             this.buttonEditSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonEditSystem.TabIndex = 2;
@@ -77,8 +77,8 @@
             // buttonEditContainer
             // 
             this.buttonEditContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditContainer.Location = new System.Drawing.Point(300, 178);
-            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEditContainer.Location = new System.Drawing.Point(296, 95);
+            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditContainer.Name = "buttonEditContainer";
             this.buttonEditContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonEditContainer.TabIndex = 3;
@@ -127,7 +127,7 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(295, 67);
+            this.label3.Location = new System.Drawing.Point(291, 67);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(53, 26);
@@ -139,7 +139,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(566, 266);
+            this.ClientSize = new System.Drawing.Size(560, 266);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -149,7 +149,7 @@
             this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

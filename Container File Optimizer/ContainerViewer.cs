@@ -421,105 +421,88 @@ namespace Container_File_Optimizer
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-
-
-
-                connection.Open();
-
-                // Check if the file already exists in the database.
-                string checkQuery = "Select count(*) From [File] f LEFT JOIN AppFile af ON f.file_id = af.file_id WHERE file_name = @file_name AND app_id = @app_id";
-                SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
-                checkCommand.Parameters.AddWithValue("@file_name", fileName);
-                checkCommand.Parameters.AddWithValue("@app_id", appIDCollection[containerList.SelectedIndex]);
-                int count = (int)checkCommand.ExecuteScalar();
-
-                if (count > 0)
+                try
                 {
-                    // Ask the user if they want to overwrite the existing file.
-                    var result = MessageBox.Show("The file already exists in the database: " + fileName + "Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-                    if (result == DialogResult.Yes)
+                    connection.Open();
+                    // Check if the file already exists in the database.
+                    string checkQuery = "Select count(*) From [File] f LEFT JOIN AppFile af ON f.file_id = af.file_id WHERE file_name = @file_name AND app_id = @app_id";
+                    SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                    checkCommand.Parameters.AddWithValue("@file_name", fileName);
+                    checkCommand.Parameters.AddWithValue("@app_id", appIDCollection[containerList.SelectedIndex]);
+                    int count = (int)checkCommand.ExecuteScalar();
+
+                    if (count > 0)
                     {
-                        // Define the SQL query for updating an existing file record.
-                        string updateQuery = "UPDATE [File] SET file_path = @file_path, file_type = @file_type WHERE file_name = @file_name";
-                        SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
-                        updateCommand.Parameters.AddWithValue("@file_name", fileName);
+                        // Ask the user if they want to overwrite the existing file.
+                        var result = MessageBox.Show("The file already exists in the database: " + fileName + " Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                        if (result == DialogResult.Yes)
+                        {
+                            // Define the SQL query for updating an existing file record.
+                            string updateQuery = "UPDATE [File] SET file_path = @file_path, file_type = @file_type WHERE file_name = @file_name";
+                            SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+                            updateCommand.Parameters.AddWithValue("@file_name", fileName);
+
+                            // Determine the file type based on its content.
+                            if (fileType == string.Empty) //If no extension file is a bin
+                            {
+                                updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                                updateCommand.Parameters.AddWithValue("@file_type", ".bin");
+                                int rowsAffected = updateCommand.ExecuteNonQuery();
+                            }
+                            else if (fileType == "so") //if extension is so than file is a library
+                            {
+                                updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                                updateCommand.Parameters.AddWithValue("@file_type", "." + fileType);
+                                int rowsAffected = updateCommand.ExecuteNonQuery();
+                            }
+                            else //any other extension is a config
+                            {
+                                updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                                updateCommand.Parameters.AddWithValue("@file_type", ".config");
+                                int rowsAffected = updateCommand.ExecuteNonQuery();
+                            }
+
+                            MessageBox.Show("The file has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+                        else
+                        {
+                            MessageBox.Show("The file has not been added to the database.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                    }
+                    else
+                    {
+                        // Define the SQL query for inserting a new file record.
+                        string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
+                        SqlCommand command = new SqlCommand(query, connection);
+                        command.Parameters.AddWithValue("@file_name", fileName);
 
                         // Determine the file type based on its content.
                         if (fileType == string.Empty) //If no extension file is a bin
                         {
-                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
-                            updateCommand.Parameters.AddWithValue("@file_type", ".bin");
-                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@file_path", filePath);
+                            command.Parameters.AddWithValue("@file_type", ".bin");
+                            int rowsAffected = command.ExecuteNonQuery();
                         }
                         else if (fileType == "so") //if extension is so than file is a library
                         {
-                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
-                            updateCommand.Parameters.AddWithValue("@file_type", "." + fileType);
-                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@file_path", filePath);
+                            command.Parameters.AddWithValue("@file_type", "." + fileType);
+                            int rowsAffected = command.ExecuteNonQuery();
                         }
                         else //any other extension is a config
                         {
-                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
-                            updateCommand.Parameters.AddWithValue("@file_type", ".config");
-                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                            command.Parameters.AddWithValue("@file_path", filePath);
+                            command.Parameters.AddWithValue("@file_type", ".config");
+                            int rowsAffected = command.ExecuteNonQuery();
                         }
 
-                        MessageBox.Show("The file has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-                    else
-                    {
-                        MessageBox.Show("The file has not been added to the database.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
-
-                }
-                else
-                {
-                    // Define the SQL query for inserting a new file record.
-                    string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
-                    SqlCommand command = new SqlCommand(query, connection);
-                    command.Parameters.AddWithValue("@file_name", fileName);
-
-                    // Determine the file type based on its content.
-                    if (fileType == string.Empty) //If no extension file is a bin
-                    {
-                        command.Parameters.AddWithValue("@file_path", filePath);
-                        command.Parameters.AddWithValue("@file_type", ".bin");
-                        int rowsAffected = command.ExecuteNonQuery();
-                    }
-                    else if (fileType == "so") //if extension is so than file is a library
-                    {
-                        command.Parameters.AddWithValue("@file_path", filePath);
-                        command.Parameters.AddWithValue("@file_type", "." + fileType);
-                        int rowsAffected = command.ExecuteNonQuery();
-                    }
-                    else //any other extension is a config
-                    {
-                        command.Parameters.AddWithValue("@file_path", filePath);
-                        command.Parameters.AddWithValue("@file_type", ".config");
-                        int rowsAffected = command.ExecuteNonQuery();
+                        // Close the database connection.
+                        connection.Close();
+                        // add app file connection
+                        AddAppFileConnection(appIDCollection[containerList.SelectedIndex], filePath);
                     }
 
-                    // Close the database connection.
-                    connection.Close();
-                    // add app file connection
-                    AddAppFileConnection(appIDCollection[containerList.SelectedIndex], filePath);
-                }
-
-
-                connection.Close();
-
-
-
-
-
-
-
-
-
-
-
-                try
-                {
 
                 }
                 catch (SqlException ex)

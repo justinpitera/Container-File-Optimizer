@@ -40,19 +40,23 @@
             // 
             // containerList
             // 
+            this.containerList.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.containerList.FormattingEnabled = true;
+            this.containerList.ItemHeight = 15;
             this.containerList.Location = new System.Drawing.Point(11, 44);
             this.containerList.Name = "containerList";
-            this.containerList.Size = new System.Drawing.Size(418, 186);
+            this.containerList.Size = new System.Drawing.Size(418, 184);
             this.containerList.TabIndex = 0;
             this.containerList.SelectedIndexChanged += new System.EventHandler(this.containerList_SelectedIndexChanged);
             // 
             // filesList
             // 
+            this.filesList.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.filesList.FormattingEnabled = true;
+            this.filesList.ItemHeight = 15;
             this.filesList.Location = new System.Drawing.Point(12, 315);
             this.filesList.Name = "filesList";
-            this.filesList.Size = new System.Drawing.Size(421, 160);
+            this.filesList.Size = new System.Drawing.Size(421, 154);
             this.filesList.TabIndex = 1;
             // 
             // label3
@@ -79,6 +83,7 @@
             // 
             // buttonDeleteFile
             // 
+            this.buttonDeleteFile.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonDeleteFile.Location = new System.Drawing.Point(139, 480);
             this.buttonDeleteFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteFile.Name = "buttonDeleteFile";
@@ -90,6 +95,7 @@
             // 
             // buttonDeleteContainer
             // 
+            this.buttonDeleteContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonDeleteContainer.Location = new System.Drawing.Point(139, 235);
             this.buttonDeleteContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteContainer.Name = "buttonDeleteContainer";
@@ -101,6 +107,7 @@
             // 
             // buttonNewContainer
             // 
+            this.buttonNewContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonNewContainer.Location = new System.Drawing.Point(12, 235);
             this.buttonNewContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonNewContainer.Name = "buttonNewContainer";
@@ -112,6 +119,7 @@
             // 
             // buttonAddFile
             // 
+            this.buttonAddFile.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonAddFile.Location = new System.Drawing.Point(12, 480);
             this.buttonAddFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonAddFile.Name = "buttonAddFile";

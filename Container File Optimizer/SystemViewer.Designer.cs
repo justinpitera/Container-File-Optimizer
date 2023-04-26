@@ -108,10 +108,11 @@
             // 
             // buttonOpenContainerViewer
             // 
+            this.buttonOpenContainerViewer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonOpenContainerViewer.Location = new System.Drawing.Point(12, 351);
             this.buttonOpenContainerViewer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOpenContainerViewer.Name = "buttonOpenContainerViewer";
-            this.buttonOpenContainerViewer.Size = new System.Drawing.Size(134, 43);
+            this.buttonOpenContainerViewer.Size = new System.Drawing.Size(164, 43);
             this.buttonOpenContainerViewer.TabIndex = 6;
             this.buttonOpenContainerViewer.Text = "Open Container Viewer";
             this.buttonOpenContainerViewer.UseVisualStyleBackColor = true;
@@ -119,10 +120,11 @@
             // 
             // buttonShowAppDirectory
             // 
-            this.buttonShowAppDirectory.Location = new System.Drawing.Point(307, 9);
+            this.buttonShowAppDirectory.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonShowAppDirectory.Location = new System.Drawing.Point(247, 9);
             this.buttonShowAppDirectory.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShowAppDirectory.Name = "buttonShowAppDirectory";
-            this.buttonShowAppDirectory.Size = new System.Drawing.Size(134, 32);
+            this.buttonShowAppDirectory.Size = new System.Drawing.Size(194, 32);
             this.buttonShowAppDirectory.TabIndex = 8;
             this.buttonShowAppDirectory.Text = "Open Systems Directory";
             this.buttonShowAppDirectory.UseVisualStyleBackColor = true;
@@ -130,6 +132,7 @@
             // 
             // buttonNewSystem
             // 
+            this.buttonNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonNewSystem.Location = new System.Drawing.Point(12, 158);
             this.buttonNewSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonNewSystem.Name = "buttonNewSystem";
@@ -141,7 +144,8 @@
             // 
             // buttonDeleteSystem
             // 
-            this.buttonDeleteSystem.Location = new System.Drawing.Point(139, 157);
+            this.buttonDeleteSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonDeleteSystem.Location = new System.Drawing.Point(139, 158);
             this.buttonDeleteSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteSystem.Name = "buttonDeleteSystem";
             this.buttonDeleteSystem.Size = new System.Drawing.Size(123, 43);
