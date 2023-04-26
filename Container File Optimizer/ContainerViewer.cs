@@ -600,22 +600,6 @@ namespace Container_File_Optimizer
             }
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         private void containerList_SelectedIndexChanged(object sender, EventArgs e)
         {
             fileIDCollection.Clear();
@@ -713,6 +697,8 @@ namespace Container_File_Optimizer
 
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
+
+            //Show openfiledialog so user can add files to the system
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Multiselect = true;
             openFileDialog.ShowDialog();
