@@ -348,6 +348,7 @@ namespace Container_File_Optimizer
         }
 
 
+
         private void textBoxContainer_TextChanged(object sender, EventArgs e)
         {
             int current = textBoxContainerName.Text.Length;
@@ -379,10 +380,6 @@ namespace Container_File_Optimizer
             }
 
         }
-
-
-
-
 
 
         private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
