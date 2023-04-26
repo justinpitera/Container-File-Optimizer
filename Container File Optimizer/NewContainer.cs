@@ -28,7 +28,11 @@ namespace Container_File_Optimizer
 
 
 
-        // This method creates a new application record in the Application table of the database.
+        /// <summary>
+        /// This method creates a new application record in the Application table of the database.
+        /// </summary>
+        /// <param name="appName">The name of the aplication being added.</param>
+        /// <param name="appDescription">The description of the aplication being added.</param>
         private void CreateApp(string appName, string appDescription)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -58,7 +62,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
                     // Log any database errors.
-                    MessageBox.Show("Database error: " + ex);
+                    MessageBox.Show("An error ocured trying to add the aplication!");
                 }
                 finally
                 {
@@ -71,7 +75,10 @@ namespace Container_File_Optimizer
 
 
 
-        // This method creates a new file record in the [File] table of the database.
+        /// <summary>
+        /// This method creates a new file record in the [File] table of the database.
+        /// </summary>
+        /// <param name="filePath">The path of the file to be added.</param>
         private void CreateFile(string filePath)
         {
             // Extract the file name and type from the file path.
@@ -83,42 +90,54 @@ namespace Container_File_Optimizer
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                // Define the SQL query for inserting a new file record.
-                string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@file_name", fileName);
-
-                // Determine the file type based on its content.
-                if (fileType == string.Empty)
+                try
                 {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".bin");
-                    int rowsAffected = command.ExecuteNonQuery();
-                }
-                else if (fileType == "so")
-                {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", "." + fileType);
-                    int rowsAffected = command.ExecuteNonQuery();
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".config");
-                    int rowsAffected = command.ExecuteNonQuery();
-                }
+                    connection.Open();
 
-                // Close the database connection.
-                connection.Close();
+                    // Define the SQL query for inserting a new file record.
+                    string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@file_name", fileName);
+
+                    // Determine the file type based on its content.
+                    if (fileType == string.Empty)
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", ".bin");
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    else if (fileType == "so")
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", "." + fileType);
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", ".config");
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+
+                    // Close the database connection.
+                    connection.Close();
+
+                }
+                catch (SqlException ex)
+                {
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured trying to add the file!");
+                }
+                
             }
         }
 
 
-
-
-        // This method adds a connection between an application and a file in the database, based on the app ID and file path.
+        /// <summary>
+        /// This method adds a connection between an application and a file in the database, based on the app ID and file path.
+        /// </summary>
+        /// <param name="appID">The id of the aplication the file will be connected to.</param>
+        /// <param name="filePath">The path of the file being connected.</param>
         private void AddAppFileConnection(int appID, string filePath)
         {
             // Extract the file name from the file path using a regular expression.
@@ -127,47 +146,55 @@ namespace Container_File_Optimizer
             // Create a SQL connection using the connection string.
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
+                try
+                {
+                    cnn.Open();
 
-                // Declare a variable to store the file ID.
-                int fileID;
+                    // Declare a variable to store the file ID.
+                    int fileID;
 
-                // Define the SQL query to retrieve the file ID based on the file name and path.
-                string query = "SELECT file_id FROM [File] WHERE file_name = @file_name AND file_path = @file_path";
+                    // Define the SQL query to retrieve the file ID based on the file name and path.
+                    string query = "SELECT file_id FROM [File] WHERE file_name = @file_name AND file_path = @file_path";
 
-                // Create a SQL command using the query and connection.
-                SqlCommand command = new SqlCommand(query, cnn);
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the file name and path.
-                command.Parameters.AddWithValue("@file_name", fileName);
-                command.Parameters.AddWithValue("@file_path", filePath);
+                    // Add parameters to the command to specify the file name and path.
+                    command.Parameters.AddWithValue("@file_name", fileName);
+                    command.Parameters.AddWithValue("@file_path", filePath);
 
-                // Execute the command and retrieve the file ID as a scalar value.
-                fileID = (int)command.ExecuteScalar();
+                    // Execute the command and retrieve the file ID as a scalar value.
+                    fileID = (int)command.ExecuteScalar();
 
-                // Define the SQL query to insert a new row into the AppFile table with the app ID and file ID.
-                query = "INSERT INTO AppFile (app_id, file_id) VALUES (@app_id, @file_id)";
+                    // Define the SQL query to insert a new row into the AppFile table with the app ID and file ID.
+                    query = "INSERT INTO AppFile (app_id, file_id) VALUES (@app_id, @file_id)";
 
-                // Create a new SQL command using the query and connection.
-                command = new SqlCommand(query, cnn);
+                    // Create a new SQL command using the query and connection.
+                    command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the app ID and file ID.
-                command.Parameters.AddWithValue("@app_id", appID);
-                command.Parameters.AddWithValue("@file_id", fileID);
+                    // Add parameters to the command to specify the app ID and file ID.
+                    command.Parameters.AddWithValue("@app_id", appID);
+                    command.Parameters.AddWithValue("@file_id", fileID);
 
-                // Execute the command to insert the new row.
-                command.ExecuteNonQuery();
+                    // Execute the command to insert the new row.
+                    command.ExecuteNonQuery();
 
-                // Close the SQL connection.
-                cnn.Close();
+                    // Close the SQL connection.
+                    cnn.Close();
+                }
+                catch (SqlException ex)
+                {
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured trying to add the file!");
+                }
+                
             }
         }
 
-
-
-
-        // This method retrieves the ID of an application from the database, based on its name and description.
-        // It returns the app ID as an integer.
+        /// <summary>
+        /// This function finds the id of a given aplication.
+        /// </summary>
+        /// <returns> the id of the aplication being searched for</returns>
         private int GetAppID()
         {
             int appID = 0;
@@ -175,31 +202,43 @@ namespace Container_File_Optimizer
             // Create a SQL connection using the connection string.
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
+                try
+                {
+                    cnn.Open();
 
-                // Define the SQL query to retrieve the app ID based on the app name and description.
-                string query = "SELECT app_id FROM Application WHERE app_name = @app_name AND app_desc = @app_desc";
+                    // Define the SQL query to retrieve the app ID based on the app name and description.
+                    string query = "SELECT app_id FROM Application WHERE app_name = @app_name AND app_desc = @app_desc";
 
-                // Create a SQL command using the query and connection.
-                SqlCommand command = new SqlCommand(query, cnn);
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the app name and description.
-                command.Parameters.AddWithValue("@app_name", textBoxContainerName.Text);
-                command.Parameters.AddWithValue("@app_desc", textBoxContainerDesc.Text);
+                    // Add parameters to the command to specify the app name and description.
+                    command.Parameters.AddWithValue("@app_name", textBoxContainerName.Text);
+                    command.Parameters.AddWithValue("@app_desc", textBoxContainerDesc.Text);
 
-                // Execute the command and retrieve the app ID as a scalar value.
-                appID = (int)command.ExecuteScalar();
+                    // Execute the command and retrieve the app ID as a scalar value.
+                    appID = (int)command.ExecuteScalar();
 
-                // Close the SQL connection.
-                cnn.Close();
+                    // Close the SQL connection.
+                    cnn.Close();
 
-                // Return the app ID.
-                return appID;
+                }
+                catch (SqlException ex)
+                {
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured!");
+                }
+                
             }
+            return appID;
         }
 
 
-        // Create app, then create each file from file list, then create connections in bridge table for apps and files
+        /// <summary>
+        /// Create app, then create each file from file list, then create connections in bridge table for apps and files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonCreateContainer_Click(object sender, EventArgs e)
         {
 
@@ -229,7 +268,12 @@ namespace Container_File_Optimizer
 
 
         }
-        // Add a file of list of files to add to container
+
+        /// <summary>
+        /// Add a file of list of files to add to container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
             // Windows explorer open file dialog with multiselect enabled to allow multiple files
@@ -282,9 +326,11 @@ namespace Container_File_Optimizer
             }
         }
 
-
-
-        // Remove a file from the list of files to add to the container
+        /// <summary>
+        /// Remove a file from the list of files to add to the container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonRemoveFile_Click(object sender, EventArgs e)
         {
             // Determine if any files have been selected
@@ -300,8 +346,6 @@ namespace Container_File_Optimizer
             }
 
         }
-
-
 
 
         private void textBoxContainer_TextChanged(object sender, EventArgs e)
