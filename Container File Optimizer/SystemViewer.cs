@@ -110,7 +110,7 @@ namespace Container_File_Optimizer
                         string systemName = row["system_name"].ToString();
                         int systemId = Convert.ToInt32(row["system_id"]);
                         systemIDCollection.Add(i, systemId);
-                        listBoxSystems.Items.Add(systemName.Trim() + " Version " + GetVersionNumber(systemId));
+                        systemsList.Items.Add(systemName.Trim() + " Version " + GetVersionNumber(systemId));
 
                     }
 
@@ -162,7 +162,7 @@ namespace Container_File_Optimizer
                         DataRow row = dataTable.Rows[i];
                         string app_name = row["app_name"].ToString();
                         int app_ID = Convert.ToInt32(row["app_id"]);
-                        listBoxContainers.Items.Add(app_name);
+                        containersList.Items.Add(app_name);
                         appIDCollection.Add(i, app_ID);
                     }
                 }
@@ -250,7 +250,7 @@ namespace Container_File_Optimizer
                         int app_id = reader.GetInt32(0); // see if this can work with Int16 
                         int file_id = reader.GetInt32(1); // Same with this 
                         string file_name = reader.GetString(3);
-                        listBoxFiles.Items.Add(file_name);
+                        filesList.Items.Add(file_name);
 
                     }
 
@@ -293,7 +293,7 @@ namespace Container_File_Optimizer
                     {
                         int app_id = reader.GetInt32(0); // see if this can work with Int16 
                         int file_id = reader.GetInt32(1); // Same with this 
-                        listBoxFiles.Items.Add(file_id);
+                        filesList.Items.Add(file_id);
 
                     }
 
@@ -334,7 +334,7 @@ namespace Container_File_Optimizer
 
                     // Iterate through the SqlDataReader and populate the CheckedListBox
                     List<string> listOfSharedContainers = new List<string>();
-                    string fileName = listBoxFiles.GetItemText(listBoxFiles.SelectedItem);
+                    string fileName = filesList.GetItemText(filesList.SelectedItem);
                     while (reader.Read())
                     {
                         string app_name = reader.GetString(0);
@@ -385,7 +385,7 @@ namespace Container_File_Optimizer
                     command.ExecuteNonQuery();
 
                     //message to show the system was deleted
-                    MessageBox.Show("Deleted system: " + listBoxSystems.SelectedItem.ToString());
+                    MessageBox.Show("Deleted system: " + systemsList.SelectedItem.ToString());
 
 
                     //close connection
@@ -469,12 +469,12 @@ namespace Container_File_Optimizer
         private void listBoxSystems_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Put this here to avoid crashing if they dont select anything 
-            if (listBoxSystems.SelectedItems.Count > 0)
+            if (systemsList.SelectedItems.Count > 0)
             {
                 appIDCollection.Clear();
-                listBoxContainers.Items.Clear();
-                GetApps(systemIDCollection[listBoxSystems.SelectedIndex]);
-                listBoxFiles.Items.Clear();
+                containersList.Items.Clear();
+                GetApps(systemIDCollection[systemsList.SelectedIndex]);
+                filesList.Items.Clear();
             }
 
         }
@@ -487,14 +487,14 @@ namespace Container_File_Optimizer
         private void listBoxContainers_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Put this here to avoid crashing if they dont select anything 
-            if (listBoxContainers.SelectedItems.Count > 0)
+            if (containersList.SelectedItems.Count > 0)
             {
-                listBoxFiles.Items.Clear();
+                filesList.Items.Clear();
                 fileIDCollection.Clear();
                 // To populate the list box
-                GetFileNames(appIDCollection[listBoxContainers.SelectedIndex]);
+                GetFileNames(appIDCollection[containersList.SelectedIndex]);
                 // to populate the dictionary
-                GetFileIDS(appIDCollection[listBoxContainers.SelectedIndex]);
+                GetFileIDS(appIDCollection[containersList.SelectedIndex]);
             }
 
         }
@@ -502,9 +502,9 @@ namespace Container_File_Optimizer
 
         private void listBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxFiles.SelectedItems.Count > 0)
+            if (filesList.SelectedItems.Count > 0)
             {
-               GetSharedApps(fileIDCollection[listBoxFiles.SelectedIndex], systemIDCollection[listBoxSystems.SelectedIndex]);
+               GetSharedApps(fileIDCollection[filesList.SelectedIndex], systemIDCollection[systemsList.SelectedIndex]);
             }
         }
 
@@ -535,19 +535,19 @@ namespace Container_File_Optimizer
 
         private void buttonDeleteSystem_Click(object sender, EventArgs e)
         {
-            if (listBoxSystems.SelectedItems.Count > 0)
+            if (systemsList.SelectedItems.Count > 0)
             {
-                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxSystems.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Are you sure you would like to remove: " + systemsList.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Directory.Delete(GetOptimizedPath(systemIDCollection[listBoxSystems.SelectedIndex]),true);
+                    Directory.Delete(GetOptimizedPath(systemIDCollection[systemsList.SelectedIndex]),true);
                     //Delete the system
-                    deleteSystem(systemIDCollection[listBoxSystems.SelectedIndex]);
+                    deleteSystem(systemIDCollection[systemsList.SelectedIndex]);
 
 
 
-                    listBoxSystems.Items.Clear();
-                    listBoxContainers.Items.Clear();
-                    listBoxFiles.Items.Clear();
+                    systemsList.Items.Clear();
+                    containersList.Items.Clear();
+                    filesList.Items.Clear();
                     systemIDCollection.Clear();
                     ViewSystems();
                 }

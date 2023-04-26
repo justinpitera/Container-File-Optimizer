@@ -241,32 +241,28 @@ namespace Container_File_Optimizer
         /// <param name="e"></param>
         private void buttonCreateContainer_Click(object sender, EventArgs e)
         {
-
-            if (checkedListBoxFiles.Items.Count == 0 || textBoxContainerName.Text == string.Empty)
-            {
-                MessageBox.Show("Please select at least one file and provide a name for the container.");
-            }
-            else
+            // Check if user has provided a name to the container and that at least one file has been added
+            if (filesList.Items.Count > 0 || !(textBoxContainerName.Text == string.Empty))
             {
                 CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
                 // Create files from the list into Database table for Files
-                foreach (String filePath in checkedListBoxFiles.CheckedItems)
+                foreach (String filePath in filesList.CheckedItems)
                 {
                     CreateFile(filePath);
                 }
                 // Creating connections between files and app
-                foreach (String filePath in checkedListBoxFiles.CheckedItems)
+                foreach (String filePath in filesList.CheckedItems)
                 {
                     AddAppFileConnection(GetAppID(), filePath);
                 }
                 ContainerViewer containerViewer = new ContainerViewer();
                 containerViewer.Show();
                 this.Close();
-
             }
-
-
-
+            else // Handle user not adding required information into the form
+            {
+                MessageBox.Show("Please select at least one file and provide a name for the container.");
+            }
         }
 
         /// <summary>
@@ -274,57 +270,50 @@ namespace Container_File_Optimizer
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        /// <summary>
+        /// Opens a file dialog to add one or more files to the container.
+        /// </summary>
         private void buttonAddFile_Click(object sender, EventArgs e)
         {
-            // Windows explorer open file dialog with multiselect enabled to allow multiple files
-            OpenFileDialog findFiles = new OpenFileDialog();
-            findFiles.Multiselect = true;
-
-            findFiles.ShowDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
 
             // Get the currently selected items before adding new files
-            List<string> selectedFiles = new List<string>();
-            foreach (var item in checkedListBoxFiles.CheckedItems)
-            {
-                selectedFiles.Add(item.ToString());
-            }
+            List<string> selectedFiles = filesList.CheckedItems.Cast<string>().ToList();
 
-            // Add new files to list box and automatically select them
-            foreach (String filePath in findFiles.FileNames)
+            // Add new files to the list box and automatically select them
+            foreach (string filePath in openFileDialog.FileNames)
             {
-                // Check if file is already in the list based on its file path
-                if (!checkedListBoxFiles.Items.Contains(filePath))
+                if (filesList.Items.Contains(filePath))
                 {
-                    // Add file
-                    checkedListBoxFiles.Items.Add(filePath, true); // Automatically select new items
+                    MessageBox.Show($"Error: file already exists in container: {filePath}", "Container File Optimizer");
                 }
                 else
                 {
-                    // Display error
-                    MessageBox.Show("Error: file already exists in container: " + filePath, "Container File Optimizer");
+                    filesList.Items.Add(filePath, true); // Automatically select new items
+                }
+            }
+
+            // Select the previously selected files and the new items
+            for (int i = 0; i < filesList.Items.Count; i++)
+            {
+                if (selectedFiles.Contains(filesList.Items[i].ToString()))
+                {
+                    filesList.SetItemChecked(i, true);
                 }
             }
 
             // If there are no items in the list box, select all by default
-            if (checkedListBoxFiles.Items.Count > 0)
+            if (filesList.Items.Count == 0)
             {
-                // Check the previously selected files and select new items
-                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
-                    if (selectedFiles.Contains(checkedListBoxFiles.Items[i].ToString()))
-                    {
-                        checkedListBoxFiles.SetItemChecked(i, true);
-                    }
-                }
-            }
-            else // Automatically select everything if there are no items in the list box
-            {
-                for (int i = 0; i < findFiles.FileNames.Length; i++)
-                {
-                    checkedListBoxFiles.SetItemChecked(i, true);
+                    filesList.SetItemChecked(i, true);
                 }
             }
         }
+
 
         /// <summary>
         /// Remove a file from the list of files to add to the container
@@ -334,10 +323,10 @@ namespace Container_File_Optimizer
         private void buttonRemoveFile_Click(object sender, EventArgs e)
         {
             // Determine if any files have been selected
-            if (checkedListBoxFiles.SelectedItems.Count > 0)
+            if (filesList.SelectedItems.Count > 0)
             {
                 // Remove file
-                checkedListBoxFiles.Items.RemoveAt(checkedListBoxFiles.SelectedIndex);
+                filesList.Items.RemoveAt(filesList.SelectedIndex);
             }
             else
             {
@@ -348,13 +337,17 @@ namespace Container_File_Optimizer
         }
 
 
-
+        // This method is called when the text in the container name textbox changes
         private void textBoxContainer_TextChanged(object sender, EventArgs e)
         {
+            // Get the length of the current text in the textbox and the maximum allowed length
             int current = textBoxContainerName.Text.Length;
             int max = textBoxContainerName.MaxLength;
+
+            // Update the label to show the current and maximum lengths of the text
             labelSystemNameCount.Text = current.ToString() + " / 50";
 
+            // If the length of the text equals the maximum allowed length, change the color of the label to red
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
@@ -365,11 +358,17 @@ namespace Container_File_Optimizer
             }
         }
 
+        // This method is called when the text in the container description textbox changes
         private void textBoxContainerDesc_TextChanged(object sender, EventArgs e)
         {
+            // Get the length of the current text in the textbox and the maximum allowed length
             int current = textBoxContainerDesc.Text.Length;
             int max = textBoxContainerDesc.MaxLength;
+
+            // Update the label to show the current and maximum lengths of the text
             labelCreatorCount.Text = current.ToString() + " / 50";
+
+            // If the length of the text equals the maximum allowed length, change the color of the label to red
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
@@ -378,13 +377,6 @@ namespace Container_File_Optimizer
             {
                 labelCreatorCount.ForeColor = Color.White;
             }
-
-        }
-
-
-        private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void textBoxContainerName_KeyPress(object sender, KeyPressEventArgs e)

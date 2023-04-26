@@ -67,7 +67,7 @@ namespace Container_File_Optimizer
                         DataRow row = dataTable.Rows[i];
                         string applicationName = row["app_name"].ToString();
                         int applicationID = Convert.ToInt32(row["app_id"]);
-                        listBoxContainerViewer.Items.Add(applicationName);
+                        containerList.Items.Add(applicationName);
                         appIDCollection.Add(i, applicationID);
                     }
 
@@ -109,7 +109,7 @@ namespace Container_File_Optimizer
                         int app_id = reader.GetInt32(0); // see if this can work with Int16 
                         int file_id = reader.GetInt32(1); // Same with this 
                         string file_name = reader.GetString(3);
-                        listBoxFiles.Items.Add(file_name);
+                        filesList.Items.Add(file_name);
 
                     }
 
@@ -387,6 +387,25 @@ namespace Container_File_Optimizer
 
         }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// This function creates a new file record in the [File] table of the database.
         /// </summary>
@@ -402,10 +421,59 @@ namespace Container_File_Optimizer
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                try
-                {
-                    connection.Open();
 
+
+
+                connection.Open();
+
+                // Check if the file already exists in the database.
+                string checkQuery = "Select count(*) From [File] f LEFT JOIN AppFile af ON f.file_id = af.file_id WHERE file_name = @file_name AND app_id = @app_id";
+                SqlCommand checkCommand = new SqlCommand(checkQuery, connection);
+                checkCommand.Parameters.AddWithValue("@file_name", fileName);
+                checkCommand.Parameters.AddWithValue("@app_id", appIDCollection[containerList.SelectedIndex]);
+                int count = (int)checkCommand.ExecuteScalar();
+
+                if (count > 0)
+                {
+                    // Ask the user if they want to overwrite the existing file.
+                    var result = MessageBox.Show("The file already exists in the database. Do you want to overwrite it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                    if (result == DialogResult.Yes)
+                    {
+                        // Define the SQL query for updating an existing file record.
+                        string updateQuery = "UPDATE [File] SET file_path = @file_path, file_type = @file_type WHERE file_name = @file_name";
+                        SqlCommand updateCommand = new SqlCommand(updateQuery, connection);
+                        updateCommand.Parameters.AddWithValue("@file_name", fileName);
+
+                        // Determine the file type based on its content.
+                        if (fileType == string.Empty) //If no extension file is a bin
+                        {
+                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                            updateCommand.Parameters.AddWithValue("@file_type", ".bin");
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                        }
+                        else if (fileType == "so") //if extension is so than file is a library
+                        {
+                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                            updateCommand.Parameters.AddWithValue("@file_type", "." + fileType);
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                        }
+                        else //any other extension is a config
+                        {
+                            updateCommand.Parameters.AddWithValue("@file_path", filePath);
+                            updateCommand.Parameters.AddWithValue("@file_type", ".config");
+                            int rowsAffected = updateCommand.ExecuteNonQuery();
+                        }
+
+                        MessageBox.Show("The file has been updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("The file has not been added to the database.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+
+                }
+                else
+                {
                     // Define the SQL query for inserting a new file record.
                     string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
                     SqlCommand command = new SqlCommand(query, connection);
@@ -433,18 +501,45 @@ namespace Container_File_Optimizer
 
                     // Close the database connection.
                     connection.Close();
+                    // add app file connection
+                    AddAppFileConnection(appIDCollection[containerList.SelectedIndex], filePath);
+                }
 
+
+                connection.Close();
+
+
+
+
+
+
+
+
+
+
+
+                try
+                {
 
                 }
                 catch (SqlException ex)
                 {
 
-                    //error message to show if error ocurs during delete
-                    MessageBox.Show("An error ocured when adding the file!");
+
+                    MessageBox.Show("Error writing file to database");
                 }
-               
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
+
+
+
+
+
+
 
         /// <summary>
         /// This method adds a connection between an application and a file in the database, based on the app ID and file path.
@@ -501,38 +596,54 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured when adding the file!");
                 }
-                
+
             }
         }
 
-        private void listBoxContainerViewer_SelectedIndexChanged(object sender, EventArgs e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        private void containerList_SelectedIndexChanged(object sender, EventArgs e)
         {
             fileIDCollection.Clear();
-            listBoxFiles.Items.Clear();
-            if (listBoxContainerViewer.SelectedItems.Count > 0)
+            filesList.Items.Clear();
+            if (containerList.SelectedItems.Count > 0)
             {
                 // To populate the list box
-                GetFileNames(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                GetFileNames(appIDCollection[containerList.SelectedIndex]);
                 // to populate the dictionary
-                GetFileIDS(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                GetFileIDS(appIDCollection[containerList.SelectedIndex]);
             }
         }
         private void buttonDeleteFile_Click(object sender, EventArgs e)
         {
-            if (listBoxFiles.SelectedItems.Count > 0)
+            if (filesList.SelectedItems.Count > 0)
             {
-                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxFiles.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                if (MessageBox.Show("Are you sure you would like to remove: " + filesList.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
 
-                    MessageBox.Show("Deleted file: " + listBoxFiles.SelectedItem.ToString() + " from " + listBoxContainerViewer.SelectedItem.ToString());
-                    deleteFile(fileIDCollection[listBoxFiles.SelectedIndex], appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    MessageBox.Show("Deleted file: " + filesList.SelectedItem.ToString() + " from " + containerList.SelectedItem.ToString());
+                    deleteFile(fileIDCollection[filesList.SelectedIndex], appIDCollection[containerList.SelectedIndex]);
                     //Clear the list box and id collection dictionary 
-                    listBoxFiles.Items.Clear();
+                    filesList.Items.Clear();
                     fileIDCollection.Clear();
                     // To populate the list box
-                    GetFileNames(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    GetFileNames(appIDCollection[containerList.SelectedIndex]);
                     // to populate the dictionary
-                    GetFileIDS(appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                    GetFileIDS(appIDCollection[containerList.SelectedIndex]);
                 }
                 else
                 {
@@ -549,47 +660,49 @@ namespace Container_File_Optimizer
 
         private void buttonDeleteContainer_Click(object sender, EventArgs e)
         {
-            if (listBoxContainerViewer.SelectedItems.Count > 0)
+            // Check if a container is selected
+            if (containerList.SelectedItems.Count > 0)
             {
-                if (MessageBox.Show("Are you sure you would like to remove: " + listBoxContainerViewer.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                // Confirm deletion with user
+                string message = "Are you sure you would like to remove: "
+                               + containerList.SelectedItem.ToString().Trim()
+                               + "?";
+                if (MessageBox.Show(message, "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-
-                    // First delete all the files in that app if they only occur once which is done through the deleteFiles() function
-                    for (int i = 0; i < listBoxFiles.Items.Count; i++)
+                    // Delete all files in the container
+                    for (int i = 0; i < filesList.Items.Count; i++)
                     {
-                        deleteFile(fileIDCollection[i], appIDCollection[listBoxContainerViewer.SelectedIndex]);
+                        deleteFile(fileIDCollection[i], appIDCollection[containerList.SelectedIndex]);
                     }
-                    // Next delete the empty container
-                    deleteApplication(appIDCollection[listBoxContainerViewer.SelectedIndex]);
-                    MessageBox.Show("Deleted container: " + listBoxContainerViewer.SelectedItem.ToString());
+
+                    // Delete the container itself
+                    deleteApplication(appIDCollection[containerList.SelectedIndex]);
+
+                    // Show success message
+                    MessageBox.Show("Deleted container: " + containerList.SelectedItem.ToString());
 
                     // Clear form objects and collections
-
                     appIDCollection.Clear();
-                    listBoxContainerViewer.Items.Clear();
-
+                    containerList.Items.Clear();
                     fileIDCollection.Clear();
-                    listBoxFiles.Items.Clear();
+                    filesList.Items.Clear();
 
-                    // Populate list box and app ids collection dictionary
+                    // Refresh the list of containers
                     ViewContainers();
                 }
                 else
                 {
-                    // Do nothing
+                    // User cancelled the deletion
                     MessageBox.Show("No changes made");
                 }
-
             }
             else
             {
+                // No container was selected
                 MessageBox.Show("Error: No container was selected to be deleted...");
             }
-
-
-
-
         }
+
 
         private void buttonNewContainer_Click(object sender, EventArgs e)
         {
@@ -597,5 +710,33 @@ namespace Container_File_Optimizer
             NewContainer newContainerForm = new NewContainer();
             newContainerForm.Show();
         }
+
+        private void buttonAddFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+
+            // Add new files to the list box and automatically select them
+            foreach (string filePath in openFileDialog.FileNames)
+            {
+                {
+                    CreateFile(filePath);
+
+                }
+            }
+
+
+            // Clear form objects and collections
+            appIDCollection.Clear();
+            containerList.Items.Clear();
+            fileIDCollection.Clear();
+            filesList.Items.Clear();
+
+            // Refresh the list of containers
+            ViewContainers();
+        }
+
+       
     }
 }

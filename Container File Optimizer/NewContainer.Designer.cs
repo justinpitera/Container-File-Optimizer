@@ -41,7 +41,7 @@ namespace Container_File_Optimizer
             this.labelSystemNameCount = new System.Windows.Forms.Label();
             this.labelCreatorCount = new System.Windows.Forms.Label();
             this.buttonAddFile = new System.Windows.Forms.Button();
-            this.checkedListBoxFiles = new System.Windows.Forms.CheckedListBox();
+            this.filesList = new System.Windows.Forms.CheckedListBox();
             this.buttonRemoveFile = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -152,14 +152,13 @@ namespace Container_File_Optimizer
             this.buttonAddFile.UseVisualStyleBackColor = true;
             this.buttonAddFile.Click += new System.EventHandler(this.buttonAddFile_Click);
             // 
-            // checkedListBoxFiles
+            // filesList
             // 
-            this.checkedListBoxFiles.FormattingEnabled = true;
-            this.checkedListBoxFiles.Location = new System.Drawing.Point(8, 195);
-            this.checkedListBoxFiles.Name = "checkedListBoxFiles";
-            this.checkedListBoxFiles.Size = new System.Drawing.Size(368, 124);
-            this.checkedListBoxFiles.TabIndex = 25;
-            this.checkedListBoxFiles.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxFiles_SelectedIndexChanged);
+            this.filesList.FormattingEnabled = true;
+            this.filesList.Location = new System.Drawing.Point(8, 195);
+            this.filesList.Name = "filesList";
+            this.filesList.Size = new System.Drawing.Size(368, 124);
+            this.filesList.TabIndex = 25;
             // 
             // buttonRemoveFile
             // 
@@ -179,7 +178,7 @@ namespace Container_File_Optimizer
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.ClientSize = new System.Drawing.Size(387, 393);
             this.Controls.Add(this.buttonRemoveFile);
-            this.Controls.Add(this.checkedListBoxFiles);
+            this.Controls.Add(this.filesList);
             this.Controls.Add(this.buttonAddFile);
             this.Controls.Add(this.labelCreator);
             this.Controls.Add(this.labelSystemName);
@@ -213,7 +212,7 @@ namespace Container_File_Optimizer
         private System.Windows.Forms.Label labelSystemNameCount;
         private System.Windows.Forms.Label labelCreatorCount;
         private System.Windows.Forms.Button buttonAddFile;
-        private System.Windows.Forms.CheckedListBox checkedListBoxFiles;
+        private System.Windows.Forms.CheckedListBox filesList;
         private System.Windows.Forms.Button buttonRemoveFile;
     }
 }
