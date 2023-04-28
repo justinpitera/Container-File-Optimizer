@@ -234,6 +234,42 @@ namespace Container_File_Optimizer
         }
 
 
+
+
+        public int GetCount(string appName)
+        {
+            // Create a SQL connection using the connection string.
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    cnn.Open();
+
+                    // Define the SQL query to retrieve the app ID based on the app name and description.
+                    string query = "SELECT count(*) FROM Application WHERE app_name = @app_name";
+
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
+
+                    // Add parameters to the command to specify the app name and description.
+                    command.Parameters.AddWithValue("@app_name", appName);
+
+                    // Execute the command and retrieve the app ID as a scalar value.
+                    int count = (int)command.ExecuteScalar();
+
+                    // Close the SQL connection.
+                    cnn.Close();
+                    return count;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    return -1;
+                }
+
+            }
+        }
+
         /// <summary>
         /// Create app, then create each file from file list, then create connections in bridge table for apps and files
         /// </summary>
@@ -244,20 +280,26 @@ namespace Container_File_Optimizer
             // Check if user has provided a name to the container and that at least one file has been added
             if (filesList.Items.Count > 0 || !(textBoxContainerName.Text == string.Empty))
             {
-                CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
-                // Create files from the list into Database table for Files
-                foreach (String filePath in filesList.CheckedItems)
-                {
-                    CreateFile(filePath);
+                if (GetCount(textBoxContainerName.Text) == 0) {
+                    CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
+                    // Create files from the list into Database table for Files
+                    foreach (String filePath in filesList.CheckedItems)
+                    {
+                        CreateFile(filePath);
+                    }
+                    // Creating connections between files and app
+                    foreach (String filePath in filesList.CheckedItems)
+                    {
+                        AddAppFileConnection(GetAppID(), filePath);
+                    }
+                    ContainerViewer containerViewer = new ContainerViewer();
+                    containerViewer.Show();
+                    this.Close();
                 }
-                // Creating connections between files and app
-                foreach (String filePath in filesList.CheckedItems)
+                else
                 {
-                    AddAppFileConnection(GetAppID(), filePath);
+                    MessageBox.Show("A container with this name already exists in the database, please choose another name for the container.");
                 }
-                ContainerViewer containerViewer = new ContainerViewer();
-                containerViewer.Show();
-                this.Close();
             }
             else // Handle user not adding required information into the form
             {
