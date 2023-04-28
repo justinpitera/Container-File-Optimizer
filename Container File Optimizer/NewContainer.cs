@@ -234,8 +234,11 @@ namespace Container_File_Optimizer
         }
 
 
-
-
+        /// <summary>
+        /// This method returns the count of times an app with a specified name appears in the database
+        /// </summary>
+        /// <param name="appName">The name of the aplication</param>
+        //
         public int GetCount(string appName)
         {
             // Create a SQL connection using the connection string.
@@ -245,16 +248,16 @@ namespace Container_File_Optimizer
                 {
                     cnn.Open();
 
-                    // Define the SQL query to retrieve the app ID based on the app name and description.
+                    // Define the SQL query to retrieve the  count of containers based on the app name
                     string query = "SELECT count(*) FROM Application WHERE app_name = @app_name";
 
                     // Create a SQL command using the query and connection.
                     SqlCommand command = new SqlCommand(query, cnn);
 
-                    // Add parameters to the command to specify the app name and description.
+                    // Add parameters to the command to specify the app name
                     command.Parameters.AddWithValue("@app_name", appName);
 
-                    // Execute the command and retrieve the app ID as a scalar value.
+                    // Execute the command and retrieve the app's count as a scalar value.
                     int count = (int)command.ExecuteScalar();
 
                     // Close the SQL connection.
@@ -280,6 +283,7 @@ namespace Container_File_Optimizer
             // Check if user has provided a name to the container and that at least one file has been added
             if (filesList.Items.Count > 0 || !(textBoxContainerName.Text == string.Empty))
             {
+                // Check if the container already exists in the database
                 if (GetCount(textBoxContainerName.Text) == 0) {
                     CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
                     // Create files from the list into Database table for Files
