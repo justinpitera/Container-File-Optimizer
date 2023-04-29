@@ -11,15 +11,16 @@ using System.Text.RegularExpressions;
 namespace Container_File_Optimizer
 {
 
-
-
     public partial class NewSystem : Form
     {
+        //variable to hold version number
         public int currentVersionNumber = 0;
+
+        //variable to hold the connection string fr the database
         public string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
+       
+        //variable to hold the system path
         public string systemPath = "";
-
-
 
 
         public NewSystem()
@@ -28,37 +29,56 @@ namespace Container_File_Optimizer
         }
 
 
+        /// <summary>
+        /// This function populates the container box with all of the containers saved in the application
+        /// </summary>
         public void PopulateContainers()
         {
-            string query = "SELECT * FROM Application";
+            string query = "SELECT * FROM Application"; //query to get all containers from the aplication table
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                connection.Open();
-
-
-                SqlDataReader reader = command.ExecuteReader();
-
-                // Iterate through the SqlDataReader and populate the CheckedListBox
-                while (reader.Read())
+                try
                 {
-                    int app_id = reader.GetInt32(0); // see if this can work with Int16 
-                    string app_name = reader.GetString(1);
-                    string app_desc = reader.GetString(2);
-                    checkedListBoxContainers.DisplayMember = "Name";
-                    checkedListBoxContainers.ValueMember = "Id";
-                    checkedListBoxContainers.Items.Add(app_id + " - " + app_name);
+                    connection.Open();//open connection
+
+
+                    SqlDataReader reader = command.ExecuteReader(); //exucute query
+
+                    // Iterate through the SqlDataReader and populate the CheckedListBox
+                    while (reader.Read())
+                    {
+                        int app_id = reader.GetInt32(0); // see if this can work with Int16 
+                        string app_name = reader.GetString(1);
+                        string app_desc = reader.GetString(2);
+                        checkedListBoxContainers.DisplayMember = "Name";
+                        checkedListBoxContainers.ValueMember = "Id";
+                        checkedListBoxContainers.Items.Add(app_id + " - " + app_name);
+                    }
+
+                    // Close the SqlDataReader and the SqlConnection
+                    reader.Close();
+
+                    connection.Close(); //close connection
+
+
                 }
+                catch (SqlException ex)
+                {
 
-                // Close the SqlDataReader and the SqlConnection
-                reader.Close();
-
-                connection.Close();
+                    //error message to show if error ocurs during delete
+                    MessageBox.Show("An error ocured!");
+                }
+               
             }
         }
 
 
+        /// <summary>
+        /// This function gets the system ID using the information given in the text boxes
+        /// </summary>
+        /// <returns>system id</returns>
         private int GetSystemID()
         {
             int systemID = 0;
@@ -67,14 +87,24 @@ namespace Container_File_Optimizer
             using (SqlConnection cnn = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand("SELECT system_id FROM [System] WHERE system_name = @system_name AND system_creator = @system_creator AND version_number = @version_number", cnn))
             {
-                command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
-                command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
-                command.Parameters.AddWithValue("@version_number", currentVersionNumber);
+                try
+                {
+                    command.Parameters.AddWithValue("@system_name", textBoxSystemName.Text);
+                    command.Parameters.AddWithValue("@system_creator", textBoxCreator.Text);
+                    command.Parameters.AddWithValue("@version_number", currentVersionNumber);
 
-                // Open database connection, execute the SQL command, and retrieve the system ID
-                cnn.Open();
-                systemID = (int)command.ExecuteScalar();
-                cnn.Close();
+                    // Open database connection, execute the SQL command, and retrieve the system ID
+                    cnn.Open();
+                    systemID = (int)command.ExecuteScalar();
+                    cnn.Close();
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error ocurs during delete
+                    MessageBox.Show("An error ocured!");
+                }
+                
             }
 
             return systemID;
@@ -88,7 +118,11 @@ namespace Container_File_Optimizer
         }
 
 
-
+        /// <summary>
+        /// This function is called when the create system button is clicked and performs all of the function calls to create a system
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonCreateSystem_Click(object sender, EventArgs e)
         {
             // Check if required fields are filled in and at least one container is selected
@@ -127,6 +161,11 @@ namespace Container_File_Optimizer
         }
 
 
+        /// <summary>
+        /// This function removes a container when the remove container button is clicked
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
@@ -139,77 +178,111 @@ namespace Container_File_Optimizer
             }
         }
 
+        /// <summary>
+        /// This function uses a query to create a system in the database
+        /// </summary>
         private void CreateSystem()
         {
             
             int versionNumber;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                string systemName = textBoxSystemName.Text;
-                string creatorName = textBoxCreator.Text;
-                versionNumber = 1;
-
-                // Check if a system with the same systemName and creatorName already exists
-                string checkQuery = "SELECT COUNT(*) FROM System WHERE system_name = @systemName";
-                using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
+                try
                 {
-                    checkCommand.Parameters.AddWithValue("@systemName", systemName);
-                    checkCommand.Parameters.AddWithValue("@creatorName", creatorName);
-                    int count = (int)checkCommand.ExecuteScalar();
+                    connection.Open();
 
-                    // If a system with the same systemName and creatorName already exists, increment the version number
-                    if (count > 0)
+                    string systemName = textBoxSystemName.Text;
+                    string creatorName = textBoxCreator.Text;
+                    versionNumber = 1;
+
+                    // Check if a system with the same systemName and creatorName already exists
+                    string checkQuery = "SELECT COUNT(*) FROM System WHERE system_name = @systemName";
+                    using (SqlCommand checkCommand = new SqlCommand(checkQuery, connection))
                     {
-                        string versionQuery = "SELECT MAX(version_number) FROM System WHERE system_name = @systemName AND system_creator = @creatorName";
-                        using (SqlCommand versionCommand = new SqlCommand(versionQuery, connection))
+                        checkCommand.Parameters.AddWithValue("@systemName", systemName);
+                        checkCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                        int count = (int)checkCommand.ExecuteScalar();
+
+                        // If a system with the same systemName and creatorName already exists, increment the version number
+                        if (count > 0)
                         {
-                            versionCommand.Parameters.AddWithValue("@systemName", systemName);
-                            versionCommand.Parameters.AddWithValue("@creatorName", creatorName);
-                            versionNumber = count + 1;
+                            string versionQuery = "SELECT MAX(version_number) FROM System WHERE system_name = @systemName AND system_creator = @creatorName";
+                            using (SqlCommand versionCommand = new SqlCommand(versionQuery, connection))
+                            {
+                                versionCommand.Parameters.AddWithValue("@systemName", systemName);
+                                versionCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                                versionNumber = count + 1;
+                            }
                         }
+
+                        // Add the new system to the Systems table
+                        string insertQuery = "INSERT INTO System (system_name, system_creator, version_number, optimized_path) VALUES (@systemName, @creatorName, @versionNumber, @optimizedPath)";
+                        using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
+                        {
+                            systemPath = Application.StartupPath + "\\Systems\\" + textBoxSystemName.Text.Trim() + " Version " + versionNumber;
+                            insertCommand.Parameters.AddWithValue("@systemName", systemName);
+                            insertCommand.Parameters.AddWithValue("@creatorName", creatorName);
+                            insertCommand.Parameters.AddWithValue("@versionNumber", versionNumber);
+                            insertCommand.Parameters.AddWithValue("@optimizedPath", systemPath);
+                            currentVersionNumber = versionNumber;
+                            int rowsAffected = insertCommand.ExecuteNonQuery();
+                        }
+                        // Create the folder for the optimized system
+                        Directory.CreateDirectory(systemPath);
                     }
 
-                    // Add the new system to the Systems table
-                    string insertQuery = "INSERT INTO System (system_name, system_creator, version_number, optimized_path) VALUES (@systemName, @creatorName, @versionNumber, @optimizedPath)";
-                    using (SqlCommand insertCommand = new SqlCommand(insertQuery, connection))
-                    {
-                        systemPath = Application.StartupPath + "\\Systems\\" + textBoxSystemName.Text.Trim() + " Version " + versionNumber;
-                        insertCommand.Parameters.AddWithValue("@systemName", systemName);
-                        insertCommand.Parameters.AddWithValue("@creatorName", creatorName);
-                        insertCommand.Parameters.AddWithValue("@versionNumber", versionNumber);
-                        insertCommand.Parameters.AddWithValue("@optimizedPath", systemPath);
-                        currentVersionNumber = versionNumber;
-                        int rowsAffected = insertCommand.ExecuteNonQuery();
-                    }
-                    // Create the folder for the optimized system
-                    Directory.CreateDirectory(systemPath);
+                    connection.Close();
+
                 }
+                catch (SqlException ex)
+                {
 
-                connection.Close();
+                    //error message to show if error ocurs during delete
+                    MessageBox.Show("An error ocured while creating a system!");
+                }
+                
             }
         }
 
-
+        /// <summary>
+        /// This function is called after creating a system and adds all of the connections between the system and selected containers
+        /// to the SysApp table
+        /// </summary>
+        /// <param name="currentAppID">id of the container being connected to</param>
+        /// <param name="systemID">id of the system being connected to</param>
         private void AddSysAppConnection(int currentAppID, int systemID)
         {
             // Create a SQL command to insert a new system-application connection record
             using (SqlConnection sqlConnection = new SqlConnection(connectionString))
             using (SqlCommand sqlCommand = new SqlCommand("INSERT INTO SysApp (system_id, app_id) VALUES (@system_id, @app_id)", sqlConnection))
             {
-                // Add parameters to the SQL command to specify the system and application IDs
-                sqlCommand.Parameters.AddWithValue("@system_id", systemID);
-                sqlCommand.Parameters.AddWithValue("@app_id", currentAppID);
+                try
+                {
+                    // Add parameters to the SQL command to specify the system and application IDs
+                    sqlCommand.Parameters.AddWithValue("@system_id", systemID);
+                    sqlCommand.Parameters.AddWithValue("@app_id", currentAppID);
 
-                // Open the database connection, execute the SQL command, and close the connection
-                sqlConnection.Open();
-                sqlCommand.ExecuteNonQuery();
-                sqlConnection.Close();
+                    // Open the database connection, execute the SQL command, and close the connection
+                    sqlConnection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                    sqlConnection.Close();
+
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error ocurs during delete
+                    MessageBox.Show("An error ocured!");
+                }
+                
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="systemID"></param>
+        /// <returns></returns>
         public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
         {
             // Create an empty dictionary to store the app_id and associated file_ids
