@@ -67,7 +67,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
 
-                    //error message to show if error ocurs during delete
+                    //error message to show if error 
                     MessageBox.Show("An error ocured!");
                 }
                
@@ -101,7 +101,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
 
-                    //error message to show if error ocurs during delete
+                    //error message to show if error ocurs 
                     MessageBox.Show("An error ocured!");
                 }
                 
@@ -237,7 +237,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
 
-                    //error message to show if error ocurs during delete
+                    //error message to show if error ocurs while creting a system
                     MessageBox.Show("An error ocured while creating a system!");
                 }
                 
@@ -271,7 +271,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
 
-                    //error message to show if error ocurs during delete
+                    //error message to show if error ocurs 
                     MessageBox.Show("An error ocured!");
                 }
                 
@@ -279,10 +279,10 @@ namespace Container_File_Optimizer
         }
 
         /// <summary>
-        /// 
+        /// This function creates the system collection for ue with optimization
         /// </summary>
         /// <param name="systemID"></param>
-        /// <returns></returns>
+        /// <returns>currentSystemCollection</returns>
         public Dictionary<int, List<int>> PopulateSystemCollection(int systemID)
         {
             // Create an empty dictionary to store the app_id and associated file_ids
@@ -295,54 +295,65 @@ namespace Container_File_Optimizer
             using (SqlConnection connection = new SqlConnection(connectionString))
             using (SqlCommand command = new SqlCommand(query, connection))
             {
-                // Add system_id parameter to the SQL command
-                command.Parameters.AddWithValue("@system_id", systemID);
-
-                // Open database connection
-                connection.Open();
-
-                // Execute the SQL command and retrieve app_id values
-                using (SqlDataReader reader = command.ExecuteReader())
+                try
                 {
-                    // Iterate through the reader and add app_id to the dictionary
-                    while (reader.Read())
-                    {
-                        int appID = reader.GetInt32(0);
-                        currentSystemCollection.Add(appID, new List<int>());
-                    }
-                }
+                    // Add system_id parameter to the SQL command
+                    command.Parameters.AddWithValue("@system_id", systemID);
 
-                // SQL query to retrieve file_id for a given app_id
-                query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
+                    // Open database connection
+                    connection.Open();
 
-                // Set the command text to the new query
-                command.CommandText = query;
-
-                // Clear the command parameters
-                command.Parameters.Clear();
-
-                // Iterate through the dictionary and add the file_ids for each app_id
-                foreach (int appID in currentSystemCollection.Keys)
-                {
-                    // Add app_id parameter to the SQL command
-                    command.Parameters.AddWithValue("@app_id", appID);
-
-                    // Execute the SQL command and retrieve file_id values
+                    // Execute the SQL command and retrieve app_id values
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        // Iterate through the reader and add the file_id to the list for the current app_id
+                        // Iterate through the reader and add app_id to the dictionary
                         while (reader.Read())
                         {
-                            currentSystemCollection[appID].Add(reader.GetInt32(0));
+                            int appID = reader.GetInt32(0);
+                            currentSystemCollection.Add(appID, new List<int>());
                         }
                     }
 
-                    // Clear the command parameters for the next iteration
-                    command.Parameters.Clear();
-                }
+                    // SQL query to retrieve file_id for a given app_id
+                    query = "SELECT file_id FROM AppFile WHERE app_id = @app_id";
 
-                // Close the database connection
-                connection.Close();
+                    // Set the command text to the new query
+                    command.CommandText = query;
+
+                    // Clear the command parameters
+                    command.Parameters.Clear();
+
+                    // Iterate through the dictionary and add the file_ids for each app_id
+                    foreach (int appID in currentSystemCollection.Keys)
+                    {
+                        // Add app_id parameter to the SQL command
+                        command.Parameters.AddWithValue("@app_id", appID);
+
+                        // Execute the SQL command and retrieve file_id values
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            // Iterate through the reader and add the file_id to the list for the current app_id
+                            while (reader.Read())
+                            {
+                                currentSystemCollection[appID].Add(reader.GetInt32(0));
+                            }
+                        }
+
+                        // Clear the command parameters for the next iteration
+                        command.Parameters.Clear();
+                    }
+
+                    // Close the database connection
+                    connection.Close();
+
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                }
+               
             }
 
             // Return the dictionary with the app_id and associated file_ids
@@ -351,20 +362,24 @@ namespace Container_File_Optimizer
 
 
 
-
+        /// <summary>
+        /// This function begins the proccess for optimizing a system
+        /// </summary>
+        /// <param name="systemID">The id of the system to optimize</param>
         public void OptimizeSystem(int systemID)
         {
-            Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID);
-            //Temporary
-            Dictionary<int, int> fileCount = new Dictionary<int, int>();
+            Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID); //collection holds the system ids
+    
+            Dictionary<int, int> fileCount = new Dictionary<int, int>();//Temporary collection to hold the file counts for each system id
 
-
+            //loop through each appid in in the collection and get its counts.
             foreach (int appID in currentSystemCollection.Keys)
             {
+                //get each file id in the curent system colleection
                 List<int> fileIDs = currentSystemCollection[appID];
                 foreach (int currentID in fileIDs)
                 {
-                    int currentCount = GetFileCount(currentID, systemID);
+                    int currentCount = GetFileCount(currentID, systemID); //get the count of the current file
                     if (fileCount.Keys.Contains(currentID))
                     {
                         // Dont add to list
@@ -372,32 +387,33 @@ namespace Container_File_Optimizer
                     }
                     else
                     {
-                        fileCount.Add(currentID, currentCount);
+                        fileCount.Add(currentID, currentCount); //else add to the list
                     }
                 }
             }
 
-            // wtaf
+            // Converts the Dictionary into a List, sorts the List, then converts it back into a Dictionary.
             List<KeyValuePair<int, int>> fileCounts = new List<KeyValuePair<int, int>>();
             var sortedList = fileCount.ToList();
             sortedList.Sort((x, y) => y.Value.CompareTo(x.Value));
 
+            //converts back to dictiniary
             Dictionary<int, int> sortedFileCount = new Dictionary<int, int>();
             foreach (var keyValuePair in sortedList)
             {
                 sortedFileCount.Add(keyValuePair.Key, keyValuePair.Value);
             }
-
-
             
-            GenerateOptimizedFiles(currentSystemCollection, sortedFileCount);
-
-
+            GenerateOptimizedFiles(currentSystemCollection, sortedFileCount); //call the function to generate the optimized files
 
         }
         
 
-
+        /// <summary>
+        /// This function return the version number of a given system
+        /// </summary>
+        /// <param name="system_id">the system id</param>
+        /// <returns>version number</returns>
         public int GetVersionNumber(int system_id)
         {
             int versionNumber = 0;
@@ -407,50 +423,78 @@ namespace Container_File_Optimizer
             // Create a SqlConnection object and open the connection to the database
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                // Create a SqlCommand object with the SQL query and the SqlConnection object
-                using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                try
                 {
-                    // Add a parameter for the system_id value to the SqlCommand object
-                    command.Parameters.AddWithValue("@system_id", system_id);
+                    connection.Open();
 
-                    // Execute the SQL query and retrieve the version number using the ExecuteScalar method
-                    object result = command.ExecuteScalar();
-                    // Convert the result to an int and assign it to the versionNumber variable
-                    versionNumber = Convert.ToInt32(result);
+                    // Create a SqlCommand object with the SQL query and the SqlConnection object
+                    using (SqlCommand command = new SqlCommand(sqlQuery, connection))
+                    {
+                        // Add a parameter for the system_id value to the SqlCommand object
+                        command.Parameters.AddWithValue("@system_id", system_id);
+
+                        // Execute the SQL query and retrieve the version number using the ExecuteScalar method
+                        object result = command.ExecuteScalar();
+                        // Convert the result to an int and assign it to the versionNumber variable
+                        versionNumber = Convert.ToInt32(result);
+                    }
+
+
                 }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                }
+                
             }
 
             return versionNumber + 1;
         }
 
-
+        /// <summary>
+        /// This function returns the file count of a given file
+        /// </summary>
+        /// <param name="currentID">the file id</param>
+        /// <param name="systemID">the system id</param>
+        /// <returns></returns>
         public int  GetFileCount(int currentID, int systemID) {
+
+            //variable to hold the file count
             int fileCount;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
+                try
+                {
+                    connection.Open();
 
-                string query = "SELECT COUNT(*) FROM AppFile ap LEFT JOIN SysApp sa ON ap.app_id = sa.app_id WHERE ap.file_id = @file_id AND sa.system_id = @system_id";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@file_id", currentID);
-                command.Parameters.AddWithValue("@system_id", systemID);
-                fileCount = (int)command.ExecuteScalar();
-                connection.Close();
+                    //query to get the file count by joining Appfile and SysApp tables in the database
+                    string query = "SELECT COUNT(*) FROM AppFile ap LEFT JOIN SysApp sa ON ap.app_id = sa.app_id WHERE ap.file_id = @file_id AND sa.system_id = @system_id";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@file_id", currentID);
+                    command.Parameters.AddWithValue("@system_id", systemID);
+                    fileCount = (int)command.ExecuteScalar();
+                    connection.Close();
+
+                    return fileCount; //return file count
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                    return -1;
+                }
             }
-
-            return fileCount;
+            
         }
 
-
-
-
-
-
-
-
-
+        /// <summary>
+        /// This function generates all of the optimized.app files for the given container
+        /// </summary>
+        /// <param name="currentSystemCollection">the current system collection</param>
+        /// <param name="sortedFileCount">the count of all of the files</param>
         private void GenerateOptimizedFiles(Dictionary<int, List<int>> currentSystemCollection, Dictionary<int, int> sortedFileCount)
         {
             // Loop through each app ID in the collection
@@ -491,89 +535,101 @@ namespace Container_File_Optimizer
 
 
 
-
+        /// <summary>
+        /// This function writes all of the library files to the optimized container file
+        /// </summary>
+        /// <param name="tempFileCounts">the file conts</param>
+        /// <param name="currentSystemCollection">the collection of all of the systems</param>
+        /// <param name="appID">the current container id</param>
+        /// <param name="writer">a writer to write to the file</param>
+        /// <returns></returns>
         public Dictionary<int, int> WriteLibraries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
         {
-
+            //first write out all of the files that have a count greater than 1
             foreach (int fileID in tempFileCounts.Keys.ToList())
             {
-                string fileType = GetFileType(fileID).Trim();
+                string fileType = GetFileType(fileID).Trim();//get file type
+
+                //if count is greater than 1 than write the file to its own copy statement
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] > 1)
                 {
+                    //write out the copy statement
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
                     writer.WriteLine("\t./lib/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
-                    //tempFileCounts.Remove(fileID);
 
                 }
 
             }
-            if (!(!tempFileCounts.Any()))
+            if (!(!tempFileCounts.Any())) //check if there are any remaining library files
             {
 
 
                 bool containsCopy = false;
+
+                //write out each library file that only appears in one container in one grouped copy statement
                 foreach (int fileID in tempFileCounts.Keys.ToList())
                 {
+                    string fileType = GetFileType(fileID).Trim();//get file extension
 
-   
-
-
-                    string fileType = GetFileType(fileID).Trim();
+                    //if the file count equalls one then add to the copy
                     if (currentSystemCollection[appID].Contains(fileID) && fileType == ".so" && tempFileCounts[fileID] <= 1)
                     {
+                        //write out the first line to be copy
                         if (!containsCopy)
                         {
+                            //write the copy statment
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
                         string fileName = Path.GetFileName(GetFilePath(fileID));
                         writer.WriteLine("\t./lib/" + fileName + " \\");
-                        //tempFileCounts.Remove(fileID);
 
                     }
 
                 }
 
+                //if the copy was added then write out the home directory 
                 if (containsCopy == true)
                 {
-
-                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n"); 
                 }
 
             }
-            return tempFileCounts;
+            return tempFileCounts;//return file counts
         }
 
-
-
-
-
-
-
+        /// <summary>
+        /// This function writes all of the conig files to the optimized container file
+        /// </summary>
+        /// <param name="tempFileCounts">the file conts</param>
+        /// <param name="currentSystemCollection">the collection of all of the systems</param>
+        /// <param name="appID">the current container id</param>
+        /// <param name="writer">a writer to write to the file</param>
+        /// <returns></returns>
         public Dictionary<int, int> WriteConfigs(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
         {
-
+            //first write out all of the files that have a count greater than 1
             foreach (int fileID in tempFileCounts.Keys.ToList())
             {
-                string fileType = GetFileType(fileID).Trim();
+                string fileType = GetFileType(fileID).Trim();//get file type
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] > 1)
                 {
+                    //write out the copy statement
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
                     writer.WriteLine("\t./config/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
-                    //tempFileCounts.Remove(fileID);
-
                 }
 
             }
-            if (!(!tempFileCounts.Any()))
+            if (!(!tempFileCounts.Any()))//check if there are any remaining config files
             {
                 bool containsCopy = false;
 
-                    foreach (int fileID in tempFileCounts.Keys.ToList())
+                //write out each config file that only appears in one container in one grouped copy statement
+                foreach (int fileID in tempFileCounts.Keys.ToList())
                     {
 
                     string fileType = GetFileType(fileID).Trim();
@@ -581,57 +637,64 @@ namespace Container_File_Optimizer
                     {
                         if (!containsCopy)
                         {
+                            //write out the first line to be copy
                             writer.Write("COPY ");
                             containsCopy = true;
                         }
 
                         string fileName = Path.GetFileName(GetFilePath(fileID));
                         writer.WriteLine("\t./config/" + fileName + " \\");
-                        //tempFileCounts.Remove(fileID);
 
                     }
                 }
 
-
+                //if the copy was added then write out the home directory 
                 if (containsCopy == true)
                 {
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/config \n");
                 }
 
             }
-            return tempFileCounts;
+            return tempFileCounts;//return the file collection
         }
 
-
-
+        /// <summary>
+        /// This function writes all of the binary files to the optimized container file
+        /// </summary>
+        /// <param name="tempFileCounts">the file conts</param>
+        /// <param name="currentSystemCollection">the collection of all of the systems</param>
+        /// <param name="appID">the current container id</param>
+        /// <param name="writer">a writer to write to the file</param>
+        /// <returns></returns>
         public Dictionary<int, int> WriteBinaries(Dictionary<int, int> tempFileCounts, Dictionary<int, List<int>> currentSystemCollection, int appID, StreamWriter writer)
         {
-
+            //first write out all of the files that have a count greater than 1
             foreach (int fileID in tempFileCounts.Keys.ToList())
             {
-                string fileType = GetFileType(fileID).Trim();
+                string fileType = GetFileType(fileID).Trim();//get file type
                 if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] > 1)
                 {
+                    //write out the copy statement
                     writer.Write("COPY ");
                     string fileName = Path.GetFileName(GetFilePath(fileID));
                     writer.WriteLine("\t./bin/" + fileName + " \\");
                     writer.WriteLine("\t/home/" + textBoxCreator.Text + "/bin \n");
-                    //tempFileCounts.Remove(fileID);
 
                 }
 
             }
-            if (!(!tempFileCounts.Any()))
+            if (!(!tempFileCounts.Any()))//check if there are any remaining binary files
             {
                 bool containsCopy = false;
 
-
+                //write out each binary file that only appears in one container in one grouped copy statement
                 foreach (int fileID in tempFileCounts.Keys.ToList())
                 {
 
                     string fileType = GetFileType(fileID).Trim();
                     if (currentSystemCollection[appID].Contains(fileID) && fileType == ".bin" && tempFileCounts[fileID] <= 1)
                     {
+                        //write out the first line to be copy
                         if (!containsCopy)
                         {
                             writer.Write("COPY ");
@@ -639,10 +702,10 @@ namespace Container_File_Optimizer
                         }
                         string fileName = Path.GetFileName(GetFilePath(fileID));
                         writer.WriteLine("\t./bin/" + fileName + " \\");
-                        // tempFileCounts.Remove(fileID);
 
                     }
                 }
+                //if the copy was added then write out the home directory 
                 if (containsCopy == true)
                 {
 
@@ -650,80 +713,118 @@ namespace Container_File_Optimizer
                 }
 
             }
-            return tempFileCounts;
+            return tempFileCounts;//return the file collection
         }
 
-
-
-
-
-
-
-
-        // Returns the fileName of a specific file from the database
+        /// <summary>
+        /// Returns the fileName of a specific file from the database
+        /// </summary>
+        /// <param name="appID">the app id</param>
+        /// <returns>file name</returns>
         private string GetAppName(int appID)
         {
             string file_name = "";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
-                string query = "SELECT app_name FROM Application WHERE app_id = @app_id";
+                try
+                {
+                    cnn.Open();
+                    string query = "SELECT app_name FROM Application WHERE app_id = @app_id";
 
-                SqlCommand command = new SqlCommand(query, cnn);
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                command.Parameters.AddWithValue("@app_id", appID);
+                    command.Parameters.AddWithValue("@app_id", appID);
 
 
-                file_name = (string)command.ExecuteScalar();
-                cnn.Close();
-                return file_name.Trim();
+                    file_name = (string)command.ExecuteScalar();
+                    cnn.Close();
+                    return file_name.Trim();
+
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                    return file_name.Trim();
+                }
+                
 
             }
         }
 
-        // returns the specific filepath of a file in the database
+        /// <summary>
+        /// returns the specific filepath of a file in the database
+        /// </summary>
+        /// <param name="fileID">the file id</param>
+        /// <returns>return file path</returns>
         private string GetFilePath(int fileID)
         {
             string file_path = "";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
-                string query = "SELECT file_path FROM [File] WHERE file_id = @file_id";
+                try
+                {
+                    cnn.Open();
+                    string query = "SELECT file_path FROM [File] WHERE file_id = @file_id";
 
-                SqlCommand command = new SqlCommand(query, cnn);
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                command.Parameters.AddWithValue("@file_id", fileID);
+                    command.Parameters.AddWithValue("@file_id", fileID);
 
 
-                file_path = (string)command.ExecuteScalar();
-                cnn.Close();
-                return file_path;
+                    file_path = (string)command.ExecuteScalar();
+                    cnn.Close();
+                    return file_path;
 
+
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                    return file_path;
+                }
             }
         }
 
-
-
-        // returns the specific filepath of a file in the database
+        /// <summary>
+        /// returns the specific filepath of a file in the database
+        /// </summary>
+        /// <param name="fileID">the file id</param>
+        /// <returns>file type</returns>
         private string GetFileType(int fileID)
         {
             string file_type = "";
             //get SQL connection and Command
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
-                string query = "SELECT file_type FROM [File] WHERE file_id = @file_id";
+                try
+                {
+                    cnn.Open();
+                    string query = "SELECT file_type FROM [File] WHERE file_id = @file_id";
 
-                SqlCommand command = new SqlCommand(query, cnn);
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                command.Parameters.AddWithValue("@file_id", fileID);
+                    command.Parameters.AddWithValue("@file_id", fileID);
 
 
-                file_type = (string)command.ExecuteScalar();
-                cnn.Close();
-                return file_type;
+                    file_type = (string)command.ExecuteScalar();
+                    cnn.Close();
+                    return file_type;
+
+
+                }
+                catch (SqlException ex)
+                {
+
+                    //error message to show if error 
+                    MessageBox.Show("An error ocured!");
+                    return file_type;
+                }
 
             }
         }
