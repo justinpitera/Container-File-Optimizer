@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
-using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Container_File_Optimizer
 {
@@ -18,7 +18,7 @@ namespace Container_File_Optimizer
 
         //variable to hold the connection string fr the database
         public string connectionString = ConfigurationManager.ConnectionStrings["Container_File_Optimizer.Properties.Settings.ContainerfileDatabaseConnectionString"].ConnectionString;
-       
+
         //variable to hold the system path
         public string systemPath = "";
 
@@ -70,7 +70,7 @@ namespace Container_File_Optimizer
                     //error message to show if error 
                     MessageBox.Show("An error ocured!");
                 }
-               
+
             }
         }
 
@@ -104,7 +104,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs 
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
 
             return systemID;
@@ -168,10 +168,11 @@ namespace Container_File_Optimizer
         /// <param name="e"></param>
         private void buttonRemoveContainer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() +  "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("Are you sure you would like to remove: " + checkedListBoxContainers.SelectedItems.ToString() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 MessageBox.Show("Removed: " + checkedListBoxContainers.SelectedItems.ToString());
-            } else
+            }
+            else
             {
                 // Do nothing
                 MessageBox.Show("No changes made");
@@ -183,7 +184,7 @@ namespace Container_File_Optimizer
         /// </summary>
         private void CreateSystem()
         {
-            
+
             int versionNumber;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -240,7 +241,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs while creting a system
                     MessageBox.Show("An error ocured while creating a system!");
                 }
-                
+
             }
         }
 
@@ -274,7 +275,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs 
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
         }
 
@@ -353,7 +354,7 @@ namespace Container_File_Optimizer
                     //error message to show if error 
                     MessageBox.Show("An error ocured!");
                 }
-               
+
             }
 
             // Return the dictionary with the app_id and associated file_ids
@@ -369,7 +370,7 @@ namespace Container_File_Optimizer
         public void OptimizeSystem(int systemID)
         {
             Dictionary<int, List<int>> currentSystemCollection = PopulateSystemCollection(systemID); //collection holds the system ids
-    
+
             Dictionary<int, int> fileCount = new Dictionary<int, int>();//Temporary collection to hold the file counts for each system id
 
             //loop through each appid in in the collection and get its counts.
@@ -403,11 +404,11 @@ namespace Container_File_Optimizer
             {
                 sortedFileCount.Add(keyValuePair.Key, keyValuePair.Value);
             }
-            
+
             GenerateOptimizedFiles(currentSystemCollection, sortedFileCount); //call the function to generate the optimized files
 
         }
-        
+
 
         /// <summary>
         /// This function return the version number of a given system
@@ -447,7 +448,7 @@ namespace Container_File_Optimizer
                     //error message to show if error 
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
 
             return versionNumber + 1;
@@ -459,7 +460,8 @@ namespace Container_File_Optimizer
         /// <param name="currentID">the file id</param>
         /// <param name="systemID">the system id</param>
         /// <returns></returns>
-        public int  GetFileCount(int currentID, int systemID) {
+        public int GetFileCount(int currentID, int systemID)
+        {
 
             //variable to hold the file count
             int fileCount;
@@ -487,7 +489,7 @@ namespace Container_File_Optimizer
                     return -1;
                 }
             }
-            
+
         }
 
         /// <summary>
@@ -522,7 +524,7 @@ namespace Container_File_Optimizer
                         sortedFileCount = WriteBinaries(tempFileCounts, currentSystemCollection, appID, writer);
 
                         // Write the final command and close the file
-                        writer.WriteLine("CMD[\"/bin/bash\"]");
+                        writer.WriteLine("CMD [\"/bin/bash\"]");
                     }
                 }
                 catch (Exception ex)
@@ -593,7 +595,7 @@ namespace Container_File_Optimizer
                 //if the copy was added then write out the home directory 
                 if (containsCopy == true)
                 {
-                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n"); 
+                    writer.WriteLine("\t/home/" + textBoxCreator.Text + "/lib \n");
                 }
 
             }
@@ -630,7 +632,7 @@ namespace Container_File_Optimizer
 
                 //write out each config file that only appears in one container in one grouped copy statement
                 foreach (int fileID in tempFileCounts.Keys.ToList())
-                    {
+                {
 
                     string fileType = GetFileType(fileID).Trim();
                     if (currentSystemCollection[appID].Contains(fileID) && fileType == ".config" && tempFileCounts[fileID] <= 1)
@@ -749,7 +751,7 @@ namespace Container_File_Optimizer
                     MessageBox.Show("An error ocured!");
                     return file_name.Trim();
                 }
-                
+
 
             }
         }
@@ -829,8 +831,11 @@ namespace Container_File_Optimizer
             }
         }
 
-
-
+        /// <summary>
+        /// This method does not allow the user to enter anything into the System name textbox that would not be allowed in a File/Folder name 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxSystemName_KeyPress(object sender, KeyPressEventArgs e)
         {
             // Check if the key pressed is not the backspace key and is an invalid character for a file path
@@ -841,17 +846,27 @@ namespace Container_File_Optimizer
             }
         }
 
-
+        /// <summary>
+        /// This code is called when the text in the System Name text box is changed.
+        /// It does not allow the user to enter more than 50 characters into the text box, if they reach 50 the count label turns red
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBoxSystemName_TextChanged(object sender, EventArgs e)
         {
+            // The current amount of characters in the system name text box
             int current = textBoxSystemName.Text.Length;
+            // The max amount of characters allowed in system name text box 
             int max = textBoxSystemName.MaxLength;
+            // Update the label 
             labelSystemNameCount.Text = current.ToString() + " / 50";
 
+            // If the current character count is at the max limit, set the color of the label to red
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
             }
+            // Otherwise, set the label to white again
             else
             {
                 labelSystemNameCount.ForeColor = Color.White;
@@ -860,20 +875,27 @@ namespace Container_File_Optimizer
 
         private void textBoxCreatorName_TextChanged(object sender, EventArgs e)
         {
+            // The current amount of characters in the Creator Name text box
             int current = textBoxCreator.Text.Length;
+            // The max amount of characters allowed in the Creator Name text box 
             int max = textBoxCreator.MaxLength;
+            // Update the label 
             labelCreatorCount.Text = current.ToString() + " / 50";
+
+            // If the current character count is at the max limit, set the color of the label to red
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
             }
+            // Otherwise, set the label to white again
             else
             {
                 labelCreatorCount.ForeColor = Color.White;
             }
-
         }
 
+
+        // Call the form to create a new container
         private void buttonAddContainer_Click(object sender, EventArgs e)
         {
             ContainerViewer newContainerViewerForm = new ContainerViewer();
@@ -881,6 +903,8 @@ namespace Container_File_Optimizer
             this.Close();
         }
 
+
+        // Call the form for the System Viewer
         private void buttonSystemViewer_Click(object sender, EventArgs e)
         {
             SystemViewer systemViewerForm = new SystemViewer();

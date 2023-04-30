@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Container_File_Optimizer
 {
@@ -128,7 +128,7 @@ namespace Container_File_Optimizer
                     // Log any database errors.
                     MessageBox.Show("An error ocured trying to add the file!");
                 }
-                
+
             }
         }
 
@@ -187,7 +187,7 @@ namespace Container_File_Optimizer
                     // Log any database errors.
                     MessageBox.Show("An error ocured trying to add the file!");
                 }
-                
+
             }
         }
 
@@ -228,7 +228,7 @@ namespace Container_File_Optimizer
                     // Log any database errors.
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
             return appID;
         }
@@ -284,7 +284,8 @@ namespace Container_File_Optimizer
             if (filesList.Items.Count > 0 || !(textBoxContainerName.Text == string.Empty))
             {
                 // Check if the container already exists in the database
-                if (GetCount(textBoxContainerName.Text) == 0) {
+                if (GetCount(textBoxContainerName.Text) == 0)
+                {
                     CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
                     // Create files from the list into Database table for Files
                     foreach (String filePath in filesList.CheckedItems)

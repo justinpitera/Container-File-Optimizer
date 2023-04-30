@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.SqlTypes;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -70,7 +69,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
 
             return versionNumber;
@@ -123,7 +122,7 @@ namespace Container_File_Optimizer
                     MessageBox.Show("An error ocured!");
                 }
 
-               
+
             }
         }
 
@@ -172,7 +171,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
         }
 
@@ -220,7 +219,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
 
 
@@ -266,7 +265,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
         }
 
@@ -308,7 +307,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
         }
 
@@ -356,7 +355,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
         }
 
@@ -365,7 +364,7 @@ namespace Container_File_Optimizer
         /// It will also delete the system files from the optimized folder
         /// </summary>
         /// <param name="systemID">The file_id that needs to be dleted.</param>
-        public void deleteSystem(int systemID) 
+        public void deleteSystem(int systemID)
         {
 
             try
@@ -420,7 +419,8 @@ namespace Container_File_Optimizer
                     connection.Close();
                 }
             }
-            catch(SqlException ex) {
+            catch (SqlException ex)
+            {
 
                 //error message to show if error ocurs during delete
                 MessageBox.Show("An error ocured when attempting to delete the system!" + ex);
@@ -504,7 +504,7 @@ namespace Container_File_Optimizer
         {
             if (filesList.SelectedItems.Count > 0)
             {
-               GetSharedApps(fileIDCollection[filesList.SelectedIndex], systemIDCollection[systemsList.SelectedIndex]);
+                GetSharedApps(fileIDCollection[filesList.SelectedIndex], systemIDCollection[systemsList.SelectedIndex]);
             }
         }
 
@@ -524,7 +524,7 @@ namespace Container_File_Optimizer
         {
 
         }
-       
+
 
         private void buttonNewContainer_Click(object sender, EventArgs e)
         {
@@ -539,7 +539,7 @@ namespace Container_File_Optimizer
             {
                 if (MessageBox.Show("Are you sure you would like to remove: " + systemsList.SelectedItem.ToString().Trim() + "?", "Confirmation of removal", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    Directory.Delete(GetOptimizedPath(systemIDCollection[systemsList.SelectedIndex]),true);
+                    Directory.Delete(GetOptimizedPath(systemIDCollection[systemsList.SelectedIndex]), true);
                     //Delete the system
                     deleteSystem(systemIDCollection[systemsList.SelectedIndex]);
 
@@ -571,11 +571,4 @@ namespace Container_File_Optimizer
             newSystemForm.Show();
         }
     }
-
-
-
-
-
-
-
 }

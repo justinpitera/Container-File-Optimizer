@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Net.WebRequestMethods;
 
 namespace Container_File_Optimizer
 {
@@ -79,7 +72,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-               
+
             }
         }
 
@@ -110,7 +103,7 @@ namespace Container_File_Optimizer
                         int file_id = reader.GetInt32(1); // Same with this 
                         string file_name = reader.GetString(3);
                         filesList.Items.Add(file_name);
-                       
+
                     }
 
                     // Close the SqlDataReader and the SqlConnection
@@ -126,7 +119,7 @@ namespace Container_File_Optimizer
                 //error message to show if error ocurs during delete
                 MessageBox.Show("An error ocured!");
             }
-            
+
         }
 
         /// <summary>
@@ -381,7 +374,7 @@ namespace Container_File_Optimizer
                     //error message to show if error ocurs during delete
                     MessageBox.Show("An error ocured!");
                 }
-                
+
             }
 
 
@@ -707,6 +700,6 @@ namespace Container_File_Optimizer
             GetFileIDS(appIDCollection[containerList.SelectedIndex]);
         }
 
-       
+
     }
 }
