@@ -28,38 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBoxContainerViewer = new System.Windows.Forms.ListBox();
-            this.listBoxFiles = new System.Windows.Forms.ListBox();
+            this.containerList = new System.Windows.Forms.ListBox();
+            this.filesList = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.buttonDeleteFile = new System.Windows.Forms.Button();
             this.buttonDeleteContainer = new System.Windows.Forms.Button();
             this.buttonNewContainer = new System.Windows.Forms.Button();
+            this.buttonAddFile = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // listBoxContainerViewer
+            // containerList
             // 
-            this.listBoxContainerViewer.FormattingEnabled = true;
-            this.listBoxContainerViewer.Location = new System.Drawing.Point(15, 51);
-            this.listBoxContainerViewer.Name = "listBoxContainerViewer";
-            this.listBoxContainerViewer.Size = new System.Drawing.Size(483, 212);
-            this.listBoxContainerViewer.TabIndex = 0;
-            this.listBoxContainerViewer.SelectedIndexChanged += new System.EventHandler(this.listBoxContainerViewer_SelectedIndexChanged);
+            this.containerList.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.containerList.FormattingEnabled = true;
+            this.containerList.ItemHeight = 15;
+            this.containerList.Location = new System.Drawing.Point(11, 44);
+            this.containerList.Name = "containerList";
+            this.containerList.Size = new System.Drawing.Size(418, 184);
+            this.containerList.TabIndex = 0;
+            this.containerList.SelectedIndexChanged += new System.EventHandler(this.containerList_SelectedIndexChanged);
             // 
-            // listBoxFiles
+            // filesList
             // 
-            this.listBoxFiles.FormattingEnabled = true;
-            this.listBoxFiles.Location = new System.Drawing.Point(12, 350);
-            this.listBoxFiles.Name = "listBoxFiles";
-            this.listBoxFiles.Size = new System.Drawing.Size(483, 199);
-            this.listBoxFiles.TabIndex = 1;
+            this.filesList.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.filesList.FormattingEnabled = true;
+            this.filesList.ItemHeight = 15;
+            this.filesList.Location = new System.Drawing.Point(12, 315);
+            this.filesList.Name = "filesList";
+            this.filesList.Size = new System.Drawing.Size(421, 154);
+            this.filesList.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Variable Display", 18F, System.Drawing.FontStyle.Bold);
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(10, 314);
+            this.label3.Location = new System.Drawing.Point(12, 280);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(64, 32);
             this.label3.TabIndex = 7;
@@ -70,7 +75,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Variable Display", 18F, System.Drawing.FontStyle.Bold);
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(10, 15);
+            this.label2.Location = new System.Drawing.Point(9, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(138, 32);
             this.label2.TabIndex = 6;
@@ -78,8 +83,9 @@
             // 
             // buttonDeleteFile
             // 
-            this.buttonDeleteFile.Location = new System.Drawing.Point(12, 554);
-            this.buttonDeleteFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonDeleteFile.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonDeleteFile.Location = new System.Drawing.Point(139, 480);
+            this.buttonDeleteFile.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteFile.Name = "buttonDeleteFile";
             this.buttonDeleteFile.Size = new System.Drawing.Size(123, 43);
             this.buttonDeleteFile.TabIndex = 10;
@@ -89,7 +95,8 @@
             // 
             // buttonDeleteContainer
             // 
-            this.buttonDeleteContainer.Location = new System.Drawing.Point(142, 268);
+            this.buttonDeleteContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonDeleteContainer.Location = new System.Drawing.Point(139, 235);
             this.buttonDeleteContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteContainer.Name = "buttonDeleteContainer";
             this.buttonDeleteContainer.Size = new System.Drawing.Size(123, 43);
@@ -100,7 +107,8 @@
             // 
             // buttonNewContainer
             // 
-            this.buttonNewContainer.Location = new System.Drawing.Point(15, 269);
+            this.buttonNewContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonNewContainer.Location = new System.Drawing.Point(12, 235);
             this.buttonNewContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonNewContainer.Name = "buttonNewContainer";
             this.buttonNewContainer.Size = new System.Drawing.Size(123, 43);
@@ -109,24 +117,37 @@
             this.buttonNewContainer.UseVisualStyleBackColor = true;
             this.buttonNewContainer.Click += new System.EventHandler(this.buttonNewContainer_Click);
             // 
+            // buttonAddFile
+            // 
+            this.buttonAddFile.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonAddFile.Location = new System.Drawing.Point(12, 480);
+            this.buttonAddFile.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonAddFile.Name = "buttonAddFile";
+            this.buttonAddFile.Size = new System.Drawing.Size(123, 43);
+            this.buttonAddFile.TabIndex = 12;
+            this.buttonAddFile.Text = "Add File";
+            this.buttonAddFile.UseVisualStyleBackColor = true;
+            this.buttonAddFile.Click += new System.EventHandler(this.buttonAddFile_Click);
+            // 
             // ContainerViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(512, 604);
+            this.ClientSize = new System.Drawing.Size(445, 534);
+            this.Controls.Add(this.buttonAddFile);
             this.Controls.Add(this.buttonNewContainer);
             this.Controls.Add(this.buttonDeleteFile);
             this.Controls.Add(this.buttonDeleteContainer);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.listBoxFiles);
-            this.Controls.Add(this.listBoxContainerViewer);
+            this.Controls.Add(this.filesList);
+            this.Controls.Add(this.containerList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "ContainerViewer";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Container Viewer";
+            this.Text = "Existing Containers";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.ContainerViewer_Load);
             this.ResumeLayout(false);
@@ -136,12 +157,13 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBoxContainerViewer;
-        private System.Windows.Forms.ListBox listBoxFiles;
+        private System.Windows.Forms.ListBox containerList;
+        private System.Windows.Forms.ListBox filesList;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button buttonDeleteFile;
         private System.Windows.Forms.Button buttonDeleteContainer;
         private System.Windows.Forms.Button buttonNewContainer;
+        private System.Windows.Forms.Button buttonAddFile;
     }
 }

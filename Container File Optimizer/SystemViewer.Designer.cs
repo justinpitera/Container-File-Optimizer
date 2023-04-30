@@ -28,9 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBoxSystems = new System.Windows.Forms.ListBox();
-            this.listBoxContainers = new System.Windows.Forms.ListBox();
-            this.listBoxFiles = new System.Windows.Forms.ListBox();
+            this.systemsList = new System.Windows.Forms.ListBox();
+            this.containersList = new System.Windows.Forms.ListBox();
+            this.filesList = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -40,38 +40,38 @@
             this.buttonDeleteSystem = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // listBoxSystems
+            // systemsList
             // 
-            this.listBoxSystems.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxSystems.FormattingEnabled = true;
-            this.listBoxSystems.ItemHeight = 15;
-            this.listBoxSystems.Location = new System.Drawing.Point(12, 44);
-            this.listBoxSystems.Name = "listBoxSystems";
-            this.listBoxSystems.Size = new System.Drawing.Size(429, 109);
-            this.listBoxSystems.TabIndex = 0;
-            this.listBoxSystems.SelectedIndexChanged += new System.EventHandler(this.listBoxSystems_SelectedIndexChanged);
+            this.systemsList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.systemsList.FormattingEnabled = true;
+            this.systemsList.ItemHeight = 15;
+            this.systemsList.Location = new System.Drawing.Point(12, 44);
+            this.systemsList.Name = "systemsList";
+            this.systemsList.Size = new System.Drawing.Size(429, 109);
+            this.systemsList.TabIndex = 0;
+            this.systemsList.SelectedIndexChanged += new System.EventHandler(this.listBoxSystems_SelectedIndexChanged);
             // 
-            // listBoxContainers
+            // containersList
             // 
-            this.listBoxContainers.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxContainers.FormattingEnabled = true;
-            this.listBoxContainers.ItemHeight = 15;
-            this.listBoxContainers.Location = new System.Drawing.Point(12, 237);
-            this.listBoxContainers.Name = "listBoxContainers";
-            this.listBoxContainers.Size = new System.Drawing.Size(429, 109);
-            this.listBoxContainers.TabIndex = 1;
-            this.listBoxContainers.SelectedIndexChanged += new System.EventHandler(this.listBoxContainers_SelectedIndexChanged);
+            this.containersList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.containersList.FormattingEnabled = true;
+            this.containersList.ItemHeight = 15;
+            this.containersList.Location = new System.Drawing.Point(12, 237);
+            this.containersList.Name = "containersList";
+            this.containersList.Size = new System.Drawing.Size(429, 109);
+            this.containersList.TabIndex = 1;
+            this.containersList.SelectedIndexChanged += new System.EventHandler(this.listBoxContainers_SelectedIndexChanged);
             // 
-            // listBoxFiles
+            // filesList
             // 
-            this.listBoxFiles.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxFiles.FormattingEnabled = true;
-            this.listBoxFiles.ItemHeight = 15;
-            this.listBoxFiles.Location = new System.Drawing.Point(12, 435);
-            this.listBoxFiles.Name = "listBoxFiles";
-            this.listBoxFiles.Size = new System.Drawing.Size(429, 109);
-            this.listBoxFiles.TabIndex = 2;
-            this.listBoxFiles.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
+            this.filesList.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.filesList.FormattingEnabled = true;
+            this.filesList.ItemHeight = 15;
+            this.filesList.Location = new System.Drawing.Point(12, 435);
+            this.filesList.Name = "filesList";
+            this.filesList.Size = new System.Drawing.Size(429, 109);
+            this.filesList.TabIndex = 2;
+            this.filesList.SelectedIndexChanged += new System.EventHandler(this.listBoxFiles_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -108,10 +108,11 @@
             // 
             // buttonOpenContainerViewer
             // 
+            this.buttonOpenContainerViewer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonOpenContainerViewer.Location = new System.Drawing.Point(12, 351);
             this.buttonOpenContainerViewer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonOpenContainerViewer.Name = "buttonOpenContainerViewer";
-            this.buttonOpenContainerViewer.Size = new System.Drawing.Size(134, 43);
+            this.buttonOpenContainerViewer.Size = new System.Drawing.Size(164, 43);
             this.buttonOpenContainerViewer.TabIndex = 6;
             this.buttonOpenContainerViewer.Text = "Open Container Viewer";
             this.buttonOpenContainerViewer.UseVisualStyleBackColor = true;
@@ -119,17 +120,19 @@
             // 
             // buttonShowAppDirectory
             // 
-            this.buttonShowAppDirectory.Location = new System.Drawing.Point(307, 9);
+            this.buttonShowAppDirectory.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonShowAppDirectory.Location = new System.Drawing.Point(247, 9);
             this.buttonShowAppDirectory.Margin = new System.Windows.Forms.Padding(2);
             this.buttonShowAppDirectory.Name = "buttonShowAppDirectory";
-            this.buttonShowAppDirectory.Size = new System.Drawing.Size(134, 32);
+            this.buttonShowAppDirectory.Size = new System.Drawing.Size(194, 32);
             this.buttonShowAppDirectory.TabIndex = 8;
-            this.buttonShowAppDirectory.Text = "Open App Directory";
+            this.buttonShowAppDirectory.Text = "Open Systems Directory";
             this.buttonShowAppDirectory.UseVisualStyleBackColor = true;
             this.buttonShowAppDirectory.Click += new System.EventHandler(this.buttonShowAppDirectory_Click);
             // 
             // buttonNewSystem
             // 
+            this.buttonNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
             this.buttonNewSystem.Location = new System.Drawing.Point(12, 158);
             this.buttonNewSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonNewSystem.Name = "buttonNewSystem";
@@ -141,7 +144,8 @@
             // 
             // buttonDeleteSystem
             // 
-            this.buttonDeleteSystem.Location = new System.Drawing.Point(139, 157);
+            this.buttonDeleteSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F);
+            this.buttonDeleteSystem.Location = new System.Drawing.Point(139, 158);
             this.buttonDeleteSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDeleteSystem.Name = "buttonDeleteSystem";
             this.buttonDeleteSystem.Size = new System.Drawing.Size(123, 43);
@@ -163,13 +167,13 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.listBoxFiles);
-            this.Controls.Add(this.listBoxContainers);
-            this.Controls.Add(this.listBoxSystems);
+            this.Controls.Add(this.filesList);
+            this.Controls.Add(this.containersList);
+            this.Controls.Add(this.systemsList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "SystemViewer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "System Viewer";
+            this.Text = "Existing Systems";
             this.TopMost = true;
             this.Load += new System.EventHandler(this.SystemViewer_Load);
             this.ResumeLayout(false);
@@ -179,9 +183,9 @@
 
         #endregion
 
-        private System.Windows.Forms.ListBox listBoxSystems;
-        private System.Windows.Forms.ListBox listBoxContainers;
-        private System.Windows.Forms.ListBox listBoxFiles;
+        private System.Windows.Forms.ListBox systemsList;
+        private System.Windows.Forms.ListBox containersList;
+        private System.Windows.Forms.ListBox filesList;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;

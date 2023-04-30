@@ -41,10 +41,10 @@
             // buttonCreateNewSystem
             // 
             this.buttonCreateNewSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateNewSystem.Location = new System.Drawing.Point(11, 126);
-            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonCreateNewSystem.Location = new System.Drawing.Point(11, 178);
+            this.buttonCreateNewSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateNewSystem.Name = "buttonCreateNewSystem";
-            this.buttonCreateNewSystem.Size = new System.Drawing.Size(340, 98);
+            this.buttonCreateNewSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateNewSystem.TabIndex = 0;
             this.buttonCreateNewSystem.Text = "New System";
             this.buttonCreateNewSystem.UseVisualStyleBackColor = true;
@@ -53,10 +53,10 @@
             // buttonCreateContainer
             // 
             this.buttonCreateContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonCreateContainer.Location = new System.Drawing.Point(11, 226);
-            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonCreateContainer.Location = new System.Drawing.Point(11, 95);
+            this.buttonCreateContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCreateContainer.Name = "buttonCreateContainer";
-            this.buttonCreateContainer.Size = new System.Drawing.Size(340, 98);
+            this.buttonCreateContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonCreateContainer.TabIndex = 1;
             this.buttonCreateContainer.Text = "New Container";
             this.buttonCreateContainer.UseVisualStyleBackColor = true;
@@ -65,24 +65,24 @@
             // buttonEditSystem
             // 
             this.buttonEditSystem.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditSystem.Location = new System.Drawing.Point(403, 126);
-            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonEditSystem.Location = new System.Drawing.Point(296, 178);
+            this.buttonEditSystem.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditSystem.Name = "buttonEditSystem";
-            this.buttonEditSystem.Size = new System.Drawing.Size(340, 98);
+            this.buttonEditSystem.Size = new System.Drawing.Size(255, 80);
             this.buttonEditSystem.TabIndex = 2;
-            this.buttonEditSystem.Text = "System Viewer";
+            this.buttonEditSystem.Text = "Existing Systems";
             this.buttonEditSystem.UseVisualStyleBackColor = true;
             this.buttonEditSystem.Click += new System.EventHandler(this.buttonEditSystem_Click);
             // 
             // buttonEditContainer
             // 
             this.buttonEditContainer.Font = new System.Drawing.Font("Segoe UI Variable Display", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonEditContainer.Location = new System.Drawing.Point(403, 226);
-            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonEditContainer.Location = new System.Drawing.Point(296, 95);
+            this.buttonEditContainer.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEditContainer.Name = "buttonEditContainer";
-            this.buttonEditContainer.Size = new System.Drawing.Size(340, 98);
+            this.buttonEditContainer.Size = new System.Drawing.Size(255, 80);
             this.buttonEditContainer.TabIndex = 3;
-            this.buttonEditContainer.Text = "Container Viewer";
+            this.buttonEditContainer.Text = "Existing Containers";
             this.buttonEditContainer.UseVisualStyleBackColor = true;
             this.buttonEditContainer.Click += new System.EventHandler(this.buttonEditContainer_Click);
             // 
@@ -91,9 +91,10 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Variable Display", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.Control;
-            this.label1.Location = new System.Drawing.Point(5, 9);
+            this.label1.Location = new System.Drawing.Point(4, 7);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(349, 40);
+            this.label1.Size = new System.Drawing.Size(284, 32);
             this.label1.TabIndex = 4;
             this.label1.Text = "Container File Optimzer";
             // 
@@ -102,9 +103,10 @@
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Segoe UI Variable Display", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label4.Location = new System.Drawing.Point(93, 50);
+            this.label4.Location = new System.Drawing.Point(70, 41);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(279, 17);
+            this.label4.Size = new System.Drawing.Size(236, 15);
             this.label4.TabIndex = 9;
             this.label4.Text = "Made with love by Pythons at Rowan University";
             // 
@@ -113,9 +115,10 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.SystemColors.Control;
-            this.label2.Location = new System.Drawing.Point(5, 90);
+            this.label2.Location = new System.Drawing.Point(5, 67);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(84, 31);
+            this.label2.Size = new System.Drawing.Size(69, 26);
             this.label2.TabIndex = 5;
             this.label2.Text = "Create";
             // 
@@ -124,18 +127,19 @@
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Segoe UI Variable Display Semib", 13.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.SystemColors.Control;
-            this.label3.Location = new System.Drawing.Point(396, 90);
+            this.label3.Location = new System.Drawing.Point(291, 67);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(64, 31);
+            this.label3.Size = new System.Drawing.Size(53, 26);
             this.label3.TabIndex = 6;
             this.label3.Text = "View";
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.ClientSize = new System.Drawing.Size(755, 342);
+            this.ClientSize = new System.Drawing.Size(560, 266);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -145,7 +149,7 @@
             this.Controls.Add(this.buttonCreateContainer);
             this.Controls.Add(this.buttonCreateNewSystem);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

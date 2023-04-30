@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Windows.Forms;
-using System.Configuration;
-using System.Text.RegularExpressions;
-using System.IO;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
 
 namespace Container_File_Optimizer
 {
@@ -27,7 +28,11 @@ namespace Container_File_Optimizer
 
 
 
-        // This method creates a new application record in the Application table of the database.
+        /// <summary>
+        /// This method creates a new application record in the Application table of the database.
+        /// </summary>
+        /// <param name="appName">The name of the aplication being added.</param>
+        /// <param name="appDescription">The description of the aplication being added.</param>
         private void CreateApp(string appName, string appDescription)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -57,7 +62,7 @@ namespace Container_File_Optimizer
                 catch (SqlException ex)
                 {
                     // Log any database errors.
-                    MessageBox.Show("Database error: " + ex);
+                    MessageBox.Show("An error ocured trying to add the aplication!");
                 }
                 finally
                 {
@@ -70,7 +75,10 @@ namespace Container_File_Optimizer
 
 
 
-        // This method creates a new file record in the [File] table of the database.
+        /// <summary>
+        /// This method creates a new file record in the [File] table of the database.
+        /// </summary>
+        /// <param name="filePath">The path of the file to be added.</param>
         private void CreateFile(string filePath)
         {
             // Extract the file name and type from the file path.
@@ -82,42 +90,54 @@ namespace Container_File_Optimizer
             // Connect to the database.
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                connection.Open();
-
-                // Define the SQL query for inserting a new file record.
-                string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
-                SqlCommand command = new SqlCommand(query, connection);
-                command.Parameters.AddWithValue("@file_name", fileName);
-
-                // Determine the file type based on its content.
-                if (fileType == string.Empty)
+                try
                 {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".bin");
-                    int rowsAffected = command.ExecuteNonQuery();
+                    connection.Open();
+
+                    // Define the SQL query for inserting a new file record.
+                    string query = "INSERT INTO [File] (file_name, file_path, file_type) VALUES (@file_name, @file_path, @file_type)";
+                    SqlCommand command = new SqlCommand(query, connection);
+                    command.Parameters.AddWithValue("@file_name", fileName);
+
+                    // Determine the file type based on its content.
+                    if (fileType == string.Empty)
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", ".bin");
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    else if (fileType == "so")
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", "." + fileType);
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+                    else
+                    {
+                        command.Parameters.AddWithValue("@file_path", filePath);
+                        command.Parameters.AddWithValue("@file_type", ".config");
+                        int rowsAffected = command.ExecuteNonQuery();
+                    }
+
+                    // Close the database connection.
+                    connection.Close();
+
                 }
-                else if (fileType == "so")
+                catch (SqlException ex)
                 {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", "." + fileType);
-                    int rowsAffected = command.ExecuteNonQuery();
-                }
-                else
-                {
-                    command.Parameters.AddWithValue("@file_path", filePath);
-                    command.Parameters.AddWithValue("@file_type", ".config");
-                    int rowsAffected = command.ExecuteNonQuery();
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured trying to add the file!");
                 }
 
-                // Close the database connection.
-                connection.Close();
             }
         }
 
 
-
-
-        // This method adds a connection between an application and a file in the database, based on the app ID and file path.
+        /// <summary>
+        /// This method adds a connection between an application and a file in the database, based on the app ID and file path.
+        /// </summary>
+        /// <param name="appID">The id of the aplication the file will be connected to.</param>
+        /// <param name="filePath">The path of the file being connected.</param>
         private void AddAppFileConnection(int appID, string filePath)
         {
             // Extract the file name from the file path using a regular expression.
@@ -126,47 +146,55 @@ namespace Container_File_Optimizer
             // Create a SQL connection using the connection string.
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
+                try
+                {
+                    cnn.Open();
 
-                // Declare a variable to store the file ID.
-                int fileID;
+                    // Declare a variable to store the file ID.
+                    int fileID;
 
-                // Define the SQL query to retrieve the file ID based on the file name and path.
-                string query = "SELECT file_id FROM [File] WHERE file_name = @file_name AND file_path = @file_path";
+                    // Define the SQL query to retrieve the file ID based on the file name and path.
+                    string query = "SELECT file_id FROM [File] WHERE file_name = @file_name AND file_path = @file_path";
 
-                // Create a SQL command using the query and connection.
-                SqlCommand command = new SqlCommand(query, cnn);
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the file name and path.
-                command.Parameters.AddWithValue("@file_name", fileName);
-                command.Parameters.AddWithValue("@file_path", filePath);
+                    // Add parameters to the command to specify the file name and path.
+                    command.Parameters.AddWithValue("@file_name", fileName);
+                    command.Parameters.AddWithValue("@file_path", filePath);
 
-                // Execute the command and retrieve the file ID as a scalar value.
-                fileID = (int)command.ExecuteScalar();
+                    // Execute the command and retrieve the file ID as a scalar value.
+                    fileID = (int)command.ExecuteScalar();
 
-                // Define the SQL query to insert a new row into the AppFile table with the app ID and file ID.
-                query = "INSERT INTO AppFile (app_id, file_id) VALUES (@app_id, @file_id)";
+                    // Define the SQL query to insert a new row into the AppFile table with the app ID and file ID.
+                    query = "INSERT INTO AppFile (app_id, file_id) VALUES (@app_id, @file_id)";
 
-                // Create a new SQL command using the query and connection.
-                command = new SqlCommand(query, cnn);
+                    // Create a new SQL command using the query and connection.
+                    command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the app ID and file ID.
-                command.Parameters.AddWithValue("@app_id", appID);
-                command.Parameters.AddWithValue("@file_id", fileID);
+                    // Add parameters to the command to specify the app ID and file ID.
+                    command.Parameters.AddWithValue("@app_id", appID);
+                    command.Parameters.AddWithValue("@file_id", fileID);
 
-                // Execute the command to insert the new row.
-                command.ExecuteNonQuery();
+                    // Execute the command to insert the new row.
+                    command.ExecuteNonQuery();
 
-                // Close the SQL connection.
-                cnn.Close();
+                    // Close the SQL connection.
+                    cnn.Close();
+                }
+                catch (SqlException ex)
+                {
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured trying to add the file!");
+                }
+
             }
         }
 
-
-
-
-        // This method retrieves the ID of an application from the database, based on its name and description.
-        // It returns the app ID as an integer.
+        /// <summary>
+        /// This function finds the id of a given aplication.
+        /// </summary>
+        /// <returns> the id of the aplication being searched for</returns>
         private int GetAppID()
         {
             int appID = 0;
@@ -174,123 +202,178 @@ namespace Container_File_Optimizer
             // Create a SQL connection using the connection string.
             using (SqlConnection cnn = new SqlConnection(connectionString))
             {
-                cnn.Open();
+                try
+                {
+                    cnn.Open();
 
-                // Define the SQL query to retrieve the app ID based on the app name and description.
-                string query = "SELECT app_id FROM Application WHERE app_name = @app_name AND app_desc = @app_desc";
+                    // Define the SQL query to retrieve the app ID based on the app name and description.
+                    string query = "SELECT app_id FROM Application WHERE app_name = @app_name AND app_desc = @app_desc";
 
-                // Create a SQL command using the query and connection.
-                SqlCommand command = new SqlCommand(query, cnn);
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
 
-                // Add parameters to the command to specify the app name and description.
-                command.Parameters.AddWithValue("@app_name", textBoxContainerName.Text);
-                command.Parameters.AddWithValue("@app_desc", textBoxContainerDesc.Text);
+                    // Add parameters to the command to specify the app name and description.
+                    command.Parameters.AddWithValue("@app_name", textBoxContainerName.Text);
+                    command.Parameters.AddWithValue("@app_desc", textBoxContainerDesc.Text);
 
-                // Execute the command and retrieve the app ID as a scalar value.
-                appID = (int)command.ExecuteScalar();
+                    // Execute the command and retrieve the app ID as a scalar value.
+                    appID = (int)command.ExecuteScalar();
 
-                // Close the SQL connection.
-                cnn.Close();
+                    // Close the SQL connection.
+                    cnn.Close();
 
-                // Return the app ID.
-                return appID;
+                }
+                catch (SqlException ex)
+                {
+                    // Log any database errors.
+                    MessageBox.Show("An error ocured!");
+                }
+
             }
+            return appID;
         }
 
 
-        // Create app, then create each file from file list, then create connections in bridge table for apps and files
+        /// <summary>
+        /// This method returns the count of times an app with a specified name appears in the database
+        /// </summary>
+        /// <param name="appName">The name of the aplication</param>
+        //
+        public int GetCount(string appName)
+        {
+            // Create a SQL connection using the connection string.
+            using (SqlConnection cnn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    cnn.Open();
+
+                    // Define the SQL query to retrieve the  count of containers based on the app name
+                    string query = "SELECT count(*) FROM Application WHERE app_name = @app_name";
+
+                    // Create a SQL command using the query and connection.
+                    SqlCommand command = new SqlCommand(query, cnn);
+
+                    // Add parameters to the command to specify the app name
+                    command.Parameters.AddWithValue("@app_name", appName);
+
+                    // Execute the command and retrieve the app's count as a scalar value.
+                    int count = (int)command.ExecuteScalar();
+
+                    // Close the SQL connection.
+                    cnn.Close();
+                    return count;
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    return -1;
+                }
+
+            }
+        }
+
+        /// <summary>
+        /// Create app, then create each file from file list, then create connections in bridge table for apps and files
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonCreateContainer_Click(object sender, EventArgs e)
         {
-
-            if (checkedListBoxFiles.Items.Count == 0 || textBoxContainerName.Text == string.Empty)
+            // Check if user has provided a name to the container and that at least one file has been added
+            if (filesList.Items.Count > 0 || !(textBoxContainerName.Text == string.Empty))
             {
-                MessageBox.Show("Please select at least one file and provide a name for the container.");
-            }
-            else
-            {
-                CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
-                // Create files from the list into Database table for Files
-                foreach (String filePath in checkedListBoxFiles.CheckedItems)
+                // Check if the container already exists in the database
+                if (GetCount(textBoxContainerName.Text) == 0)
                 {
-                    CreateFile(filePath);
-                }
-                // Creating connections between files and app
-                foreach (String filePath in checkedListBoxFiles.CheckedItems)
-                {
-                    AddAppFileConnection(GetAppID(), filePath);
-                }
-                ContainerViewer containerViewer = new ContainerViewer();
-                containerViewer.Show();
-                this.Close();
-
-            }
-
-
-
-        }
-        // Add a file of list of files to add to container
-        private void buttonAddFile_Click(object sender, EventArgs e)
-        {
-            // Windows explorer open file dialog with multiselect enabled to allow multiple files
-            OpenFileDialog findFiles = new OpenFileDialog();
-            findFiles.Multiselect = true;
-
-            findFiles.ShowDialog();
-
-            // Get the currently selected items before adding new files
-            List<string> selectedFiles = new List<string>();
-            foreach (var item in checkedListBoxFiles.CheckedItems)
-            {
-                selectedFiles.Add(item.ToString());
-            }
-
-            // Add new files to list box and automatically select them
-            foreach (String filePath in findFiles.FileNames)
-            {
-                // Check if file is already in the list based on its file path
-                if (!checkedListBoxFiles.Items.Contains(filePath))
-                {
-                    // Add file
-                    checkedListBoxFiles.Items.Add(filePath, true); // Automatically select new items
+                    CreateApp(textBoxContainerName.Text, textBoxContainerDesc.Text);
+                    // Create files from the list into Database table for Files
+                    foreach (String filePath in filesList.CheckedItems)
+                    {
+                        CreateFile(filePath);
+                    }
+                    // Creating connections between files and app
+                    foreach (String filePath in filesList.CheckedItems)
+                    {
+                        AddAppFileConnection(GetAppID(), filePath);
+                    }
+                    ContainerViewer containerViewer = new ContainerViewer();
+                    containerViewer.Show();
+                    this.Close();
                 }
                 else
                 {
-                    // Display error
-                    MessageBox.Show("Error: file already exists in container: " + filePath, "Container File Optimizer");
+                    MessageBox.Show("A container with this name already exists in the database, please choose another name for the container.");
+                }
+            }
+            else // Handle user not adding required information into the form
+            {
+                MessageBox.Show("Please select at least one file and provide a name for the container.");
+            }
+        }
+
+        /// <summary>
+        /// Add a file of list of files to add to container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <summary>
+        /// Opens a file dialog to add one or more files to the container.
+        /// </summary>
+        private void buttonAddFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
+            openFileDialog.ShowDialog();
+
+            // Get the currently selected items before adding new files
+            List<string> selectedFiles = filesList.CheckedItems.Cast<string>().ToList();
+
+            // Add new files to the list box and automatically select them
+            foreach (string filePath in openFileDialog.FileNames)
+            {
+                if (filesList.Items.Contains(filePath))
+                {
+                    MessageBox.Show($"Error: file already exists in container: {filePath}", "Container File Optimizer");
+                }
+                else
+                {
+                    filesList.Items.Add(filePath, true); // Automatically select new items
+                }
+            }
+
+            // Select the previously selected files and the new items
+            for (int i = 0; i < filesList.Items.Count; i++)
+            {
+                if (selectedFiles.Contains(filesList.Items[i].ToString()))
+                {
+                    filesList.SetItemChecked(i, true);
                 }
             }
 
             // If there are no items in the list box, select all by default
-            if (checkedListBoxFiles.Items.Count > 0)
+            if (filesList.Items.Count == 0)
             {
-                // Check the previously selected files and select new items
-                for (int i = 0; i < checkedListBoxFiles.Items.Count; i++)
+                for (int i = 0; i < openFileDialog.FileNames.Length; i++)
                 {
-                    if (selectedFiles.Contains(checkedListBoxFiles.Items[i].ToString()))
-                    {
-                        checkedListBoxFiles.SetItemChecked(i, true);
-                    }
-                }
-            }
-            else // Automatically select everything if there are no items in the list box
-            {
-                for (int i = 0; i < findFiles.FileNames.Length; i++)
-                {
-                    checkedListBoxFiles.SetItemChecked(i, true);
+                    filesList.SetItemChecked(i, true);
                 }
             }
         }
 
 
-
-        // Remove a file from the list of files to add to the container
+        /// <summary>
+        /// Remove a file from the list of files to add to the container
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonRemoveFile_Click(object sender, EventArgs e)
         {
             // Determine if any files have been selected
-            if (checkedListBoxFiles.SelectedItems.Count > 0)
+            if (filesList.SelectedItems.Count > 0)
             {
                 // Remove file
-                checkedListBoxFiles.Items.RemoveAt(checkedListBoxFiles.SelectedIndex);
+                filesList.Items.RemoveAt(filesList.SelectedIndex);
             }
             else
             {
@@ -301,14 +384,17 @@ namespace Container_File_Optimizer
         }
 
 
-
-
+        // This method is called when the text in the container name textbox changes
         private void textBoxContainer_TextChanged(object sender, EventArgs e)
         {
+            // Get the length of the current text in the textbox and the maximum allowed length
             int current = textBoxContainerName.Text.Length;
             int max = textBoxContainerName.MaxLength;
+
+            // Update the label to show the current and maximum lengths of the text
             labelSystemNameCount.Text = current.ToString() + " / 50";
 
+            // If the length of the text equals the maximum allowed length, change the color of the label to red
             if (current == max)
             {
                 labelSystemNameCount.ForeColor = Color.Red;
@@ -319,11 +405,17 @@ namespace Container_File_Optimizer
             }
         }
 
+        // This method is called when the text in the container description textbox changes
         private void textBoxContainerDesc_TextChanged(object sender, EventArgs e)
         {
+            // Get the length of the current text in the textbox and the maximum allowed length
             int current = textBoxContainerDesc.Text.Length;
             int max = textBoxContainerDesc.MaxLength;
+
+            // Update the label to show the current and maximum lengths of the text
             labelCreatorCount.Text = current.ToString() + " / 50";
+
+            // If the length of the text equals the maximum allowed length, change the color of the label to red
             if (current == max)
             {
                 labelCreatorCount.ForeColor = Color.Red;
@@ -332,17 +424,16 @@ namespace Container_File_Optimizer
             {
                 labelCreatorCount.ForeColor = Color.White;
             }
-
         }
 
-
-
-
-
-
-        private void checkedListBoxFiles_SelectedIndexChanged(object sender, EventArgs e)
+        private void textBoxContainerName_KeyPress(object sender, KeyPressEventArgs e)
         {
-
+            // Check if the key pressed is not the backspace key and is an invalid character for a file path
+            if (e.KeyChar != '\b' && Path.GetInvalidFileNameChars().Contains(e.KeyChar))
+            {
+                // Cancel the key press if it is an invalid character
+                e.Handled = true;
+            }
         }
     }
 }
