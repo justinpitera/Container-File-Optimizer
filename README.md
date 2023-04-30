@@ -3,7 +3,7 @@
 ## Contributors 
 Emma Zimmerman (https://github.com/EmmaZim , https://www.linkedin.com/in/emma-zimmerman-4aa317267/ )  ,<br>
 Christopher Shields (https://github.com/cjosh24 ) ,<br>
-Yekaterina Saburova (https://github.com/KatSaburova , https://www.linkedin.com/in/yekaterina-saburova-0aa257242/ ) , <br>
+Yekaterina Saburova (https://github.com/KatSaburova , https://www.linkedin.com/in/yekaterina-saburova-0aa257242/) , <br>
 Justin Pitera (https://github.com/justinpitera) , <br>
 Sadia Orpi (https://github.com/sadiaorpi) <br>
 Dylan Lorrilliere (https://github.com/NiteFuryNinja)<br>
