@@ -29,8 +29,6 @@ This application requires the Microsoft Windows Operating System and the current
 2. Ensure that you have installed a copy of Microsoft Visual Studio and the .NET framework.<br>
 3. Open the ‘Container File Optimizer.sln’ file provided in the root directory of the project source - that is the project file.<br>
 4. Right-click on the solution in Solution Explorer in Visual Studio and then select Build. Go to the bin folder under your project folder and look for the EXE associated with the solution file’s name. 
-<br>
-
 
 ## Usage
-Refer to the User Manual attached for this project for more information. <br>
+Refer to the User Manual pdf attached to this project for more information. <br>
