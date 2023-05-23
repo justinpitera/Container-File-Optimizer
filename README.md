@@ -5,7 +5,7 @@ Emma Zimmerman (https://github.com/EmmaZim , https://www.linkedin.com/in/emma-zi
 Christopher Shields (https://github.com/cjosh24 ) ,<br>
 Yekaterina Saburova (https://github.com/KatSaburova , https://www.linkedin.com/in/yekaterina-saburova-0aa257242/) , <br>
 Justin Pitera (https://github.com/justinpitera) , <br>
-Sadia Orpi (https://github.com/sadiaorpi , https://www.linkedin.com/in/sadia-orpi-3747a1206 ), <br>
+Sadia Orpi (https://github.com/sadiaorpi, https://www.linkedin.com/in/sadia-orpi-3747a1206 ), <br>
 Dylan Lorrilliere (https://github.com/NiteFuryNinja)<br>
 
 ## Project Description 
